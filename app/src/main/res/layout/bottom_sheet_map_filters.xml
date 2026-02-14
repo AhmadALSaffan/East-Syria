@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_sheet_background"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Filters"
+            android:textColor="@color/text_white"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btnClose"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Close"
+            android:src="@drawable/ic_close"
+            app:tint="@color/text_white" />
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/divider_color" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Category"
+        android:textColor="@color/text_white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:selectionRequired="false"
+        app:singleSelection="false">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipHistorical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Historical"
+            android:textColor="@color/text_white"
+            app:checkedIconVisible="true"
+            app:chipBackgroundColor="@color/chip_background_selector"
+            app:chipCornerRadius="20dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipArchaeological"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Archaeological"
+            android:textColor="@color/text_white"
+            app:checkedIconVisible="true"
+            app:chipBackgroundColor="@color/chip_background_selector"
+            app:chipCornerRadius="20dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipNature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Nature"
+            android:textColor="@color/text_white"
+            app:checkedIconVisible="true"
+            app:chipBackgroundColor="@color/chip_background_selector"
+            app:chipCornerRadius="20dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipCulture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Culture"
+            android:textColor="@color/text_white"
+            app:checkedIconVisible="true"
+            app:chipBackgroundColor="@color/chip_background_selector"
+            app:chipCornerRadius="20dp" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Distance"
+        android:textColor="@color/text_white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvDistanceValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Any distance"
+            android:textColor="@color/orange_accent"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/sliderDistance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:valueFrom="0"
+        android:valueTo="100"
+        android:value="100"
+        android:stepSize="5"
+        app:labelBehavior="gone"
+        app:thumbColor="@color/orange_accent"
+        app:trackColorActive="@color/orange_accent"
+        app:trackColorInactive="@color/surface_light" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Minimum Rating"
+        android:textColor="@color/text_white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupRating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:selectionRequired="false"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipRatingAny"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:checked="true"
+            android:text="Any"
+            android:textColor="@color/text_white"
+            app:checkedIconVisible="false"
+            app:chipBackgroundColor="@color/chip_background_selector"
+            app:chipCornerRadius="20dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipRating3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="3+ ⭐"
+            android:textColor="@color/text_white"
+            app:checkedIconVisible="false"
+            app:chipBackgroundColor="@color/chip_background_selector"
+            app:chipCornerRadius="20dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipRating4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="4+ ⭐"
+            android:textColor="@color/text_white"
+            app:checkedIconVisible="false"
+            app:chipBackgroundColor="@color/chip_background_selector"
+            app:chipCornerRadius="20dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipRating45"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="4.5+ ⭐"
+            android:textColor="@color/text_white"
+            app:checkedIconVisible="false"
+            app:chipBackgroundColor="@color/chip_background_selector"
+            app:chipCornerRadius="20dp" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Features"
+        android:textColor="@color/text_white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <CheckBox
+        android:id="@+id/cbFeaturedOnly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Featured landmarks only"
+        android:textColor="@color/text_white"
+        android:buttonTint="@color/orange_accent" />
+
+    <CheckBox
+        android:id="@+id/cbTrendingOnly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Trending destinations only"
+        android:textColor="@color/text_white"
+        android:buttonTint="@color/orange_accent" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/divider_color" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClearFilters"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="Clear All"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_white"
+            android:letterSpacing="0"
+            app:cornerRadius="12dp"
+            app:strokeColor="@color/orange_accent"
+            app:strokeWidth="2dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnApplyFilters"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="Apply Filters"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:letterSpacing="0"
+            android:backgroundTint="@color/orange_accent"
+            app:cornerRadius="12dp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

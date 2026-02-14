@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_dark"
+    android:fitsSystemWindows="false">
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_dark"
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/tvExploreLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EXPLORE"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                android:letterSpacing="0.15"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="East Syria"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_white"
+                android:fontFamily="serif"
+                app:layout_constraintTop_toBottomOf="@id/tvExploreLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="4dp" />
+
+            <ImageView
+                android:id="@+id/ivBookmark"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_bookmark"
+                android:padding="12dp"
+                android:background="@drawable/circle_background_orange"
+                app:tint="@color/white"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintTop_toTopOf="@id/tvTitle"
+                app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/searchCard"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/surface_dark"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="@color/text_secondary" />
+
+                    <EditText
+                        android:id="@+id/etSearch"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="Search landmarks, cities..."
+                        android:textColorHint="@color/text_secondary"
+                        android:textColor="@color/text_light"
+                        android:textSize="16sp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:inputType="text"
+                        android:imeOptions="actionSearch" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="100dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Featured Landmarks"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_white" />
+
+                <TextView
+                    android:id="@+id/tvSeeAllFeatured"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SEE ALL"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/orange_accent"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            </LinearLayout>
+
+
+            <ProgressBar
+                android:id="@+id/progressFeatured"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/orange_accent"
+                android:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFeaturedLandmarks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:visibility="gone"
+                tools:listitem="@layout/item_featured_landmark" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Categories"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_white"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp" />
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="4"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp">
+
+
+                <LinearLayout
+                    android:id="@+id/btnHistorical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="8dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp"
+                        app:cardBackgroundColor="@color/surface_dark">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_historical"
+                            android:layout_gravity="center"
+                            app:tint="@color/orange_accent" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="HISTORY"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_light"
+                        android:layout_marginTop="8dp" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/btnNature"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="8dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp"
+                        app:cardBackgroundColor="@color/surface_dark">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_nature"
+                            android:layout_gravity="center"
+                            app:tint="#4FC3F7" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="RIVERS"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_light"
+                        android:layout_marginTop="8dp" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/btnCulture"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="8dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp"
+                        app:cardBackgroundColor="@color/surface_dark">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_culture"
+                            android:layout_gravity="center"
+                            app:tint="#FF8A65" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CULTURE"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_light"
+                        android:layout_marginTop="8dp" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/btnMore"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="8dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp"
+                        app:cardBackgroundColor="@color/surface_dark">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_more"
+                            android:layout_gravity="center"
+                            app:tint="@color/text_secondary" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MORE"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_light"
+                        android:layout_marginTop="8dp" />
+
+                </LinearLayout>
+
+            </GridLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="32dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Trending"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_white" />
+
+                <TextView
+                    android:id="@+id/tvViewMap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VIEW MAP"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/orange_accent"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            </LinearLayout>
+
+
+            <ProgressBar
+                android:id="@+id/progressTrending"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/orange_accent"
+                android:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTrendingDestinations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:visibility="gone"
+                tools:listitem="@layout/item_trending_destination" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/surface_dark"
+        android:paddingBottom="8dp"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemTextColor="@color/bottom_nav_color"
+        app:itemIconSize="24dp"
+        app:itemTextAppearanceActive="@style/BottomNavTextStyle"
+        app:itemTextAppearanceInactive="@style/BottomNavTextStyle"
+        app:labelVisibilityMode="labeled"
+        app:elevation="8dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_map_outlined"
+        app:tint="@color/white"
+        app:backgroundTint="@color/teal_accent"
+        app:fabSize="normal"
+        app:elevation="16dp"
+        app:pressedTranslationZ="20dp"
+        app:borderWidth="0dp"
+        app:layout_anchor="@id/bottomNavigation"
+        app:layout_anchorGravity="center|top"
+        android:translationZ="20dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
