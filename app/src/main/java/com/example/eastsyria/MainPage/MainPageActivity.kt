@@ -11,12 +11,15 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.eastsyria.Categories.CategoriesActivity
+import com.example.eastsyria.CategoryList.CategoryListActivity
 import com.example.eastsyria.Details.LandmarkDetailActivity
 import com.example.eastsyria.MainPage.Adapters.FeaturedLandmarkAdapter
 import com.example.eastsyria.MainPage.Adapters.TrendingDestinationAdapter
@@ -51,12 +54,14 @@ class MainPageActivity : AppCompatActivity() {
         hideSystemBars()
         enableEdgeToEdge()
         window.statusBarColor = ContextCompat.getColor(this, R.color.background_light)
+
         binding = ActivityMainPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         window.statusBarColor = ContextCompat.getColor(this, R.color.background_dark)
         window.navigationBarColor = Color.TRANSPARENT
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 
         setupRecyclerViews()
         setupClickListeners()
@@ -160,19 +165,20 @@ class MainPageActivity : AppCompatActivity() {
 
 
             btnHistorical.setOnClickListener {
-                filterByCategory("Historical")
+                startCategoryList("Historical Sites", "historical_sites")
             }
 
             btnNature.setOnClickListener {
-                filterByCategory("Nature")
+                startCategoryList("Nature & Rivers", "nature_rivers")
             }
 
             btnCulture.setOnClickListener {
-                filterByCategory("Culture")
+                startCategoryList("Local Culture", "local_culture")
             }
 
             btnMore.setOnClickListener {
-                //showToast("More categories")
+                val intent = Intent(this@MainPageActivity, CategoriesActivity::class.java)
+                startActivity(intent)
             }
 
             tvSeeAllFeatured.setOnClickListener {
@@ -213,13 +219,14 @@ class MainPageActivity : AppCompatActivity() {
         }
     }
 
-    private fun filterByCategory(category: String) {
-        showToast("Filter by: $category")
+    private fun startCategoryList(name: String, type: String) {
+        val intent = Intent(this, CategoryListActivity::class.java).apply {
+            putExtra(CategoryListActivity.EXTRA_CATEGORY_NAME, name)
+            putExtra(CategoryListActivity.EXTRA_CATEGORY_TYPE, type)
+        }
+        startActivity(intent)
     }
 
-    private fun onLandmarkClick(landmark: Landmark) {
-        showToast("Selected: ${landmark.name}")
-    }
 
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {

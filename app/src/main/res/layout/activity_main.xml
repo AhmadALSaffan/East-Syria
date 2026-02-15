@@ -5,12 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="@drawable/back">
+
 
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#99000000" />
+        android:background="#66000000" />
+
 
     <View
         android:id="@+id/statusBarSpace"
@@ -20,7 +22,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+
+    <View
+        android:id="@+id/progressIndicator"
+        android:layout_width="80dp"
+        android:layout_height="3dp"
+        android:background="@color/orange_accent"
+        app:layout_constraintTop_toBottomOf="@id/statusBarSpace"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="48dp" />
+
+
     <LinearLayout
+        android:id="@+id/centerContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -28,38 +43,74 @@
         android:paddingStart="32dp"
         android:paddingEnd="32dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomContent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.35">
+        app:layout_constraintEnd_toEndOf="parent">
 
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Explore East Syria"
-            android:textSize="42sp"
+            android:text="Explore"
+            android:textSize="56sp"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:fontFamily="serif"
             android:gravity="center"
-            android:lineSpacingExtra="4dp" />
+            android:letterSpacing="-0.02" />
 
 
-        <View
-            android:layout_width="120dp"
-            android:layout_height="4dp"
-            android:background="@color/orange_accent"
-            android:layout_marginTop="8dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="-8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="East "
+                android:textSize="56sp"
+                android:textStyle="bold|italic"
+                android:textColor="@color/orange_accent"
+                android:fontFamily="serif"
+                android:letterSpacing="-0.02" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Syria"
+                android:textSize="56sp"
+                android:textStyle="bold|italic"
+                android:textColor="@color/white"
+                android:fontFamily="serif"
+                android:letterSpacing="-0.02" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TIMELESS BEAUTY &amp; HERITAGE"
+            android:textSize="13sp"
+            android:textColor="@color/white"
+            android:alpha="0.85"
+            android:letterSpacing="0.15"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginTop="16dp" />
 
     </LinearLayout>
 
 
     <LinearLayout
+        android:id="@+id/bottomContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:gravity="center_horizontal"
         android:paddingStart="32dp"
         android:paddingEnd="32dp"
         android:paddingBottom="48dp"
@@ -67,16 +118,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/tvSubtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ancient Wonders Await"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:fontFamily="sans-serif"
-            android:lineSpacingExtra="2dp" />
 
         <TextView
             android:id="@+id/tvDescription"
@@ -85,16 +126,18 @@
             android:text="Discover the hidden gems of the Euphrates, from the majestic suspension bridge to the timeless history of Dura-Europos."
             android:textSize="16sp"
             android:textColor="@color/white"
-            android:alpha="0.9"
+            android:alpha="0"
+            android:visibility="gone"
             android:lineSpacingExtra="4dp"
-            android:layout_marginTop="16dp" />
+            android:gravity="center"
+            android:layout_marginBottom="24dp" />
 
 
         <Button
             android:id="@+id/btnStartJourney"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="Start Journey"
+            android:text="Get Started"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -103,92 +146,28 @@
             android:drawableTint="@color/white"
             android:paddingStart="24dp"
             android:paddingEnd="24dp"
-            android:layout_marginTop="32dp"
             android:elevation="4dp"
             android:stateListAnimator="@null" />
 
-        <!-- Explore Nearby Button -->
-        <Button
+
+        <TextView
             android:id="@+id/btnExploreNearby"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="Explore Nearby"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:background="@drawable/button_background_transparent"
-            android:drawableStart="@drawable/ic_map_outlined"
-            android:drawableTint="@color/white"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:layout_marginTop="16dp"
-            android:stateListAnimator="@null" />
-
-        <!-- Footer Info -->
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="24dp">
-
-            <!-- Language Info -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:gravity="start|center_vertical">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_globe"
-                    android:tint="@color/white"
-                    android:alpha="0.8" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Available in Arabic &amp; English"
-                    android:textSize="12sp"
-                    android:textColor="@color/white"
-                    android:alpha="0.8"
-                    android:layout_marginStart="8dp" />
-
-            </LinearLayout>
-
-            <!-- Official Guide Badge -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:gravity="end|center_vertical">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_verified"
-                    android:tint="@color/white"
-                    android:alpha="0.8" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Official Guide"
-                    android:textSize="12sp"
-                    android:textColor="@color/white"
-                    android:alpha="0.8"
-                    android:layout_marginStart="8dp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+            android:text="Explore"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:alpha="0.9"
+            android:fontFamily="sans-serif"
+            android:layout_marginTop="24dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp" />
 
     </LinearLayout>
 
-    <!-- Night Mode Toggle FAB -->
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabNightMode"
         android:layout_width="wrap_content"
@@ -200,6 +179,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="24dp"
-        android:contentDescription="Toggle night mode" />
+        android:contentDescription="Toggle night mode"
+        android:visibility="gone"
+        android:alpha="0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

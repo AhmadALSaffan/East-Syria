@@ -325,6 +325,7 @@
                     android:padding="8dp">
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/categoryMore"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         app:cardCornerRadius="16dp"

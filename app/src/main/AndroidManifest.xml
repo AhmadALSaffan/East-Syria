@@ -7,8 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -18,10 +16,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EastSyria">
+        <activity
+            android:name=".CategoryList.CategoryListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Categories.CategoriesActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}"/>
+            android:value="${MAPS_API_KEY}" />
 
         <activity
             android:name=".Map.MapActivity"
@@ -61,6 +65,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".CategoryList.SearchActivity"
+            android:exported="false"
+            android:theme="@style/Theme.EastSyria"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
     </application>
 
 </manifest>
