@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
@@ -15,9 +18,11 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-        val mapsApiKey = project.findProperty("MAPS_API_KEY") as String? ?: ""
+        val properties = Properties()
+        properties.load(FileInputStream(rootProject.file("local.properties")))
+        val mapsApiKey = properties.getProperty("MAPS_API_KEY", "")
+
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging {
         resources {
@@ -28,15 +33,25 @@ android {
                 "META-INF/LICENSE"
             )
         }
+        sourceSets {
+            getByName("main") {
+                res.srcDirs("src/main/res", "src/main/res/raw")
+            }
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 
@@ -79,7 +94,7 @@ dependencies {
     implementation("com.sun.mail:android-activation:1.6.7")
     implementation("com.github.bumptech.glide:glide:5.0.5")
 
-    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.1.0")
     implementation("com.google.maps.android:android-maps-utils:3.8.2")
 }

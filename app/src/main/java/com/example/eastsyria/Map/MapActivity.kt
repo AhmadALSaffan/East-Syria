@@ -27,6 +27,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -58,6 +59,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideSystemBars()
+
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -264,12 +266,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 GoogleMap.MAP_TYPE_NORMAL -> {
                     googleMap.setMapStyle(null)
                     googleMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
-                    Toast.makeText(this, "Satellite view", Toast.LENGTH_SHORT).show()
                 }
                 else -> {
                     googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
                     applyDarkMapStyle()
-                    Toast.makeText(this, "Map view", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -295,20 +295,26 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun applyDarkMapStyle() {
         try {
             Log.d(TAG, "Attempting to apply dark map style...")
-            val success = googleMap.setMapStyle(
-                MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style)
-            )
+
+            val inputStream = resources.openRawResource(R.raw.map_style)
+            val json = inputStream.bufferedReader().use { it.readText() }
+            Log.d(TAG, "✅ File loaded! JSON length: ${json.length} characters")
+            Log.d(TAG, "JSON content: $json")
+
+            val success = googleMap.setMapStyle(MapStyleOptions(json))
             if (success) {
                 Log.d(TAG, "✅ Dark map style applied successfully!")
+                Toast.makeText(this, "Dark map applied", Toast.LENGTH_SHORT).show()
             } else {
-                Log.e(TAG, "❌ Style parsing failed - JSON might be invalid")
+                Log.e(TAG, "❌ Style parsing failed")
+                Toast.makeText(this, "Map style failed", Toast.LENGTH_SHORT).show()
             }
-        } catch (e: Resources.NotFoundException) {
-            Log.e(TAG, "❌ Can't find map_style.json in res/raw/", e)
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Error applying style: ", e)
+            Log.e(TAG, "❌ Error: ${e.message}", e)
+            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
 
 
     private fun setupSearch() {

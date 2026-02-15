@@ -5,15 +5,33 @@
   },
   {
     "elementType": "labels.text.fill",
-    "stylers": [{"color": "#757575"}]
+    "stylers": [{"color": "#FFFFFF"}]
   },
   {
     "elementType": "labels.text.stroke",
-    "stylers": [{"color": "#212121"}]
+    "stylers": [{"color": "#000000"}]
   },
   {
     "featureType": "water",
     "elementType": "geometry",
     "stylers": [{"color": "#000000"}]
+  },
+  {
+    "featureType": "administrative.country",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {"color": "#D4AF37"},
+      {"weight": 3},
+      {"visibility": "on"}
+    ]
+  },
+  {
+    "featureType": "administrative.province",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {"color": "#8B7355"},
+      {"weight": 2},
+      {"visibility": "on"}
+    ]
   }
 ]
