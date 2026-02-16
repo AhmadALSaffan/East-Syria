@@ -25,6 +25,7 @@ import com.example.eastsyria.MainPage.Adapters.FeaturedLandmarkAdapter
 import com.example.eastsyria.MainPage.Adapters.TrendingDestinationAdapter
 import com.example.eastsyria.MainPage.Data.Landmark
 import com.example.eastsyria.Map.MapActivity
+import com.example.eastsyria.Notifications.NotificationsActivity
 import com.example.eastsyria.R
 import com.example.eastsyria.Saved.SavedLandmarksActivity
 import com.example.eastsyria.Search.SearchLandmarksActivity
@@ -204,8 +205,10 @@ class MainPageActivity : AppCompatActivity() {
                         false
                     }
                     R.id.nav_updates -> {
-                        //showToast("Updates")
-                        false
+                        val intentNotification = Intent(this@MainPageActivity,
+                            NotificationsActivity::class.java)
+                        startActivity(intentNotification)
+                        true
                     }
                     R.id.nav_profile -> {
                         //showToast("Profile")

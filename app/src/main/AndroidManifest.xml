@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EastSyria">
         <activity
+            android:name=".Notifications.NotificationsActivity"
+            android:exported="false" />
+        <activity
             android:name=".CategoryList.CategoryListActivity"
             android:exported="false" />
         <activity
@@ -65,7 +68,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".CategoryList.SearchActivity"
             android:exported="false"
