@@ -132,41 +132,36 @@ class NotificationsActivity : AppCompatActivity() {
         }
 
         Log.d(TAG, "Loading notifications for user: $userId")
-        Log.d(TAG, "Listening to path: notifications/$userId")
 
         notificationsListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 Log.d(TAG, "========== FIREBASE DATA RECEIVED ==========")
-                Log.d(TAG, "Snapshot exists: ${snapshot.exists()}")
-                Log.d(TAG, "Snapshot children count: ${snapshot.childrenCount}")
 
                 notifications.clear()
 
                 for (notificationSnapshot in snapshot.children) {
                     val notificationId = notificationSnapshot.key ?: continue
-                    val isReadFromFirebase = notificationSnapshot.child("isRead").getValue(Boolean::class.java) ?: false
 
-                    Log.d(TAG, "---")
-                    Log.d(TAG, "Notification ID: $notificationId")
-                    Log.d(TAG, "isRead from Firebase: $isReadFromFirebase")
-
-                    try {
-                        val notification = notificationSnapshot.getValue(Notification::class.java)
-
-                        if (notification != null) {
-                            val notificationWithId = notification.copy(id = notificationId)
-
-                            Log.d(TAG, "Title: ${notificationWithId.title}")
-                            Log.d(TAG, "isRead in object: ${notificationWithId.isRead}")
-                            Log.d(TAG, "Dot visibility: ${if (notificationWithId.isRead) "HIDDEN (GONE)" else "VISIBLE"}")
-
-                            notifications.add(notificationWithId)
-                        } else {
-                            Log.e(TAG, "Failed to parse notification: $notificationId")
-                        }
-                    } catch (e: Exception) {
-                        Log.e(TAG, "Error parsing notification $notificationId: ${e.message}", e)
+                    // ✅ MANUALLY parse each field instead of using getValue()
+                    val notification = Notification().apply {
+                        id = notificationId
+                        type = notificationSnapshot.child("type").getValue(String::class.java) ?: ""
+                        title = notificationSnapshot.child("title").getValue(String::class.java) ?: ""
+                        description = notificationSnapshot.child("description").getValue(String::class.java) ?: ""
+                        timestamp = notificationSnapshot.child("timestamp").getValue(Long::class.java) ?: 0L
+                        isRead = notificationSnapshot.child("isRead").getValue(Boolean::class.java) ?: false
+                        imageUrl = notificationSnapshot.child("imageUrl").getValue(String::class.java) ?: ""
+                        isFeatured = notificationSnapshot.child("isFeatured").getValue(Boolean::class.java) ?: false
+                        relatedId = notificationSnapshot.child("relatedId").getValue(String::class.java) ?: ""
+                        openedAt = notificationSnapshot.child("openedAt").getValue(Long::class.java) ?: 0L
                     }
+
+                    Log.d(TAG, "Notification: ${notification.id}")
+                    Log.d(TAG, "  Title: ${notification.title}")
+                    Log.d(TAG, "  isRead: ${notification.isRead}")
+                    Log.d(TAG, "  Dot: ${if (notification.isRead) "HIDDEN" else "VISIBLE"}")
+
+                    notifications.add(notification)
                 }
 
                 notifications.sortByDescending { it.timestamp }
@@ -180,11 +175,6 @@ class NotificationsActivity : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {
                 Log.e(TAG, "Failed to load notifications: ${error.message}")
-                Toast.makeText(
-                    this@NotificationsActivity,
-                    "Failed to load notifications: ${error.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         }
 
@@ -202,21 +192,27 @@ class NotificationsActivity : AppCompatActivity() {
             .child(userId)
             .get()
             .addOnSuccessListener { snapshot ->
-                Log.d(TAG, "Refresh successful - ${snapshot.childrenCount} notifications")
-
                 notifications.clear()
 
                 for (notificationSnapshot in snapshot.children) {
                     val notificationId = notificationSnapshot.key ?: continue
-                    val isReadFromFirebase = notificationSnapshot.child("isRead").getValue(Boolean::class.java) ?: false
 
-                    Log.d(TAG, "Refresh check - $notificationId: isRead=$isReadFromFirebase")
 
-                    val notification = notificationSnapshot.getValue(Notification::class.java)
-                    if (notification != null) {
-                        val notificationWithId = notification.copy(id = notificationId)
-                        notifications.add(notificationWithId)
+                    val notification = Notification().apply {
+                        id = notificationId
+                        type = notificationSnapshot.child("type").getValue(String::class.java) ?: ""
+                        title = notificationSnapshot.child("title").getValue(String::class.java) ?: ""
+                        description = notificationSnapshot.child("description").getValue(String::class.java) ?: ""
+                        timestamp = notificationSnapshot.child("timestamp").getValue(Long::class.java) ?: 0L
+                        isRead = notificationSnapshot.child("isRead").getValue(Boolean::class.java) ?: false
+                        imageUrl = notificationSnapshot.child("imageUrl").getValue(String::class.java) ?: ""
+                        isFeatured = notificationSnapshot.child("isFeatured").getValue(Boolean::class.java) ?: false
+                        relatedId = notificationSnapshot.child("relatedId").getValue(String::class.java) ?: ""
+                        openedAt = notificationSnapshot.child("openedAt").getValue(Long::class.java) ?: 0L
                     }
+
+                    Log.d(TAG, "Refresh: ${notification.id} - isRead=${notification.isRead}")
+                    notifications.add(notification)
                 }
 
                 notifications.sortByDescending { it.timestamp }
@@ -229,6 +225,7 @@ class NotificationsActivity : AppCompatActivity() {
                 Log.e(TAG, "Failed to refresh: ${error.message}")
             }
     }
+
 
     private fun handleNotificationClick(notification: Notification) {
         Log.d(TAG, "=== Notification Clicked ===")

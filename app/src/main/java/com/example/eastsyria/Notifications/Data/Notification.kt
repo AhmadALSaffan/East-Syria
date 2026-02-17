@@ -1,15 +1,15 @@
 package com.example.eastsyria.Notifications.Data
 
 data class Notification(
-    val id: String = "",
-    val type: String = "",
-    val title: String = "",
-    val description: String = "",
-    val timestamp: Long = 0L,
+    var id: String = "",
+    var type: String = "",
+    var title: String = "",
+    var description: String = "",
+    var timestamp: Long = 0L,
     var isRead: Boolean = false,
-    val imageUrl: String = "",
+    var imageUrl: String = "",
     var isFeatured: Boolean = false,
-    val relatedId: String = "",
+    var relatedId: String = "",
     var openedAt: Long = 0L
 ) {
     constructor() : this("", "", "", "", 0L, false, "", false, "", 0L)
