@@ -51,6 +51,10 @@ class MainPageActivity : AppCompatActivity() {
     private val featuredLandmarks = mutableListOf<Landmark>()
     private val trendingDestinations = mutableListOf<Landmark>()
 
+    companion object {
+        const val EXTRA_SELECT_EXPLORE = "select_explore"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideSystemBars()
@@ -68,6 +72,13 @@ class MainPageActivity : AppCompatActivity() {
         setupRecyclerViews()
         setupClickListeners()
         loadLandmarksFromFirebase()
+        handleExploreExtra(intent)
+    }
+
+    private fun handleExploreExtra(intent: Intent) {
+        if (intent.getBooleanExtra(EXTRA_SELECT_EXPLORE, false)) {
+            binding.bottomNavigation.selectedItemId = R.id.nav_explore
+        }
     }
 
 
@@ -261,5 +272,9 @@ class MainPageActivity : AppCompatActivity() {
 
             systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
+    }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleExploreExtra(intent)
     }
 }
