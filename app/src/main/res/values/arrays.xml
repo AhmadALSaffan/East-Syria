@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="syria_cities">
+        <item>Aleppo</item>
+        <item>Damascus</item>
+        <item>Homs</item>
+        <item>Latakia</item>
+        <item>Hama</item>
+        <item>Ar-Raqqah</item>
+        <item>Deir ez-Zor</item>
+        <item>Al-Hasakah</item>
+        <item>Qamishli</item>
+        <item>Tartus</item>
+        <item>Douma</item>
+        <item>Manbij</item>
+        <item>Idlib</item>
+        <item>Daraa</item>
+        <item>Darayya</item>
+        <item>As-Suwayda</item>
+        <item>As-Safira</item>
+        <item>Al-Bab</item>
+        <item>Maarat al-Numaan</item>
+        <item>Jableh</item>
+        <item>Palmyra</item>
+        <item>Ayn al-Arab</item>
+        <item>Mayadin</item>
+        <item>Abu Kamal</item>
+        <item>Baniyas</item>
+        <item>Jisr ash-Shugur</item>
+        <item>Al-Rastan</item>
+        <item>Arihah</item>
+        <item>Afrin</item>
+        <item>Qatana</item>
+        <item>Qudsaya</item>
+        <item>An-Nabk</item>
+        <item>Azaz</item>
+        <item>Al-Qusayr</item>
+        <item>Ras al-Ayn</item>
+        <item>Al-Qutayfah</item>
+        <item>Al-Malikiyah</item>
+        <item>Masyaf</item>
+        <item>Harem</item>
+        <item>Izra</item>
+        <item>Jaramana</item>
+        <item>Kafr Nabl</item>
+        <item>Khan Shaykhun</item>
+        <item>Maarat Misrin</item>
+        <item>Nawa</item>
+        <item>Kafr Takharim</item>
+        <item>Saraqib</item>
+        <item>Talbiseh</item>
+        <item>Mhardeh</item>
+        <item>Quneitra</item>
+        <item>Other</item>
+    </string-array>
+</resources>

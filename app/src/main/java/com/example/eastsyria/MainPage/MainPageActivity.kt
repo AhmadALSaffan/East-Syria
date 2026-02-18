@@ -26,6 +26,7 @@ import com.example.eastsyria.MainPage.Adapters.TrendingDestinationAdapter
 import com.example.eastsyria.MainPage.Data.Landmark
 import com.example.eastsyria.Map.MapActivity
 import com.example.eastsyria.Notifications.NotificationsActivity
+import com.example.eastsyria.Profile.ProfileActivity
 import com.example.eastsyria.R
 import com.example.eastsyria.Saved.SavedLandmarksActivity
 import com.example.eastsyria.Search.SearchLandmarksActivity
@@ -211,8 +212,9 @@ class MainPageActivity : AppCompatActivity() {
                         true
                     }
                     R.id.nav_profile -> {
-                        //showToast("Profile")
-                        false
+                        val intent = Intent(this@MainPageActivity, ProfileActivity::class.java)
+                        startActivity(intent)
+                        true
                     }
                     else -> false
                 }

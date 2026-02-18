@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -52,7 +53,15 @@ class SignUpActivity : AppCompatActivity() {
         setupFocusListeners()
         setupWindowInsets()
         setupClickListeners()
+        setupCityDropdown()
     }
+
+    private fun setupCityDropdown() {
+        val cities = resources.getStringArray(R.array.syria_cities)
+        val adapter = ArrayAdapter(this, R.layout.dropdown_item, cities)
+        binding.actvCity.setAdapter(adapter)
+    }
+
 
         private fun setupWindowInsets() {
             ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
@@ -139,9 +148,10 @@ class SignUpActivity : AppCompatActivity() {
                     val email = etEmail.text.toString().trim()
                     val phone = etPhone.text.toString().trim()
                     val password = etPassword.text.toString().trim()
+                    val city = actvCity.text.toString().trim()
 
-                    if (validateInput(fullName, email, phone, password)) {
-                        sendVerificationCode(fullName, email, phone, password)
+                    if (validateInput(fullName, email, phone, password,city)) {
+                        sendVerificationCode(fullName, email, phone, password,city)
                     }
                 }
 
@@ -155,7 +165,8 @@ class SignUpActivity : AppCompatActivity() {
             fullName: String,
             email: String,
             phone: String,
-            password: String
+            password: String,
+            city:String
         ): Boolean {
             binding.apply {
                 if (fullName.isEmpty()) {
@@ -213,6 +224,10 @@ class SignUpActivity : AppCompatActivity() {
                     return false
                 }
                 tilPassword.error = null
+                if (city.isEmpty()){
+                    tilCity.error = "Please select a city"
+                    return false
+                }
             }
 
             return true
@@ -222,7 +237,8 @@ class SignUpActivity : AppCompatActivity() {
             fullName: String,
             email: String,
             phone: String,
-            password: String
+            password: String,
+            city:String
         ) {
             showLoading(true)
 
@@ -239,12 +255,12 @@ class SignUpActivity : AppCompatActivity() {
 
                         if (emailSent) {
                             showToast("Verification code sent to $email")
-                            // Navigate to verification with all data including the code
                             navigateToVerification(
                                 fullName,
                                 email,
                                 phone,
                                 password,
+                                city,
                                 verificationCode
                             )
                         } else {
@@ -265,6 +281,7 @@ class SignUpActivity : AppCompatActivity() {
             email: String,
             phone: String,
             password: String,
+            city: String,
             verificationCode: String
     ) {
             val intent = Intent(this, VerificationActivity::class.java).apply {
@@ -272,6 +289,7 @@ class SignUpActivity : AppCompatActivity() {
                 putExtra("EMAIL", email)
                 putExtra("PHONE", phone)
                 putExtra("PASSWORD", password)
+                putExtra("CITY",city)
                 putExtra("VERIFICATION_CODE", verificationCode)
                 putExtra("CODE_TIMESTAMP", System.currentTimeMillis())
             }

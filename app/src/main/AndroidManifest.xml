@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EastSyria">
         <activity
+            android:name=".Profile.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".Notifications.NotificationsActivity"
             android:exported="false" />
         <activity

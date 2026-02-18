@@ -42,6 +42,7 @@ class VerificationActivity : AppCompatActivity() {
     private var password: String = ""
     private var verificationCode: String = ""
     private var codeTimestamp: Long = 0L
+    private var city:String = ""
 
     private var countDownTimer: CountDownTimer? = null
 
@@ -75,6 +76,7 @@ class VerificationActivity : AppCompatActivity() {
         password = intent.getStringExtra("PASSWORD") ?: ""
         verificationCode = intent.getStringExtra("VERIFICATION_CODE") ?: ""
         codeTimestamp = intent.getLongExtra("CODE_TIMESTAMP", 0L)
+        city = intent.getStringExtra("CITY")?:""
 
         setupWindowInsets()
         setupOtpInputs()
@@ -173,18 +175,14 @@ class VerificationActivity : AppCompatActivity() {
         }
 
         showLoading(true)
-
-        // Check if code has expired (10 minutes)
-        val expirationTime = codeTimestamp + 600000 // 10 minutes
+        val expirationTime = codeTimestamp + 600000
         if (System.currentTimeMillis() > expirationTime) {
             showLoading(false)
             showToast("Verification code has expired. Please request a new one.")
             return
         }
 
-        // Verify the code
         if (code == verificationCode) {
-            // Code is correct, create Firebase Auth account and save to database
             createAccountAndSaveData()
         } else {
             showLoading(false)
@@ -194,19 +192,18 @@ class VerificationActivity : AppCompatActivity() {
     }
 
     private fun createAccountAndSaveData() {
-        // Create Firebase Authentication account
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val uid = auth.currentUser?.uid ?: ""
 
-                    // Immediately save user data to Realtime Database
                     val userData = mapOf(
                         "uid" to uid,
                         "fullName" to fullName,
                         "email" to email,
                         "phone" to phone,
                         "verified" to true,
+                        "city" to city,
                         "createdAt" to System.currentTimeMillis()
                     )
 
@@ -215,14 +212,11 @@ class VerificationActivity : AppCompatActivity() {
                     userRef.setValue(userData).addOnSuccessListener {
                         showLoading(false)
                         showToast("Account created successfully!")
-
-                        // Navigate to Explore/Home page
                         navigateToExplore()
 
                     }.addOnFailureListener { dbError ->
                         showLoading(false)
                         showToast("Account created but failed to save profile: ${dbError.message}")
-                        // Even if database save fails, auth account was created
                         navigateToExplore()
                     }
 
@@ -236,15 +230,12 @@ class VerificationActivity : AppCompatActivity() {
     private fun resendVerificationCode() {
         binding.tvResendCode.isEnabled = false
         showToast("Sending new code...")
-
-        // Generate new code
         val newCode = emailService.generateVerificationCode()
 
-        // Update local variables
         verificationCode = newCode
         codeTimestamp = System.currentTimeMillis()
 
-        // Send new email
+
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val emailSent = emailService.sendVerificationCode(email, fullName, newCode)
