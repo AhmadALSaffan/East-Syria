@@ -2,6 +2,7 @@ package com.example.eastsyria.Profile
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -9,6 +10,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.bumptech.glide.Glide
 import com.example.eastsyria.Login.LoginActivity
 import com.example.eastsyria.MainPage.MainPageActivity
+import com.example.eastsyria.Profile.PersonalDetails.PersonalDetailsActivity
 import com.example.eastsyria.R
 import com.example.eastsyria.databinding.ActivityProfileBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -35,6 +37,7 @@ class ProfileActivity : AppCompatActivity() {
         setupUI()
         loadUserData()
         hideSystemBars()
+
     }
 
     private fun setupUI() {
@@ -58,8 +61,8 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         binding.layoutPersonalDetails.setOnClickListener {
-            //val intent = Intent(this, PersonalDetailsActivity::class.java)
-            //startActivity(intent)
+            val intent = Intent(this, PersonalDetailsActivity::class.java)
+            startActivity(intent)
         }
 
         binding.layoutSettings.setOnClickListener {
@@ -140,5 +143,9 @@ class ProfileActivity : AppCompatActivity() {
 
             systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        loadUserData()
     }
 }
