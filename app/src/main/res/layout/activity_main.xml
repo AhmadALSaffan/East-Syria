@@ -8,6 +8,7 @@
     android:background="@drawable/back">
 
 
+
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -133,7 +134,7 @@
             android:layout_marginBottom="24dp" />
 
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnStartJourney"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -182,5 +183,17 @@
         android:contentDescription="Toggle night mode"
         android:visibility="gone"
         android:alpha="0" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="156dp"
+        android:layout_height="156dp"
+        android:visibility="gone"
+        android:indeterminateTint="@color/orange_accent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

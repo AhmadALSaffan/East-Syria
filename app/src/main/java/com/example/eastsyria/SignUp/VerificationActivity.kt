@@ -204,6 +204,7 @@ class VerificationActivity : AppCompatActivity() {
                         "phone" to phone,
                         "verified" to true,
                         "city" to city,
+                        "role" to "user",
                         "createdAt" to System.currentTimeMillis()
                     )
 

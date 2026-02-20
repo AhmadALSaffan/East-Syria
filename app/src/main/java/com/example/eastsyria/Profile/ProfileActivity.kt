@@ -128,10 +128,15 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun signOut() {
+        val uid = auth.currentUser?.uid
         auth.signOut()
-        val intent = Intent(this, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
+        if (uid != null) {
+            getSharedPreferences("user_prefs", MODE_PRIVATE)
+                .edit()
+                .remove("role_$uid")
+                .apply()
+        }
+        startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
     private fun hideSystemBars() {

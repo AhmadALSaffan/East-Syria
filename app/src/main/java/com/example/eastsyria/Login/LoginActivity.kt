@@ -5,16 +5,11 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import com.example.eastsyria.MainActivity
+import com.example.eastsyria.Admin.MainPageAdminActivity
 import com.example.eastsyria.MainPage.MainPageActivity
 import com.example.eastsyria.R
 import com.example.eastsyria.SignUp.SignUpActivity
@@ -27,12 +22,14 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.FirebaseDatabase
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+    private var isNavigating = false
 
     companion object {
         private const val RC_SIGN_IN = 9001
@@ -43,15 +40,18 @@ class LoginActivity : AppCompatActivity() {
         hideSystemBars()
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         supportActionBar?.hide()
-
         auth = FirebaseAuth.getInstance()
-
         setupGoogleSignIn()
-
         setupClickListeners()
+    }
 
+    override fun onStart() {
+        super.onStart()
+        if (!isNavigating && auth.currentUser != null) {
+            isNavigating = true
+            navigateByRole(auth.currentUser!!.uid)
+        }
     }
 
     private fun setupGoogleSignIn() {
@@ -59,7 +59,6 @@ class LoginActivity : AppCompatActivity() {
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
-
         googleSignInClient = GoogleSignIn.getClient(this, gso)
     }
 
@@ -68,7 +67,6 @@ class LoginActivity : AppCompatActivity() {
             btnLogin.setOnClickListener {
                 val email = etEmail.text.toString().trim()
                 val password = etPassword.text.toString().trim()
-
                 if (validateInput(email, password)) {
                     loginWithEmail(email, password)
                 }
@@ -80,15 +78,12 @@ class LoginActivity : AppCompatActivity() {
 
             tvForgot.setOnClickListener {
                 val email = etEmail.text.toString().trim()
-                if (email.isEmpty()) {
-                    showToast("Please enter your email")
-                } else {
-                    resetPassword(email)
-                }
+                if (email.isEmpty()) showToast("Please enter your email")
+                else resetPassword(email)
             }
 
             tvSignUp.setOnClickListener {
-                navigateToSignUp()
+                startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
             }
         }
     }
@@ -100,57 +95,103 @@ class LoginActivity : AppCompatActivity() {
                 etEmail.requestFocus()
                 return false
             }
-
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 tilEmail.error = "Please enter a valid email"
                 etEmail.requestFocus()
                 return false
             }
-
             tilEmail.error = null
-
             if (password.isEmpty()) {
                 tilPassword.error = "Password is required"
                 etPassword.requestFocus()
                 return false
             }
-
             if (password.length < 6) {
                 tilPassword.error = "Password must be at least 6 characters"
                 etPassword.requestFocus()
                 return false
             }
-
             tilPassword.error = null
         }
-
         return true
     }
 
     private fun loginWithEmail(email: String, password: String) {
         showLoading(true)
-
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
-                showLoading(false)
-
                 if (task.isSuccessful) {
-                    showToast("Login successful!")
-                    navigateToMain()
+                    val uid = auth.currentUser?.uid
+                    if (uid == null) {
+                        showLoading(false)
+                        showToast("Login failed: user not found")
+                        return@addOnCompleteListener
+                    }
+                    isNavigating = true
+                    navigateByRole(uid)
                 } else {
+                    showLoading(false)
                     showToast("Authentication failed: ${task.exception?.message}")
                 }
             }
     }
 
+    private fun navigateByRole(uid: String) {
+        val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val cachedRole = prefs.getString("role_$uid", null)
+
+        if (cachedRole != null) {
+            showLoading(false)
+            routeToScreen(cachedRole)
+            return
+        }
+
+        showLoading(true)
+        FirebaseDatabase.getInstance().getReference("users")
+            .child(uid)
+            .child("role")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                showLoading(false)
+                val role = snapshot.getValue(String::class.java)
+                if (role == null) {
+                    showToast("Role not found, contact support")
+                    isNavigating = false
+                    return@addOnSuccessListener
+                }
+                prefs.edit().putString("role_$uid", role).apply()
+                routeToScreen(role)
+            }
+            .addOnFailureListener {
+                showLoading(false)
+                isNavigating = false
+                showToast("Failed to get role: ${it.message}")
+            }
+    }
+
+    private fun routeToScreen(role: String) {
+        when (role) {
+            "admin" -> {
+                startActivity(Intent(this, MainPageAdminActivity::class.java))
+                finish()
+            }
+            "user" -> {
+                startActivity(Intent(this, MainPageActivity::class.java))
+                finish()
+            }
+            else -> {
+                isNavigating = false
+                showToast("Unknown role: $role")
+            }
+        }
+    }
+
     private fun signInWithGoogle() {
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleGoogleSignInResult(task)
@@ -168,16 +209,19 @@ class LoginActivity : AppCompatActivity() {
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         showLoading(true)
-
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
-                showLoading(false)
-
                 if (task.isSuccessful) {
-                    showToast("Google sign in successful!")
-                    navigateToMain()
+                    val uid = auth.currentUser?.uid ?: run {
+                        showLoading(false)
+                        showToast("Sign in failed")
+                        return@addOnCompleteListener
+                    }
+                    isNavigating = true
+                    navigateByRole(uid)
                 } else {
+                    showLoading(false)
                     showToast("Authentication failed: ${task.exception?.message}")
                 }
             }
@@ -186,53 +230,22 @@ class LoginActivity : AppCompatActivity() {
     private fun resetPassword(email: String) {
         auth.sendPasswordResetEmail(email)
             .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    showToast("Password reset email sent to $email")
-                } else {
-                    showToast("Failed to send reset email: ${task.exception?.message}")
-                }
+                if (task.isSuccessful) showToast("Password reset email sent to $email")
+                else showToast("Failed to send reset email: ${task.exception?.message}")
             }
     }
 
     private fun showLoading(show: Boolean) {
         binding.apply {
-            if (show) {
-                progressBar.visibility = View.VISIBLE
-                btnLogin.text = ""
-                btnLogin.isEnabled = false
-                btnGoogleSignIn.isEnabled = false
-            } else {
-                progressBar.visibility = View.GONE
-                btnLogin.text = "Login"
-                btnLogin.isEnabled = true
-                btnGoogleSignIn.isEnabled = true
-            }
+            progressBar.visibility = if (show) View.VISIBLE else View.GONE
+            btnLogin.text = if (show) "" else "Login"
+            btnLogin.isEnabled = !show
+            btnGoogleSignIn.isEnabled = !show
         }
     }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun navigateToMain() {
-        startActivity(Intent(this, MainPageActivity::class.java))
-        finish()
-    }
-
-    private fun navigateToSignUp() {
-        startActivity(Intent(this, SignUpActivity::class.java))
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            navigateToMain()
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     private fun hideSystemBars() {
