@@ -14,6 +14,9 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.bumptech.glide.Glide
 import com.example.eastsyria.Profile.ProfileActivity
 import com.example.eastsyria.R
@@ -65,6 +68,7 @@ class PersonalDetailsActivity : AppCompatActivity() {
         loadUserData()
         setupListeners()
         setupCityDropdown()
+        hideSystemBars()
     }
 
     private fun setupCityDropdown() {
@@ -150,7 +154,7 @@ class PersonalDetailsActivity : AppCompatActivity() {
     private fun compressToUnder1MB(uri: Uri): ByteArray? {
         return try {
             val inputStream = contentResolver.openInputStream(uri) ?: return null
-            val bitmap = BitmapFactory.decodeStream(inputStream)
+            val bitmap = fixImageRotation(uri) ?: return null
             inputStream.close()
 
             val out = ByteArrayOutputStream()
@@ -168,6 +172,42 @@ class PersonalDetailsActivity : AppCompatActivity() {
             null
         }
     }
+
+    private fun fixImageRotation(uri: Uri): Bitmap? {
+        return try {
+            val inputStream = contentResolver.openInputStream(uri) ?: return null
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            inputStream.close()
+
+            val exifStream = contentResolver.openInputStream(uri) ?: return bitmap
+            val exif = androidx.exifinterface.media.ExifInterface(exifStream)
+            exifStream.close()
+
+            val orientation = exif.getAttributeInt(
+                androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION,
+                androidx.exifinterface.media.ExifInterface.ORIENTATION_NORMAL
+            )
+
+            val rotation = when (orientation) {
+                androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90  -> 90f
+                androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_180 -> 180f
+                androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270 -> 270f
+                else -> 0f
+            }
+
+            if (rotation != 0f) {
+                val matrix = android.graphics.Matrix()
+                matrix.postRotate(rotation)
+                Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+            } else {
+                bitmap
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
 
     private fun onSaveClicked() {
         val uid = auth.currentUser?.uid ?: return
@@ -258,5 +298,15 @@ class PersonalDetailsActivity : AppCompatActivity() {
         binding.btnSaveChanges.isEnabled  = !show
         binding.btnEditPhoto.isEnabled    = !show
         binding.tvChangePhoto.isEnabled   = !show
+    }
+    private fun hideSystemBars() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.apply {
+            hide(WindowInsetsCompat.Type.navigationBars())
+
+            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
     }
 }
