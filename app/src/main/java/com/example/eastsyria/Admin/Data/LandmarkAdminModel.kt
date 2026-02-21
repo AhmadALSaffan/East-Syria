@@ -2,7 +2,12 @@ package com.example.eastsyria.Admin.Data
 
 data class LocationModel(
     val city: String = "",
-    val cityArabic: String = ""
+    val cityArabic: String = "",
+    val governorate:String = "",
+    val  region:String = "",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0
+
 )
 
 data class LandmarkAdminModel(

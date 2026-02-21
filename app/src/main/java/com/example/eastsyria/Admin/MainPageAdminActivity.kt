@@ -11,8 +11,10 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.eastsyria.Admin.Add.AddLandmarkActivity
 import com.example.eastsyria.Admin.Data.AdminLandmarkAdapter
 import com.example.eastsyria.Admin.Data.LandmarkAdminModel
+import com.example.eastsyria.Admin.Data.LocationModel
 import com.example.eastsyria.Login.LoginActivity
 import com.example.eastsyria.databinding.ActivityMainPageAdminBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -53,7 +55,7 @@ class MainPageAdminActivity : AppCompatActivity() {
         }
 
         binding.btnAddLandmark.setOnClickListener {
-            //startActivity(Intent(this, AddLandmarkActivity::class.java))
+            startActivity(Intent(this, AddLandmarkActivity::class.java))
         }
 
         binding.etSearch.addTextChangedListener(object : TextWatcher {
@@ -82,6 +84,10 @@ class MainPageAdminActivity : AppCompatActivity() {
         )
         binding.rvLandmarks.layoutManager = LinearLayoutManager(this)
         binding.rvLandmarks.adapter = adapter
+        binding.rvLandmarks.isNestedScrollingEnabled = false
+        binding.rvLandmarks.setHasFixedSize(false)
+
+
     }
 
     private fun loadStats() {
@@ -110,31 +116,37 @@ class MainPageAdminActivity : AppCompatActivity() {
         binding.progressBarLandmarks.visibility = View.VISIBLE
         binding.rvLandmarks.visibility = View.GONE
 
-        database.limitToFirst(5).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                allLandmarks.clear()
-                for (child in snapshot.children) {
-                    val landmark = child.getValue(LandmarkAdminModel::class.java)
-                    if (landmark != null) {
-                        landmark.id = child.key ?: ""
-                        allLandmarks.add(landmark)
+        database.get().addOnSuccessListener { totalSnapshot ->
+            val totalCount = totalSnapshot.children.count { it.getValue(Any::class.java) != null }
+
+            database.limitToFirst(10).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    allLandmarks.clear()
+                    for (child in snapshot.children) {
+                        if (child.getValue(Any::class.java) == null) continue
+                        val landmark = child.getValue(LandmarkAdminModel::class.java)
+                        if (landmark != null) {
+                            landmark.id = child.key ?: ""
+                            allLandmarks.add(landmark)
+                        }
                     }
+                    binding.tvShowingCount.text = "Showing ${allLandmarks.size} of $totalCount"
+                    adapter.notifyDataSetChanged()
+                    binding.progressBarLandmarks.visibility = View.GONE
+                    binding.rvLandmarks.visibility = View.VISIBLE
                 }
 
-                binding.tvShowingCount.text = "Showing ${allLandmarks.size} of ${snapshot.childrenCount}"
-                adapter.notifyDataSetChanged()
-
-                binding.progressBarLandmarks.visibility = View.GONE
-                binding.rvLandmarks.visibility = View.VISIBLE
-            }
-
-
-            override fun onCancelled(error: DatabaseError) {
-                binding.progressBarLandmarks.visibility = View.GONE
-                binding.rvLandmarks.visibility = View.VISIBLE
-                Toast.makeText(this@MainPageAdminActivity, "Failed to load landmarks: ${error.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    binding.progressBarLandmarks.visibility = View.GONE
+                    binding.rvLandmarks.visibility = View.VISIBLE
+                    Toast.makeText(
+                        this@MainPageAdminActivity,
+                        "Failed to load: ${error.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+        }
     }
 
 

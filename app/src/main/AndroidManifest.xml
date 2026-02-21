@@ -21,6 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EastSyria">
         <activity
+            android:name=".Admin.Add.AddLandmarkActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
             android:name=".Admin.MainPageAdminActivity"
             android:exported="false" />
         <activity

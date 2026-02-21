@@ -82,10 +82,13 @@ data class Landmark(
 
     @get:PropertyName("updatedAt") @set:PropertyName("updatedAt")
     var updatedAt: Long = 0L
+
 ) {
     // No-argument constructor required by Firebase
     constructor() : this("")
 }
+@get:PropertyName("details") @set:PropertyName("details")
+var details: LandmarkDetails = LandmarkDetails()
 
 @IgnoreExtraProperties
 data class Location(
@@ -109,6 +112,25 @@ data class Location(
 
     @get:PropertyName("longitude") @set:PropertyName("longitude")
     var longitude: Double = 0.0
+) {
+    constructor() : this("")
+}
+@IgnoreExtraProperties
+data class LandmarkDetails(
+    @get:PropertyName("yearBuilt") @set:PropertyName("yearBuilt")
+    var yearBuilt: String = "",
+
+    @get:PropertyName("builtBy") @set:PropertyName("builtBy")
+    var builtBy: String = "",
+
+    @get:PropertyName("era") @set:PropertyName("era")
+    var era: String = "",
+
+    @get:PropertyName("material") @set:PropertyName("material")
+    var material: String = "",
+
+    @get:PropertyName("elevation") @set:PropertyName("elevation")
+    var elevation: String = ""
 ) {
     constructor() : this("")
 }
