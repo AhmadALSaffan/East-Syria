@@ -9,11 +9,12 @@ import com.example.eastsyria.databinding.ItemSearchResultBinding
 import com.example.eastsyria.MainPage.Data.Landmark
 
 class SearchResultAdapter(
-    private var landmarks: List<Landmark>,
+    landmarks: List<Landmark>,
     private val onItemClick: (Landmark) -> Unit
 ) : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
 
-    private var filteredLandmarks: List<Landmark> = landmarks
+    private var landmarks: List<Landmark> = landmarks.filter { it.status == "published" }
+    private var filteredLandmarks: List<Landmark> = this.landmarks
 
     inner class ViewHolder(private val binding: ItemSearchResultBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -71,8 +72,8 @@ class SearchResultAdapter(
     }
 
     fun updateData(newLandmarks: List<Landmark>) {
-        landmarks = newLandmarks
-        filteredLandmarks = newLandmarks
+        landmarks = newLandmarks.filter { it.status == "published" }
+        filteredLandmarks = landmarks
         notifyDataSetChanged()
     }
 

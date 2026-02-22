@@ -257,8 +257,8 @@ class LandmarkDetailActivity : AppCompatActivity() {
 
     private fun displayLandmarkData() {
         val landmark = currentLandmark ?: return
-        binding.ivHeroImage.setBackgroundColor(Color.parseColor("#FF6B35"))
 
+        binding.ivHeroImage.setBackgroundColor(Color.parseColor("#FF6B35"))
         Glide.with(this)
             .load(landmark.imageUrl)
             .placeholder(R.drawable.placeholder_destination)
@@ -267,18 +267,14 @@ class LandmarkDetailActivity : AppCompatActivity() {
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(binding.ivHeroImage)
 
-
-
         binding.tvCategory.text = if (isEnglish) {
             "${landmark.category.uppercase()} SITE"
         } else {
             "موقع ${landmark.categoryArabic}"
         }
 
-
         binding.tvLandmarkName.text = if (isEnglish) landmark.name else landmark.nameArabic
         binding.tvArabicName.text = if (isEnglish) landmark.nameArabic else landmark.name
-
 
         binding.tvLocation.text = if (isEnglish) {
             "${landmark.location.city}, ${landmark.location.governorate}"
@@ -286,22 +282,16 @@ class LandmarkDetailActivity : AppCompatActivity() {
             "${landmark.location.cityArabic}, ${landmark.location.governorateArabic}"
         }
 
-
         binding.tvRating.text = landmark.rating.toString()
         binding.tvReviewCount.text = "Based on ${formatReviewCount(landmark.reviewCount)} reviews"
 
-
         val details = landmark.details
-
-
         binding.tvBuiltIn.text = details["yearBuilt"]?.toString() ?: "N/A"
-
-
         binding.tvElevation.text = details["elevation"]?.toString() ?: "N/A"
-
-
         binding.tvMaterial.text = details["material"]?.toString() ?: "N/A"
-
+        binding.tvBestTime.text = landmark.bestTimeToVisit.ifEmpty { "N/A" }
+        binding.tvEntryFee.text = landmark.entryFee.ifEmpty { "N/A" }
+        binding.tvVisitingHours.text = landmark.visitingHours.ifEmpty { "N/A" }
 
         binding.tvDescription.text = if (isEnglish) {
             landmark.longDescription
@@ -309,11 +299,11 @@ class LandmarkDetailActivity : AppCompatActivity() {
             landmark.longDescriptionArabic
         }
 
-
         binding.btnGetDirections.setOnClickListener {
             openGoogleMaps(landmark.location.latitude, landmark.location.longitude)
         }
     }
+
 
     private fun formatReviewCount(count: Int): String {
         return when {

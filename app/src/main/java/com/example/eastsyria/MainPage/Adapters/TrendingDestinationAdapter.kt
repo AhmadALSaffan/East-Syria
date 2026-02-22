@@ -22,17 +22,13 @@ class TrendingDestinationAdapter(
                 tvReviewCount.text = "(${formatReviewCount(landmark.reviewCount)})"
                 tvLandmarkName.text = landmark.name
                 tvDescription.text = landmark.description
-
                 Glide.with(binding.root.context)
                     .load(landmark.imageUrl)
                     .placeholder(R.drawable.placeholder_destination)
                     .error(R.drawable.placeholder_destination)
                     .centerCrop()
                     .into(ivLandmark)
-
-                root.setOnClickListener {
-                    onItemClick(landmark)
-                }
+                root.setOnClickListener { onItemClick(landmark) }
             }
         }
 
@@ -46,9 +42,7 @@ class TrendingDestinationAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemTrendingDestinationBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+            LayoutInflater.from(parent.context), parent, false
         )
         return ViewHolder(binding)
     }

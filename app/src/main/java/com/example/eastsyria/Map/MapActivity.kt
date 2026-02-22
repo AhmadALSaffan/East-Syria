@@ -156,10 +156,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     for (landmarkSnapshot in snapshot.children) {
                         val landmark = landmarkSnapshot.getValue(Landmark::class.java)
-                        landmark?.let {
-                            it.id = landmarkSnapshot.key ?: ""
-                            landmarks.add(it)
-                            addMarkerForLandmark(it)
+                        if (landmark != null && landmark.status == "published") {
+                            landmark.id = landmarkSnapshot.key ?: ""
+                            landmarks.add(landmark)
+                            addMarkerForLandmark(landmark)
                         }
                     }
                 }
@@ -173,6 +173,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             })
     }
+
 
     private fun addMarkerForLandmark(landmark: Landmark) {
         if (landmark.location.latitude != 0.0 && landmark.location.longitude != 0.0) {

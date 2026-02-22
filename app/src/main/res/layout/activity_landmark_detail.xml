@@ -690,10 +690,14 @@
 
                     <TextView
                         android:id="@+id/tvVisitingHours"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Daylight Hours"
-                        android:textSize="14sp"
+                        android:layout_weight="1.2"
+                        android:text=""
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:textSize="13sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_white" />
 
@@ -729,9 +733,13 @@
 
                     <TextView
                         android:id="@+id/tvEntryFee"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="FREE"
+                        android:layout_weight="1.2"
+                        android:text=""
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="#4CAF50" />
@@ -768,10 +776,14 @@
 
                     <TextView
                         android:id="@+id/tvBestTime"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Spring / Autumn"
-                        android:textSize="14sp"
+                        android:layout_weight="1.2"
+                        android:text=""
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:textSize="13sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_white" />
 

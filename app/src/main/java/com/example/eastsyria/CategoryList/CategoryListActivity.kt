@@ -1,6 +1,6 @@
 package com.example.eastsyria.CategoryList
 
-import CategoryItemAdapter
+import com.example.eastsyria.CategoryList.CategoryItemAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable

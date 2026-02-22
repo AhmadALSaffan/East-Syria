@@ -112,43 +112,30 @@ class MainPageActivity : AppCompatActivity() {
 
     private fun loadLandmarksFromFirebase() {
         showLoading(true)
-
         val landmarksRef = database.reference.child("landmarks")
         landmarksRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 featuredLandmarks.clear()
                 trendingDestinations.clear()
-
                 for (landmarkSnapshot in snapshot.children) {
                     try {
                         val landmark = landmarkSnapshot.getValue(Landmark::class.java)
-                        if (landmark != null) {
-
+                        if (landmark != null && landmark.status == "published") {
                             landmark.id = landmarkSnapshot.key ?: ""
-
-
-
                             if (landmark.isFeatured) {
                                 featuredLandmarks.add(landmark)
                             }
-
                             if (landmark.isTrending) {
                                 trendingDestinations.add(landmark)
                             }
-                        } else {
-                            Log.e(TAG, "Landmark is null for key: ${landmarkSnapshot.key}")
                         }
                     } catch (e: Exception) {
                         Log.e(TAG, "Error parsing landmark ${landmarkSnapshot.key}: ${e.message}", e)
                     }
                 }
-
-
                 featuredAdapter.notifyDataSetChanged()
                 trendingAdapter.notifyDataSetChanged()
-
                 showLoading(false)
-
                 if (featuredLandmarks.isEmpty() && trendingDestinations.isEmpty()) {
                     showToast("No landmarks found")
                 }

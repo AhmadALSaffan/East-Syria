@@ -82,55 +82,32 @@ data class Landmark(
 
     @get:PropertyName("updatedAt") @set:PropertyName("updatedAt")
     var updatedAt: Long = 0L
-
-) {
-    // No-argument constructor required by Firebase
-    constructor() : this("")
-}
-@get:PropertyName("details") @set:PropertyName("details")
-var details: LandmarkDetails = LandmarkDetails()
-
-@IgnoreExtraProperties
-data class Location(
-    @get:PropertyName("city") @set:PropertyName("city")
-    var city: String = "",
-
-    @get:PropertyName("cityArabic") @set:PropertyName("cityArabic")
-    var cityArabic: String = "",
-
-    @get:PropertyName("governorate") @set:PropertyName("governorate")
-    var governorate: String = "",
-
-    @get:PropertyName("governorateArabic") @set:PropertyName("governorateArabic")
-    var governorateArabic: String = "",
-
-    @get:PropertyName("region") @set:PropertyName("region")
-    var region: String = "",
-
-    @get:PropertyName("latitude") @set:PropertyName("latitude")
-    var latitude: Double = 0.0,
-
-    @get:PropertyName("longitude") @set:PropertyName("longitude")
-    var longitude: Double = 0.0
 ) {
     constructor() : this("")
-}
-@IgnoreExtraProperties
-data class LandmarkDetails(
-    @get:PropertyName("yearBuilt") @set:PropertyName("yearBuilt")
-    var yearBuilt: String = "",
 
-    @get:PropertyName("builtBy") @set:PropertyName("builtBy")
-    var builtBy: String = "",
+    @IgnoreExtraProperties
+    data class Location(
+        @get:PropertyName("city") @set:PropertyName("city")
+        var city: String = "",
 
-    @get:PropertyName("era") @set:PropertyName("era")
-    var era: String = "",
+        @get:PropertyName("cityArabic") @set:PropertyName("cityArabic")
+        var cityArabic: String = "",
 
-    @get:PropertyName("material") @set:PropertyName("material")
-    var material: String = "",
+        @get:PropertyName("governorate") @set:PropertyName("governorate")
+        var governorate: String = "",
 
-    @get:PropertyName("elevation") @set:PropertyName("elevation")
-    var elevation: String = ""
-) {
-    constructor() : this("")
+        @get:PropertyName("governorateArabic") @set:PropertyName("governorateArabic")
+        var governorateArabic: String = "",
+
+        @get:PropertyName("region") @set:PropertyName("region")
+        var region: String = "",
+
+        @get:PropertyName("latitude") @set:PropertyName("latitude")
+        var latitude: Double = 0.0,
+
+        @get:PropertyName("longitude") @set:PropertyName("longitude")
+        var longitude: Double = 0.0
+    ) {
+        constructor() : this("")
+    }
 }
