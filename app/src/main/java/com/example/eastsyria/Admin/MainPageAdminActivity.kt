@@ -15,6 +15,7 @@ import com.example.eastsyria.Admin.Add.AddLandmarkActivity
 import com.example.eastsyria.Admin.Data.AdminLandmarkAdapter
 import com.example.eastsyria.Admin.Data.LandmarkAdminModel
 import com.example.eastsyria.Admin.Data.LocationModel
+import com.example.eastsyria.Admin.Edit.EditLandmarkActivity
 import com.example.eastsyria.Login.LoginActivity
 import com.example.eastsyria.databinding.ActivityMainPageAdminBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -74,9 +75,9 @@ class MainPageAdminActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         adapter = AdminLandmarkAdapter(allLandmarks,
             onEdit = { landmark ->
-               // val intent = Intent(this, EditLandmarkActivity::class.java)
-               // intent.putExtra("landmarkId", landmark.id)
-               // startActivity(intent)
+                val intent = Intent(this, EditLandmarkActivity::class.java)
+               intent.putExtra("landmarkId", landmark.id)
+                startActivity(intent)
             },
             onDelete = { landmark ->
                 database.child(landmark.id).removeValue()

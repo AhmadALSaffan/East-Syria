@@ -1,0 +1,899 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1A1A1A"
+    android:id="@+id/scrollView">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="32dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:background="@drawable/dash_bg_dark"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="48dp">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_back"
+                android:background="@null"
+                android:tint="#FFFFFF" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Edit Landmark"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginStart="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ADMIN MODE"
+                android:textColor="#FFA726"
+                android:textSize="11sp"
+                android:background="#2C1F00"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp" />
+
+        </LinearLayout>
+
+        <!-- General Information -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_add"
+            android:layout_margin="16dp"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="General Information"
+                android:textColor="#FFA726"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Landmark Name (English)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etNameEn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="Palmyra Tetrapylon"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etNameAr" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="اسم المعلم (Arabic)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etNameAr"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="اكتب الاسم"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:gravity="start"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etCategoryEn" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category (English)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etCategoryEn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="Archaeological Site"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etCategoryAr" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="الفئة (Arabic)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etCategoryAr"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="موقع أثري"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:inputType="text"
+                android:gravity="end"
+                android:imeOptions="actionNext" />
+
+        </LinearLayout>
+
+        <!-- Landmark Narrative -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_add"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Landmark Narrative"
+                android:textColor="#FFA726"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Short Description (English)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etDescriptionEn"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="A brief hook for the landmark..."
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etDescriptionAr" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="وصف قصير (Arabic)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etDescriptionAr"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="وصف موجز و جذاب للمكان..."
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="textMultiLine"
+                android:gravity="top|start"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etLongDescriptionEn" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Detailed Narrative (English)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etLongDescriptionEn"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="Extensive historical and cultural details..."
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etLongDescriptionAr" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="السرد التفصيلي (Arabic)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etLongDescriptionAr"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="التفاصيل التاريخية والثقافية الكاملة..."
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp"
+                android:layout_marginTop="4dp"
+                android:inputType="textMultiLine"
+                android:gravity="top|start"
+                android:imeOptions="actionNext" />
+
+        </LinearLayout>
+
+        <!-- Media Assets -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_add"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Media Assets"
+                android:textColor="#FFA726"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnPickImage"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Change Image"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#2A2A2A"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvImageHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current image will be kept if unchanged"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                android:layout_marginBottom="8dp" />
+
+            <ImageView
+                android:id="@+id/ivPreview"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:background="#2A2A2A" />
+
+        </LinearLayout>
+
+        <!-- Geographic Details -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_add"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Geographic Details"
+                android:textColor="#FFA726"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="City (EN)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etCityEn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="Tadmur"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etCityAr" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="المدينة (AR)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etCityAr"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="تدمر"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:gravity="start"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etGovernorateEn" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Governorate (EN)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etGovernorateEn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="Homs"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etGovernorateAr" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="المحافظة (AR)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etGovernorateAr"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="حمص"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:gravity="start"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etRegionEn" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Region (EN)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etRegionEn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="Eastern Desert"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etLatitude" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Latitude"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/etLatitude"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/dash_bg_dark"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#666666"
+                        android:hint="34.5546"
+                        android:paddingHorizontal="12dp"
+                        android:layout_marginTop="4dp"
+                        android:inputType="numberDecimal"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/etLongitude" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Longitude"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/etLongitude"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/dash_bg_dark"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#666666"
+                        android:hint="38.2672"
+                        android:paddingHorizontal="12dp"
+                        android:layout_marginTop="4dp"
+                        android:inputType="numberDecimal"
+                        android:imeOptions="actionNext" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Historical Details -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_add"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Historical Details"
+                android:textColor="#FFA726"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Year Built"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etYearBuilt"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="e.g. 1927 or 300 BCE"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etBuiltBy" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Built By"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etBuiltBy"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="e.g. Roman Empire / French Engineers"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etEra" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Era / Period"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etEra"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="e.g. Roman Period / Byzantine Era"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etMaterial" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Material"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etMaterial"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="e.g. Limestone / Iron / Stone"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etElevation" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Elevation"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etElevation"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="e.g. 244 meters above sea level"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:inputType="text"
+                android:imeOptions="actionNext" />
+
+        </LinearLayout>
+
+        <!-- Logistics & Access -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_add"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logistics &amp; Access"
+                android:textColor="#FFA726"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Visiting Hours"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etVisitingHours"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="08:00 AM - 06:00 PM"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etEntryFee" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Entry Fee"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etEntryFee"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="Free / 500 SYP"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etBestTimeToVisit" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Best Time to Visit"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etBestTimeToVisit"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="Spring / Sunset"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:inputType="text"
+                android:imeOptions="actionNext" />
+
+        </LinearLayout>
+
+        <!-- Status & Meta-tags -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_add"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status &amp; Meta-tags"
+                android:textColor="#FFA726"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status (EN)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etStatus"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="published / pending"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/etStatusArabic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="الحالة (AR)"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etStatusArabic"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/dash_bg_dark"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:hint="منشور / قيد المراجعة"
+                android:paddingHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
+                android:inputType="text"
+                android:gravity="start"
+                android:imeOptions="actionDone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="FEATURED"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switchFeatured"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TRENDING"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switchTrending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="HISTORICAL"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switchHistorical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone"
+            android:indeterminate="true"
+            android:progressTint="#FFA726"
+            android:progressBackgroundTint="#2A2A2A" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSaveLandmark"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="16dp"
+            android:text="SAVE CHANGES"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:background="@drawable/add_bg_orange" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="70dp" />
+
+    </LinearLayout>
+
+</ScrollView>
