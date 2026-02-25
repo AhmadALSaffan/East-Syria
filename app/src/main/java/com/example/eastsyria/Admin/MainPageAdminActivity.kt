@@ -16,6 +16,7 @@ import com.example.eastsyria.Admin.Data.AdminLandmarkAdapter
 import com.example.eastsyria.Admin.Data.LandmarkAdminModel
 import com.example.eastsyria.Admin.Data.LocationModel
 import com.example.eastsyria.Admin.Edit.EditLandmarkActivity
+import com.example.eastsyria.Admin.Reports.ReportsActivity
 import com.example.eastsyria.Login.LoginActivity
 import com.example.eastsyria.databinding.ActivityMainPageAdminBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -69,6 +70,9 @@ class MainPageAdminActivity : AppCompatActivity() {
 
         binding.tvViewAll.setOnClickListener {
            // startActivity(Intent(this, AllLandmarksAdminActivity::class.java))
+        }
+        binding.reportsBtn.setOnClickListener {
+            startActivity(Intent(this@MainPageAdminActivity, ReportsActivity::class.java))
         }
     }
 

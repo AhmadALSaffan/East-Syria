@@ -21,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EastSyria">
         <activity
+            android:name=".Admin.Reports.ReportsActivity"
+            android:exported="false" />
+        <activity
             android:name=".Admin.Edit.EditLandmarkActivity"
             android:exported="false" />
         <activity
