@@ -9,6 +9,7 @@
 [![Android](https://img.shields.io/badge/Android-API%2021+-3DDC84?style=flat-square&logo=android&logoColor=white)](https://developer.android.com/)
 [![Firebase](https://img.shields.io/badge/Firebase-Database%20%26%20Storage-FFCA28?style=flat-square&logo=firebase&logoColor=black)](https://firebase.google.com/)
 [![Material Design](https://img.shields.io/badge/UI-Material%20Design-757575?style=flat-square&logo=material-design&logoColor=white)](https://material.io/)
+[![Status](https://img.shields.io/badge/Status-In%20Development-orange?style=flat-square)](#)
 
 </div>
 
