@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://ik.imagekit.io/qeitebnxx/icon.png" alt="East Syria Logo" width="12%" />
+<img src="https://ik.imagekit.io/qeitebnxx/East%20Syria.png" alt="East Syria Logo" width="12%" />
 
 # Explore East Syria
 ### A community-focused informational app for the East Syria region
