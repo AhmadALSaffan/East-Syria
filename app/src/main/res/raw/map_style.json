@@ -1,27 +1,55 @@
 [
   {
     "elementType": "geometry",
-    "stylers": [{"color": "#212121"}]
+    "stylers": [{"color": "#1D1814"}]
   },
   {
     "elementType": "labels.text.fill",
-    "stylers": [{"color": "#FFFFFF"}]
+    "stylers": [{"color": "#F5EDE3"}]
   },
   {
     "elementType": "labels.text.stroke",
-    "stylers": [{"color": "#000000"}]
+    "stylers": [{"color": "#16120F"}]
+  },
+  {
+    "featureType": "landscape",
+    "elementType": "geometry",
+    "stylers": [{"color": "#1A1511"}]
   },
   {
     "featureType": "water",
     "elementType": "geometry",
-    "stylers": [{"color": "#000000"}]
+    "stylers": [{"color": "#0D1615"}]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": [{"color": "#5E8F88"}]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [{"color": "#2E2620"}]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels.text.fill",
+    "stylers": [{"color": "#B5A796"}]
+  },
+  {
+    "featureType": "poi",
+    "stylers": [{"visibility": "off"}]
+  },
+  {
+    "featureType": "transit",
+    "stylers": [{"visibility": "off"}]
   },
   {
     "featureType": "administrative.country",
     "elementType": "geometry.stroke",
     "stylers": [
-      {"color": "#D4AF37"},
-      {"weight": 3},
+      {"color": "#F0B44C"},
+      {"weight": 2},
       {"visibility": "on"}
     ]
   },
@@ -29,9 +57,14 @@
     "featureType": "administrative.province",
     "elementType": "geometry.stroke",
     "stylers": [
-      {"color": "#8B7355"},
-      {"weight": 2},
+      {"color": "#7A6650"},
+      {"weight": 1.5},
       {"visibility": "on"}
     ]
+  },
+  {
+    "featureType": "administrative.locality",
+    "elementType": "labels.text.fill",
+    "stylers": [{"color": "#F5EDE3"}]
   }
 ]

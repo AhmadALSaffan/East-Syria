@@ -6,7 +6,7 @@
     android:layout_marginBottom="16dp"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
-    app:cardBackgroundColor="#2A2A2A"
+    app:cardBackgroundColor="@color/surface"
     app:cardCornerRadius="16dp"
     app:cardElevation="0dp">
 
@@ -77,7 +77,7 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:src="@drawable/ic_star"
-                        app:tint="#FF9500" />
+                        app:tint="@color/terracotta" />
 
                     <TextView
                         android:id="@+id/tvRating"
@@ -106,7 +106,7 @@
                     android:layout_width="14dp"
                     android:layout_height="14dp"
                     android:src="@drawable/ic_location"
-                    app:tint="#CC8B6A" />
+                    app:tint="@color/terracotta" />
 
                 <TextView
                     android:id="@+id/tvLocation"
@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:text="Homs Governorate"
                     android:textSize="14sp"
-                    android:textColor="#CC8B6A"
+                    android:textColor="@color/terracotta"
                     android:layout_marginStart="6dp" />
 
             </LinearLayout>
@@ -126,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:text="An ancient Semitic city in present-day Homs Governorate, Syria. Archaeological finds date..."
                 android:textSize="14sp"
-                android:textColor="#A0A0A0"
+                android:textColor="@color/ivory_dim"
                 android:maxLines="2"
                 android:ellipsize="end"
                 android:layout_marginTop="8dp" />
@@ -147,7 +147,7 @@
                     android:text="UNESCO WORLD HERITAGE"
                     android:textSize="11sp"
                     android:textStyle="bold"
-                    android:textColor="#808080"
+                    android:textColor="@color/ivory_mute"
                     android:letterSpacing="0.05"
                     android:layout_weight="1" />
 
@@ -159,9 +159,9 @@
                     android:text="View Details"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="#CC8B6A"
+                    android:textColor="@color/terracotta"
                     android:drawableEnd="@drawable/ic_arrow_right"
-                    android:drawableTint="#CC8B6A"
+                    android:drawableTint="@color/terracotta"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical" />
 

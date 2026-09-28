@@ -3,42 +3,50 @@ package com.example.eastsyria.Map
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.location.Location
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import com.bumptech.glide.Glide
 import com.example.eastsyria.Details.LandmarkDetailActivity
 import com.example.eastsyria.MainPage.Data.Landmark
 import com.example.eastsyria.R
-import com.example.eastsyria.Saved.SavedLandmarksActivity
+import com.example.eastsyria.Ui.warmEdgeToEdge
 import com.example.eastsyria.databinding.ActivityMapBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.material.chip.Chip
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.util.Locale
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -50,6 +58,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private val markers = mutableListOf<Marker>()
     private var selectedLandmark: Landmark? = null
     private var userLocation: Location? = null
+    private var activeCategory: String? = null
+    private var sheetFilters = FilterOptions()
+    private var bottomInset = 0
+
+    private var landmarksRef: DatabaseReference? = null
+    private var landmarksListener: ValueEventListener? = null
+
+    private val pinIcon: BitmapDescriptor by lazy { bitmapFromVector(R.drawable.ic_map_pin) }
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -58,19 +74,50 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hideSystemBars()
+        warmEdgeToEdge()
 
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        window.statusBarColor = ContextCompat.getColor(this, R.color.background_dark)
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
+        setupInsets()
         setupMap()
         setupClickListeners()
         setupSearch()
-        setupFilters()
+    }
+
+    override fun onDestroy() {
+        val ref = landmarksRef
+        val listener = landmarksListener
+        if (ref != null && listener != null) ref.removeEventListener(listener)
+        super.onDestroy()
+    }
+
+    /** Instruments sit below the status bar; the card and controls clear the gesture bar. */
+    private fun setupInsets() {
+        val topGap = (10 * resources.displayMetrics.density).toInt()
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            bottomInset = bars.bottom
+            binding.topArea.updatePadding(top = topGap + bars.top)
+            updateBottomMargins()
+            insets
+        }
+    }
+
+    /** With the card up the controls ride on it; without it they clear the gesture bar. */
+    private fun updateBottomMargins() {
+        val gap = (16 * resources.displayMetrics.density).toInt()
+        binding.landmarkBottomCard.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            bottomMargin = gap + bottomInset
+        }
+        val cardShowing = binding.landmarkBottomCard.visibility == View.VISIBLE
+        binding.mapControls.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            bottomMargin = if (cardShowing) gap else gap + bottomInset
+        }
     }
 
     private fun setupMap() {
@@ -83,45 +130,35 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         googleMap = map
         applyDarkMapStyle()
 
-        try {
-            googleMap.setMapStyle(
-                MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style)
-            )
-        } catch (e: Exception) {
-        }
-        val eastSyriaCenter = LatLng(35.8, 40.0)
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eastSyriaCenter, 7.5f))
-
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(35.8, 40.0), 7.5f))
 
         googleMap.uiSettings.isZoomControlsEnabled = false
         googleMap.uiSettings.isMapToolbarEnabled = false
+        // The SDK draws its own my-location button top-right, which duplicated
+        // the teal one in the control column and sat over the search field.
+        googleMap.uiSettings.isMyLocationButtonEnabled = false
 
         googleMap.setOnMarkerClickListener { marker ->
-            val landmark = marker.tag as? Landmark
-            landmark?.let {
+            (marker.tag as? Landmark)?.let {
                 showLandmarkCard(it)
                 googleMap.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
             }
             true
         }
-
-
-        googleMap.setOnMapClickListener {
-            hideLandmarkCard()
-        }
-
+        googleMap.setOnMapClickListener { hideLandmarkCard() }
 
         enableMyLocation()
-
         loadLandmarks()
     }
 
+    // ------------------------------------------------------------ location
+
+    private fun hasLocationPermission() = ActivityCompat.checkSelfPermission(
+        this, Manifest.permission.ACCESS_FINE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
+
     private fun enableMyLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
+        if (hasLocationPermission()) {
             googleMap.isMyLocationEnabled = true
             getUserLocation()
         } else {
@@ -133,60 +170,80 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun getUserLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                location?.let {
-                    userLocation = it
-                }
-            }
+    private fun getUserLocation(onFix: ((Location) -> Unit)? = null) {
+        if (!hasLocationPermission()) return
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            location?.let {
+                userLocation = it
+                onFix?.invoke(it)
+            } ?: run { if (onFix != null) snack(R.string.map_location_unavailable) }
         }
     }
 
-    private fun loadLandmarks() {
-        database.reference.child("landmarks")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    landmarks.clear()
-                    clearMarkers()
+    // ------------------------------------------------------------ data
 
-                    for (landmarkSnapshot in snapshot.children) {
-                        val landmark = landmarkSnapshot.getValue(Landmark::class.java)
-                        if (landmark != null && landmark.status == "published") {
-                            landmark.id = landmarkSnapshot.key ?: ""
-                            landmarks.add(landmark)
-                            addMarkerForLandmark(landmark)
-                        }
+    private fun loadLandmarks() {
+        setLoading(true)
+
+        val ref = database.reference.child("landmarks")
+        val listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                landmarks.clear()
+
+                for (landmarkSnapshot in snapshot.children) {
+                    val landmark = try {
+                        landmarkSnapshot.getValue(Landmark::class.java)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error parsing landmark ${landmarkSnapshot.key}: ${e.message}")
+                        null
+                    }
+                    if (landmark != null && landmark.status == "published") {
+                        landmark.id = landmarkSnapshot.key ?: ""
+                        landmarks.add(landmark)
                     }
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(
-                        this@MapActivity,
-                        "Failed to load landmarks",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
+                setLoading(false)
+                buildCategoryChips()
+                applyCategoryFilter()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "Failed to load landmarks: ${error.message}")
+                setLoading(false)
+                binding.tvReadout.setText(R.string.map_readout_failed)
+                Snackbar.make(binding.root, R.string.map_load_failed, Snackbar.LENGTH_INDEFINITE)
+                    .setBackgroundTint(ContextCompat.getColor(this@MapActivity, R.color.surface_high))
+                    .setTextColor(ContextCompat.getColor(this@MapActivity, R.color.ivory))
+                    .setActionTextColor(ContextCompat.getColor(this@MapActivity, R.color.terracotta_soft))
+                    .setAction(R.string.action_retry) { loadLandmarks() }
+                    .show()
+            }
+        }
+        landmarksRef?.let { old -> landmarksListener?.let { old.removeEventListener(it) } }
+        landmarksRef = ref
+        landmarksListener = listener
+        ref.addValueEventListener(listener)
     }
 
+    private fun setLoading(loading: Boolean) {
+        binding.mapProgress.visibility = if (loading) View.VISIBLE else View.GONE
+        if (loading) binding.tvReadout.setText(R.string.map_readout_loading)
+    }
+
+    // ------------------------------------------------------------ markers and card
 
     private fun addMarkerForLandmark(landmark: Landmark) {
-        if (landmark.location.latitude != 0.0 && landmark.location.longitude != 0.0) {
-            val position = LatLng(landmark.location.latitude, landmark.location.longitude)
-            val marker = googleMap.addMarker(
-                MarkerOptions()
-                    .position(position)
-                    .title(landmark.name)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-            )
-            marker?.tag = landmark
-            marker?.let { markers.add(it) }
-        }
+        if (landmark.location.latitude == 0.0 && landmark.location.longitude == 0.0) return
+        val marker = googleMap.addMarker(
+            MarkerOptions()
+                .position(LatLng(landmark.location.latitude, landmark.location.longitude))
+                .title(landmark.name)
+                .icon(pinIcon)
+                .anchor(0.5f, 1f)
+        )
+        marker?.tag = landmark
+        marker?.let { markers.add(it) }
     }
 
     private fun clearMarkers() {
@@ -194,13 +251,27 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         markers.clear()
     }
 
+    /** Vector to bitmap, so the pin is drawn in the app's own colours. */
+    private fun bitmapFromVector(@DrawableRes id: Int): BitmapDescriptor {
+        val drawable = ContextCompat.getDrawable(this, id)!!
+        val bitmap = Bitmap.createBitmap(
+            drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
+
     private fun showLandmarkCard(landmark: Landmark) {
         selectedLandmark = landmark
         binding.landmarkBottomCard.visibility = View.VISIBLE
+        updateBottomMargins()
 
         binding.tvLandmarkTitle.text = landmark.name
         binding.tvLandmarkDescription.text = landmark.description
-
+        binding.tvLandmarkDescription.visibility =
+            if (landmark.description.isBlank()) View.GONE else View.VISIBLE
 
         userLocation?.let { userLoc ->
             val distance = FloatArray(1)
@@ -212,195 +283,215 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 distance
             )
             val distanceKm = distance[0] / 1000
-            binding.tvDistance.text = String.format("%.1f km away", distanceKm)
+            // A tenth of a kilometre is meaningful at 8 km and noise at 2000.
+            val reading = if (distanceKm >= 100f) {
+                String.format(Locale.getDefault(), "%,.0f", distanceKm)
+            } else {
+                String.format(Locale.getDefault(), "%.1f", distanceKm)
+            }
+            binding.tvDistance.visibility = View.VISIBLE
+            binding.tvDistance.text = getString(R.string.map_distance, reading)
         } ?: run {
-            binding.tvDistance.text = "Distance unknown"
+            // Without a fix there is no distance to state, so state nothing.
+            binding.tvDistance.visibility = View.GONE
         }
-
 
         Glide.with(this)
             .load(landmark.imageUrl)
-            .placeholder(R.drawable.placeholder_destination)
+            .placeholder(R.drawable.placeholder_dark)
+            .error(R.drawable.placeholder_dark)
+            .centerCrop()
             .into(binding.ivLandmarkSmall)
 
-
         binding.landmarkBottomCard.setOnClickListener {
-            val intent = Intent(this, LandmarkDetailActivity::class.java)
-            intent.putExtra("LANDMARK_ID", landmark.id)
-            startActivity(intent)
+            startActivity(
+                Intent(this, LandmarkDetailActivity::class.java)
+                    .putExtra("LANDMARK_ID", landmark.id)
+            )
         }
     }
 
     private fun hideLandmarkCard() {
         binding.landmarkBottomCard.visibility = View.GONE
         selectedLandmark = null
+        updateBottomMargins()
     }
 
+    // ------------------------------------------------------------ controls
+
     private fun setupClickListeners() {
+        binding.btnBack.setOnClickListener { finish() }
+
         binding.fabMyLocation.setOnClickListener {
-            getUserLocation()
-            userLocation?.let {
-                val position = LatLng(it.latitude, it.longitude)
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 12f))
-            } ?: run {
-                Toast.makeText(this, "Location not available", Toast.LENGTH_SHORT).show()
+            if (!hasLocationPermission()) {
+                enableMyLocation()
+                return@setOnClickListener
+            }
+            getUserLocation { location ->
+                googleMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 12f)
+                )
             }
         }
 
         binding.btnFilter.setOnClickListener {
-            val filterDialog = MapFiltersBottomSheet { filterOptions ->
-                applyFilters(filterOptions)
-            }
-            filterDialog.show(supportFragmentManager, MapFiltersBottomSheet.TAG)
+            val categories = landmarks.map { it.category.trim() }
+                .filter { it.isNotEmpty() }
+                .distinct()
+                .sorted()
+            MapFiltersBottomSheet(categories, sheetFilters, userLocation != null) { options ->
+                applySheetFilters(options)
+            }.show(supportFragmentManager, MapFiltersBottomSheet.TAG)
         }
 
         binding.fabZoomIn.setOnClickListener {
-            googleMap.animateCamera(CameraUpdateFactory.zoomIn())
+            if (::googleMap.isInitialized) googleMap.animateCamera(CameraUpdateFactory.zoomIn())
         }
-
         binding.fabZoomOut.setOnClickListener {
-            googleMap.animateCamera(CameraUpdateFactory.zoomOut())
+            if (::googleMap.isInitialized) googleMap.animateCamera(CameraUpdateFactory.zoomOut())
         }
 
         binding.fabLayers.setOnClickListener {
-            when (googleMap.mapType) {
-                GoogleMap.MAP_TYPE_NORMAL -> {
-                    googleMap.setMapStyle(null)
-                    googleMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
-                }
-                else -> {
-                    googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-                    applyDarkMapStyle()
-                }
-            }
-        }
-
-
-
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_explore -> {
-                    finish()
-                    true
-                }
-                R.id.nav_saved-> {
-                    val intent = Intent(this@MapActivity, SavedLandmarksActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                else -> false
+            if (!::googleMap.isInitialized) return@setOnClickListener
+            if (googleMap.mapType == GoogleMap.MAP_TYPE_NORMAL) {
+                googleMap.setMapStyle(null)
+                googleMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
+            } else {
+                googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
+                applyDarkMapStyle()
             }
         }
     }
 
     private fun applyDarkMapStyle() {
         try {
-            Log.d(TAG, "Attempting to apply dark map style...")
-
-            val inputStream = resources.openRawResource(R.raw.map_style)
-            val json = inputStream.bufferedReader().use { it.readText() }
-            Log.d(TAG, "✅ File loaded! JSON length: ${json.length} characters")
-            Log.d(TAG, "JSON content: $json")
-
-            val success = googleMap.setMapStyle(MapStyleOptions(json))
-            if (success) {
-                Log.d(TAG, "✅ Dark map style applied successfully!")
-                Toast.makeText(this, "Dark map applied", Toast.LENGTH_SHORT).show()
-            } else {
-                Log.e(TAG, "❌ Style parsing failed")
-                Toast.makeText(this, "Map style failed", Toast.LENGTH_SHORT).show()
-            }
+            val applied = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))
+            if (!applied) Log.e(TAG, "Map style parsing failed")
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Error: ${e.message}", e)
-            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            Log.e(TAG, "Map style error: ${e.message}", e)
         }
     }
-
-
 
     private fun setupSearch() {
         binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filterLandmarks(s.toString())
+                applyCategoryFilter()
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
     }
 
-    private fun setupFilters() {
-        binding.chipAncientCities.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) filterByCategory("Historical")
+    // ------------------------------------------------------------ filtering
+
+    /**
+     * Category chips built from the catalog itself.
+     *
+     * These were three fixed labels wired to unrelated values — "Ancient
+     * Cities" filtered category=="Historical", "Fortresses" filtered
+     * "Archaeological", and "Roman Era" filtered "Nature". One was checked at
+     * launch and there was no way back to the full set, so the map silently
+     * opened showing a subset of the catalog.
+     */
+    private fun buildCategoryChips() {
+        val group = binding.chipGroup
+        group.removeAllViews()
+        val inflater = LayoutInflater.from(this)
+
+        fun addChip(label: String, category: String?) {
+            val chip = inflater.inflate(R.layout.item_map_chip, group, false) as Chip
+            chip.text = label
+            chip.isChecked = category == activeCategory
+            chip.setOnClickListener {
+                activeCategory = category
+                // The chip rail and the sheet are one filter: picking here clears the sheet.
+                sheetFilters = FilterOptions()
+                applyCategoryFilter()
+            }
+            group.addView(chip)
         }
 
-        binding.chipFortresses.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) filterByCategory("Archaeological")
-        }
+        addChip(getString(R.string.map_all), null)
 
-        binding.chipRomanEra.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) filterByCategory("Nature")
-        }
+        landmarks.map { it.category.trim() }
+            .filter { it.isNotEmpty() }
+            .distinct()
+            .sorted()
+            .forEach { category ->
+                val count = landmarks.count { it.category.equals(category, ignoreCase = true) }
+                addChip("$category ($count)", category)
+            }
     }
 
-    private fun applyFilters(filterOptions: FilterOptions) {
-        clearMarkers()
-        var filteredLandmarks: List<Landmark> = landmarks
+    /** Category, search and the sheet's filters compose; none silently drops another. */
+    private fun applyCategoryFilter() {
+        if (!::googleMap.isInitialized) return
+        val query = binding.etSearch.text?.toString().orEmpty().trim()
 
-        if (filterOptions.categories.isNotEmpty()) {
-            filteredLandmarks = filteredLandmarks.filter { landmark ->
-                filterOptions.categories.contains(landmark.category)
+        var shown = landmarks.filter { landmark ->
+            val matchesCategory =
+                activeCategory == null || landmark.category.equals(activeCategory, ignoreCase = true)
+            val matchesQuery = query.isBlank() ||
+                    landmark.name.contains(query, ignoreCase = true) ||
+                    landmark.location.city.contains(query, ignoreCase = true)
+            matchesCategory && matchesQuery
+        }
+
+        val filters = sheetFilters
+        if (filters.categories.isNotEmpty()) {
+            shown = shown.filter { l -> filters.categories.any { it.equals(l.category.trim(), ignoreCase = true) } }
+        }
+        val here = userLocation
+        val maxDistance = filters.maxDistance
+        if (maxDistance != null && here != null) {
+            shown = shown.filter { landmark ->
+                val distance = FloatArray(1)
+                Location.distanceBetween(
+                    here.latitude, here.longitude,
+                    landmark.location.latitude, landmark.location.longitude,
+                    distance
+                )
+                distance[0] / 1000 <= maxDistance
             }
         }
+        if (filters.minRating > 0) shown = shown.filter { it.rating >= filters.minRating }
+        if (filters.featuredOnly) shown = shown.filter { it.isFeatured }
+        if (filters.trendingOnly) shown = shown.filter { it.isTrending }
 
-        filterOptions.maxDistance?.let { maxDist ->
-            userLocation?.let { userLoc ->
-                filteredLandmarks = filteredLandmarks.filter { landmark ->
-                    val distance = FloatArray(1)
-                    android.location.Location.distanceBetween(
-                        userLoc.latitude,
-                        userLoc.longitude,
-                        landmark.location.latitude,
-                        landmark.location.longitude,
-                        distance
-                    )
-                    (distance[0] / 1000) <= maxDist
-                }
-            }
-        }
+        clearMarkers()
+        shown.forEach { addMarkerForLandmark(it) }
+        if (selectedLandmark != null && shown.none { it.id == selectedLandmark?.id }) hideLandmarkCard()
 
-        if (filterOptions.minRating > 0) {
-            filteredLandmarks = filteredLandmarks.filter { it.rating >= filterOptions.minRating }
-        }
-
-        if (filterOptions.featuredOnly) {
-            filteredLandmarks = filteredLandmarks.filter { it.isFeatured }
-        }
-
-        if (filterOptions.trendingOnly) {
-            filteredLandmarks = filteredLandmarks.filter { it.isTrending }
-        }
-
-        filteredLandmarks.forEach { addMarkerForLandmark(it) }
-
-        Toast.makeText(
-            this,
-            "${filteredLandmarks.size} landmarks found",
-            Toast.LENGTH_SHORT
-        ).show()
+        // The filter icon lights up while the sheet is narrowing the map.
+        binding.btnFilter.imageTintList = android.content.res.ColorStateList.valueOf(
+            ContextCompat.getColor(
+                this,
+                if (filters.isActive()) R.color.terracotta else R.color.ivory_dim
+            )
+        )
+        updateReadout(shown.size)
     }
 
-    private fun filterLandmarks(query: String) {
-        clearMarkers()
-        landmarks.filter {
-            it.name.contains(query, ignoreCase = true) ||
-                    it.location.city.contains(query, ignoreCase = true)
-        }.forEach { addMarkerForLandmark(it) }
+    private fun applySheetFilters(options: FilterOptions) {
+        sheetFilters = options
+        // The sheet supersedes the chip rail; reset it so the row never claims a
+        // category the map is no longer restricted to.
+        activeCategory = null
+        buildCategoryChips()
+        applyCategoryFilter()
     }
 
-    private fun filterByCategory(category: String) {
-        clearMarkers()
-        landmarks.filter { it.category.equals(category, ignoreCase = true) }
-            .forEach { addMarkerForLandmark(it) }
+    /** A count that vanishes after two seconds is not a reading. */
+    private fun updateReadout(shown: Int) {
+        binding.tvReadout.text = getString(R.string.map_readout, shown, landmarks.size)
+    }
+
+    private fun snack(message: Int) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
+            .setBackgroundTint(ContextCompat.getColor(this, R.color.surface_high))
+            .setTextColor(ContextCompat.getColor(this, R.color.ivory))
+            .show()
     }
 
     override fun onRequestPermissionsResult(
@@ -411,19 +502,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                enableMyLocation()
+                if (::googleMap.isInitialized) enableMyLocation()
+            } else {
+                snack(R.string.map_location_permission)
             }
-        }
-    }
-
-    private fun hideSystemBars() {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-        windowInsetsController.apply {
-            hide(WindowInsetsCompat.Type.navigationBars())
-
-            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
     }
 }

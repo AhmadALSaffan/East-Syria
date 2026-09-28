@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The header every secondary screen shares: a floating back chip, the screen's
+  name in Amiri, and up to two trailing controls. Everything trailing is gone
+  until a screen asks for it.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_icon_chip"
+        android:contentDescription="@string/search_back"
+        android:padding="12dp"
+        android:src="@drawable/ic_back"
+        app:tint="@color/ivory" />
+
+    <TextView
+        android:id="@+id/tvScreenTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:fontFamily="@font/amiri"
+        android:includeFontPadding="false"
+        android:lineHeight="36sp"
+        android:maxLines="1"
+        android:textColor="@color/ivory"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/btnHeaderAction"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="4dp"
+        android:textColor="@color/terracotta_soft"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/btnHeaderIconA"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bg_icon_chip"
+        android:padding="12dp"
+        android:visibility="gone"
+        app:tint="@color/ivory" />
+
+    <ImageButton
+        android:id="@+id/btnHeaderIconB"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bg_icon_chip"
+        android:padding="12dp"
+        android:visibility="gone"
+        app:tint="@color/ivory" />
+
+</merge>

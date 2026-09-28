@@ -2,22 +2,24 @@ package com.example.eastsyria.Login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.View
-import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import com.example.eastsyria.Admin.MainPageAdminActivity
 import com.example.eastsyria.MainPage.MainPageActivity
 import com.example.eastsyria.R
 import com.example.eastsyria.SignUp.SignUpActivity
+import com.example.eastsyria.Ui.lightBarIcons
+import com.example.eastsyria.Ui.showSnack
 import com.example.eastsyria.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -31,15 +33,13 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private var isNavigating = false
 
-    companion object {
-        private const val RC_SIGN_IN = 9001
-    }
+    private lateinit var googleSignInLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hideSystemBars()
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        lightBarIcons()
         supportActionBar?.hide()
         auth = FirebaseAuth.getInstance()
         setupGoogleSignIn()
@@ -60,6 +60,12 @@ class LoginActivity : AppCompatActivity() {
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        googleSignInLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            handleGoogleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(result.data))
+        }
     }
 
     private fun setupClickListeners() {
@@ -78,7 +84,7 @@ class LoginActivity : AppCompatActivity() {
 
             tvForgot.setOnClickListener {
                 val email = etEmail.text.toString().trim()
-                if (email.isEmpty()) showToast("Please enter your email")
+                if (email.isEmpty()) showToast("Enter your email first, then tap Forgot.")
                 else resetPassword(email)
             }
 
@@ -124,16 +130,32 @@ class LoginActivity : AppCompatActivity() {
                     val uid = auth.currentUser?.uid
                     if (uid == null) {
                         showLoading(false)
-                        showToast("Login failed: user not found")
+                        showToast("We couldn't find that account. Try again.")
                         return@addOnCompleteListener
                     }
                     isNavigating = true
                     navigateByRole(uid)
                 } else {
                     showLoading(false)
-                    showToast("Authentication failed: ${task.exception?.message}")
+                    Log.e("LoginActivity", "Email sign-in failed: ${task.exception?.message}")
+                    showToast(friendlySignInError(task.exception))
                 }
             }
+    }
+
+    /** What went wrong, in words a visitor can act on. The raw message goes to the log. */
+    private fun friendlySignInError(error: Exception?): String = when (error) {
+        is com.google.firebase.auth.FirebaseAuthInvalidUserException,
+        is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException ->
+            "That email and password don't match. Check them and try again."
+
+        is com.google.firebase.FirebaseNetworkException ->
+            "No connection. Check your network and try again."
+
+        is com.google.firebase.FirebaseTooManyRequestsException ->
+            "Too many attempts. Wait a moment and try again."
+
+        else -> "We couldn't sign you in. Try again in a moment."
     }
 
     private fun navigateByRole(uid: String) {
@@ -155,8 +177,11 @@ class LoginActivity : AppCompatActivity() {
                 showLoading(false)
                 val role = snapshot.getValue(String::class.java)
                 if (role == null) {
-                    showToast("Role not found, contact support")
+                    // Never strand a signed-in user with no role — they would
+                    // hit this same wall on every launch with no way out.
+                    auth.signOut()
                     isNavigating = false
+                    showToast("Your account isn't set up yet. Please sign up first.")
                     return@addOnSuccessListener
                 }
                 prefs.edit().putString("role_$uid", role).apply()
@@ -165,7 +190,8 @@ class LoginActivity : AppCompatActivity() {
             .addOnFailureListener {
                 showLoading(false)
                 isNavigating = false
-                showToast("Failed to get role: ${it.message}")
+                Log.e("LoginActivity", "Failed to get role: ${it.message}")
+                showToast("We couldn't load your account. Check your connection and try again.")
             }
     }
 
@@ -181,49 +207,117 @@ class LoginActivity : AppCompatActivity() {
             }
             else -> {
                 isNavigating = false
-                showToast("Unknown role: $role")
+                Log.e("LoginActivity", "Unknown role: $role")
+                showToast("We couldn't load your account. Try again in a moment.")
             }
         }
     }
 
     private fun signInWithGoogle() {
-        startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleGoogleSignInResult(task)
+        // Sign the Google client out first. Otherwise it silently reuses the
+        // last account and the picker never appears, so nobody can switch.
+        googleSignInClient.signOut().addOnCompleteListener {
+            googleSignInLauncher.launch(googleSignInClient.signInIntent)
         }
     }
 
     private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-            firebaseAuthWithGoogle(account.idToken!!)
+            val idToken = account.idToken
+            if (idToken == null) {
+                Log.e("LoginActivity", "Google returned no ID token; check this build's SHA-1 in Firebase")
+                showToast("Google sign-in isn't available right now. Try your email instead.")
+                return
+            }
+            firebaseAuthWithGoogle(idToken, account)
         } catch (e: ApiException) {
-            showToast("Google sign in failed: ${e.message}")
+            when (e.statusCode) {
+                // Backing out of the picker is not an error worth reporting.
+                GoogleSignInStatusCodes.SIGN_IN_CANCELLED -> Unit
+                GoogleSignInStatusCodes.NETWORK_ERROR ->
+                    showToast("No connection. Check your network and try again.")
+                GoogleSignInStatusCodes.DEVELOPER_ERROR -> {
+                    Log.e("LoginActivity", "Google sign-in not configured for this build; add its SHA-1 to Firebase")
+                    showToast("Google sign-in isn't available right now. Try your email instead.")
+                }
+                else -> {
+                    Log.e("LoginActivity", "Google sign-in failed (code ${e.statusCode})")
+                    showToast("Google sign-in didn't work. Try again or use your email.")
+                }
+            }
         }
     }
 
-    private fun firebaseAuthWithGoogle(idToken: String) {
+    private fun firebaseAuthWithGoogle(idToken: String, account: GoogleSignInAccount) {
         showLoading(true)
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val uid = auth.currentUser?.uid ?: run {
-                        showLoading(false)
-                        showToast("Sign in failed")
-                        return@addOnCompleteListener
-                    }
+                if (!task.isSuccessful) {
+                    showLoading(false)
+                    Log.e("LoginActivity", "Google credential sign-in failed: ${task.exception?.message}")
+                    showToast(friendlySignInError(task.exception))
+                    return@addOnCompleteListener
+                }
+                val uid = auth.currentUser?.uid ?: run {
+                    showLoading(false)
+                    showToast("We couldn't sign you in. Try again in a moment.")
+                    return@addOnCompleteListener
+                }
+                ensureUserRecord(uid, account)
+            }
+    }
+
+    /**
+     * A first-time Google user gets a Firebase account but no users/{uid} node,
+     * so the role lookup returns null and the app dead-ends — permanently, since
+     * they stay signed in and hit the same wall on every launch. Email sign-up
+     * writes this record in VerificationActivity; the Google path never did.
+     *
+     * Same field shape as VerificationActivity.createAccountAndSaveData so both
+     * routes produce identical user records.
+     */
+    private fun ensureUserRecord(uid: String, account: GoogleSignInAccount) {
+        val userRef = FirebaseDatabase.getInstance().getReference("users").child(uid)
+
+        userRef.get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.exists() && snapshot.child("role").exists()) {
                     isNavigating = true
                     navigateByRole(uid)
-                } else {
-                    showLoading(false)
-                    showToast("Authentication failed: ${task.exception?.message}")
+                    return@addOnSuccessListener
                 }
+
+                val userData = mapOf(
+                    "uid" to uid,
+                    "fullName" to (account.displayName ?: ""),
+                    "email" to (account.email ?: ""),
+                    "phone" to "",
+                    // Google has already verified the address.
+                    "verified" to true,
+                    "city" to "",
+                    "role" to "user",
+                    "createdAt" to System.currentTimeMillis()
+                )
+
+                userRef.setValue(userData)
+                    .addOnSuccessListener {
+                        isNavigating = true
+                        navigateByRole(uid)
+                    }
+                    .addOnFailureListener { error ->
+                        showLoading(false)
+                        auth.signOut()
+                        Log.e("LoginActivity", "Account setup failed: ${error.message}")
+                        showToast("We couldn't finish setting up your account. Try again.")
+                    }
+            }
+            .addOnFailureListener { error ->
+                showLoading(false)
+                auth.signOut()
+                Log.e("LoginActivity", "Database unreachable: ${error.message}")
+                showToast("We couldn't reach the server. Check your connection and try again.")
             }
     }
 
@@ -238,22 +332,13 @@ class LoginActivity : AppCompatActivity() {
     private fun showLoading(show: Boolean) {
         binding.apply {
             progressBar.visibility = if (show) View.VISIBLE else View.GONE
-            btnLogin.text = if (show) "" else "Login"
+            btnLogin.text = if (show) "" else getString(R.string.login_action)
             btnLogin.isEnabled = !show
             btnGoogleSignIn.isEnabled = !show
         }
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun hideSystemBars() {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-        windowInsetsController.apply {
-            hide(WindowInsetsCompat.Type.navigationBars())
-            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
+        showSnack(binding.root, message, long = true)
     }
 }

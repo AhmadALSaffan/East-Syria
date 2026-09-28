@@ -7,8 +7,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import com.example.eastsyria.Ui.lightBarIcons
+import com.example.eastsyria.Ui.showSnack
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -50,6 +51,7 @@ class VerificationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         hideSystemBars()
         enableEdgeToEdge()
+        lightBarIcons()
         binding = ActivityVerificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -312,7 +314,7 @@ class VerificationActivity : AppCompatActivity() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        showSnack(binding.root, message, long = true)
     }
 
     override fun onDestroy() {

@@ -4,14 +4,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.eastsyria.R
 import com.example.eastsyria.databinding.ItemAdminLandmarkBinding
 
+/**
+ * The curator's list. The whole row opens the editor; delete is its own
+ * control and always asks first (that is the screen's job, not the row's).
+ */
 class AdminLandmarkAdapter(
     private var list: List<LandmarkAdminModel>,
     private val onEdit: (LandmarkAdminModel) -> Unit,
     private val onDelete: (LandmarkAdminModel) -> Unit
-) : RecyclerView.Adapter<AdminLandmarkAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemAdminLandmarkBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -20,36 +25,47 @@ class AdminLandmarkAdapter(
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val binding = (holder as ViewHolder).binding
+        val context = binding.root.context
         val item = list[position]
-        holder.binding.tvName.text = item.name
-        holder.binding.tvCity.text = item.location.city.ifEmpty { "Unknown city" }
 
-        val status = item.status.ifEmpty { "unknown" }
-        holder.binding.tvStatus.text = status.uppercase()
+        binding.tvName.text = item.name
+        binding.tvCity.text = item.location.city.ifEmpty { context.getString(R.string.admin_unknown_city) }
 
-        when (status.lowercase()) {
+        when (item.status.lowercase()) {
             "published" -> {
-                holder.binding.tvStatus.setTextColor(holder.binding.root.context.getColor(R.color.green))
-                holder.binding.tvStatus.setBackgroundResource(R.drawable.bg_status_published)
+                binding.tvStatus.setText(R.string.admin_status_published)
+                binding.tvStatus.setTextColor(context.getColor(R.color.green))
+                binding.tvStatus.setBackgroundResource(R.drawable.bg_status_published)
             }
+
             "pending" -> {
-                holder.binding.tvStatus.setTextColor(holder.binding.root.context.getColor(R.color.orange))
-                holder.binding.tvStatus.setBackgroundResource(R.drawable.bg_status_pending)
+                binding.tvStatus.setText(R.string.admin_status_pending)
+                binding.tvStatus.setTextColor(context.getColor(R.color.gold))
+                binding.tvStatus.setBackgroundResource(R.drawable.bg_status_pending)
             }
+
             else -> {
-                holder.binding.tvStatus.setTextColor(holder.binding.root.context.getColor(R.color.white))
-                holder.binding.tvStatus.background = null
+                binding.tvStatus.setText(R.string.admin_status_unknown)
+                binding.tvStatus.setTextColor(context.getColor(R.color.ivory_mute))
+                binding.tvStatus.background = null
             }
         }
 
-        Glide.with(holder.binding.root.context)
+        Glide.with(context)
             .load(item.imageUrl)
-            .placeholder(R.drawable.ic_placeholder)
-            .into(holder.binding.ivLandmark)
+            .placeholder(R.drawable.placeholder_dark)
+            .error(R.drawable.placeholder_dark)
+            .centerCrop()
+            .transition(DrawableTransitionOptions.withCrossFade(200))
+            .into(binding.ivLandmark)
 
-        holder.binding.btnEdit.setOnClickListener { onEdit(item) }
-        holder.binding.btnDelete.setOnClickListener { onDelete(item) }
+        binding.btnDelete.contentDescription = context.getString(R.string.admin_delete) + ": " + item.name
+        binding.btnEdit.contentDescription = context.getString(R.string.admin_edit) + ": " + item.name
+        binding.rowContent.setOnClickListener { onEdit(item) }
+        binding.btnEdit.setOnClickListener { onEdit(item) }
+        binding.btnDelete.setOnClickListener { onDelete(item) }
     }
 
     override fun getItemCount() = list.size
@@ -58,5 +74,4 @@ class AdminLandmarkAdapter(
         list = newList
         notifyDataSetChanged()
     }
-
 }

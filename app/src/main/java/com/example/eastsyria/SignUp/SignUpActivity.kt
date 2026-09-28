@@ -5,8 +5,9 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import com.example.eastsyria.Ui.lightBarIcons
+import com.example.eastsyria.Ui.showSnack
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -34,6 +35,7 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         hideSystemBars()
         enableEdgeToEdge()
+        lightBarIcons()
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -58,7 +60,7 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun setupCityDropdown() {
         val cities = resources.getStringArray(R.array.syria_cities)
-        val adapter = ArrayAdapter(this, R.layout.dropdown_item, cities)
+        val adapter = ArrayAdapter(this, R.layout.dropdown_item_city, cities)
         binding.actvCity.setAdapter(adapter)
     }
 
@@ -312,7 +314,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun showToast(message: String) {
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            showSnack(binding.root, message, long = true)
     }
 
     private fun hideSystemBars() {

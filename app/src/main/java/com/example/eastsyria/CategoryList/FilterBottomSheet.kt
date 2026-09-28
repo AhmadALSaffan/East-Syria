@@ -33,7 +33,6 @@ class FilterBottomSheet(
         tempFilter.isTrending = currentFilter.isTrending
 
         setupRatingFilter()
-        setupStatusFilter()
         setupSpecialFilter()
         setupButtons()
     }
@@ -54,36 +53,6 @@ class FilterBottomSheet(
                     else -> 0.0
                 }
             }
-        }
-    }
-
-    private fun setupStatusFilter() {
-        binding.apply {
-            chipIntact1.isChecked = tempFilter.statusFilters.contains("Intact")
-            chipRuins1.isChecked = tempFilter.statusFilters.contains("Ruins")
-            chipDestroyed1.isChecked = tempFilter.statusFilters.contains("Destroyed")
-
-            chipIntact1.setOnCheckedChangeListener { _, isChecked ->
-                updateStatusFilter("Intact", isChecked)
-            }
-
-            chipRuins1.setOnCheckedChangeListener { _, isChecked ->
-                updateStatusFilter("Ruins", isChecked)
-            }
-
-            chipDestroyed1.setOnCheckedChangeListener { _, isChecked ->
-                updateStatusFilter("Destroyed", isChecked)
-            }
-        }
-    }
-
-    private fun updateStatusFilter(status: String, isChecked: Boolean) {
-        if (isChecked) {
-            if (!tempFilter.statusFilters.contains(status)) {
-                tempFilter.statusFilters.add(status)
-            }
-        } else {
-            tempFilter.statusFilters.remove(status)
         }
     }
 
@@ -111,8 +80,7 @@ class FilterBottomSheet(
             btnResetFilter1.setOnClickListener {
                 tempFilter.reset()
                 setupRatingFilter()
-                setupStatusFilter()
-                setupSpecialFilter()
+                        setupSpecialFilter()
             }
 
             btnApplyFilter1.setOnClickListener {

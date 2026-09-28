@@ -1,95 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  A category's places, best-rated first. The same dense row as search and
+  saved, with the description and a bookmark. Filters live in a sheet; when one
+  is active the count line says so and offers to reset it.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1A1A1A">
+    android:background="@color/canvas"
+    android:orientation="vertical">
 
-
-    <LinearLayout
-        android:id="@+id/topBar"
+    <com.example.eastsyria.Ui.ScreenHeader
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        app:headerTitle="@string/categories_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="4dp"
         android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingTop="48dp"
-        android:paddingBottom="16dp"
-        android:background="#1A1A1A"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_arrow_left"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="@color/white"
-            android:contentDescription="Back" />
-
+        android:orientation="horizontal"
+        android:paddingStart="24dp"
+        android:paddingEnd="16dp">
 
         <TextView
-            android:id="@+id/tvCategoryTitle"
+            android:id="@+id/tvCount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Historical Sites"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:layout_marginStart="-48dp" />
+            android:accessibilityLiveRegion="polite"
+            android:textColor="@color/ivory_mute"
+            android:textSize="14sp"
+            tools:text="8 places" />
 
-
-        <ImageButton
-            android:id="@+id/btnFilter"
-            android:layout_width="48dp"
+        <TextView
+            android:id="@+id/btnResetFilters"
+            android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:src="@drawable/ic_filter"
             android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="@color/white"
-            android:contentDescription="Filter" />
-
-
-        <ImageButton
-            android:id="@+id/btnSearch"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_search"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="@color/white"
-            android:contentDescription="Search" />
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="8dp"
+            android:text="@string/category_reset_filters"
+            android:textColor="@color/terracotta_soft"
+            android:textSize="14sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     </LinearLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewItems"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="80dp"
-        android:clipToPadding="false"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/topBar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/item_category_card" />
+        android:layout_weight="1">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewItems"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:visibility="gone"
+            tools:listitem="@layout/item_search_result" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#1A1A1A"
-        app:itemIconTint="@color/bottom_nav_color"
-        app:itemTextColor="@color/bottom_nav_color"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_nav_menu"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        <LinearLayout
+            android:id="@+id/loadingState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
+            android:orientation="vertical">
 
+            <include layout="@layout/item_search_skeleton" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <include layout="@layout/item_search_skeleton" />
+
+            <include layout="@layout/item_search_skeleton" />
+
+            <include layout="@layout/item_search_skeleton" />
+
+            <include layout="@layout/item_search_skeleton" />
+
+        </LinearLayout>
+
+        <com.example.eastsyria.Ui.StatePanel
+            android:id="@+id/statePanel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+</LinearLayout>

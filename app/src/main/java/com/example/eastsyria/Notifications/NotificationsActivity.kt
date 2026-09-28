@@ -1,21 +1,23 @@
 package com.example.eastsyria.Notifications
 
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.eastsyria.Details.LandmarkDetailActivity
-import com.example.eastsyria.MainPage.MainPageActivity
+import com.example.eastsyria.Login.LoginActivity
 import com.example.eastsyria.Notifications.Data.Notification
+import com.example.eastsyria.Nav.NavDock
 import com.example.eastsyria.R
-import com.example.eastsyria.Saved.SavedLandmarksActivity
+import com.example.eastsyria.Ui.SkeletonPulse
+import com.example.eastsyria.Ui.padBottomForInsets
+import com.example.eastsyria.Ui.warmEdgeToEdge
 import com.example.eastsyria.databinding.ActivityNotificationsBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,362 +31,204 @@ class NotificationsActivity : AppCompatActivity() {
     private lateinit var notificationsAdapter: NotificationsAdapter
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
+    private lateinit var pulse: SkeletonPulse
 
+    private var notificationsRef: DatabaseReference? = null
     private var notificationsListener: ValueEventListener? = null
     private val notifications = mutableListOf<Notification>()
 
+    private enum class State { LOADING, LIST, EMPTY, SIGNED_OUT, ERROR }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        warmEdgeToEdge()
         binding = ActivityNotificationsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        pulse = SkeletonPulse(binding.loadingState)
 
         database = FirebaseDatabase.getInstance().reference
         auth = FirebaseAuth.getInstance()
 
-        val currentUser = auth.currentUser
-        Log.d(TAG, "Current user: ${currentUser?.uid}")
+        binding.header.onBack { finish() }
+        binding.navDock.attach(this, NavDock.TAB_UPDATES)
+        binding.rvNotifications.padBottomForInsets(extraDp = 128)
+        setupRecyclerView()
 
-        if (currentUser == null) {
-            Toast.makeText(this, "Not logged in!", Toast.LENGTH_LONG).show()
-            finish()
+        if (auth.currentUser == null) {
+            showState(State.SIGNED_OUT)
             return
         }
-
-        setupViews()
-        setupRecyclerView()
-        setupBottomNavigation()
         loadNotifications()
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume called - refreshing notifications")
-        refreshNotifications()
-    }
-
-    private fun setupViews() {
-        binding.tvMarkAllRead.setOnClickListener {
-            markAllNotificationsAsRead()
-        }
-
-        binding.fabMap.setOnClickListener {
-            Toast.makeText(this, "Map feature coming soon", Toast.LENGTH_SHORT).show()
-        }
+    override fun onDestroy() {
+        pulse.stop()
+        val ref = notificationsRef
+        val listener = notificationsListener
+        if (ref != null && listener != null) ref.removeEventListener(listener)
+        super.onDestroy()
     }
 
     private fun setupRecyclerView() {
         notificationsAdapter = NotificationsAdapter { notification ->
             handleNotificationClick(notification)
         }
-
         binding.rvNotifications.apply {
             layoutManager = LinearLayoutManager(this@NotificationsActivity)
             adapter = notificationsAdapter
-
-            addItemDecoration(object : RecyclerView.ItemDecoration() {
-                override fun getItemOffsets(
-                    outRect: Rect,
-                    view: View,
-                    parent: RecyclerView,
-                    state: RecyclerView.State
-                ) {
-                    outRect.bottom = 8
-                }
-            })
-        }
-
-        Log.d(TAG, "RecyclerView setup complete")
-    }
-
-    private fun setupBottomNavigation() {
-        binding.bottomNavigation.selectedItemId = R.id.nav_updates
-
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_explore -> {
-                    startActivity(Intent(this, MainPageActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_saved -> {
-                    startActivity(Intent(this, SavedLandmarksActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_updates -> {
-                    true
-                }
-                R.id.nav_profile -> {
-                    Toast.makeText(this, "Profile feature coming soon", Toast.LENGTH_SHORT).show()
-                    false
-                }
-                else -> false
-            }
         }
     }
 
+    // ------------------------------------------------------------ data
+
+    /** Live, so an update read on another screen or device is reflected here. */
     private fun loadNotifications() {
-        val userId = auth.currentUser?.uid
+        val userId = auth.currentUser?.uid ?: return
+        showState(State.LOADING)
 
-        if (userId == null) {
-            Log.e(TAG, "User ID is null - user not logged in!")
-            return
-        }
-
-        Log.d(TAG, "Loading notifications for user: $userId")
-
-        notificationsListener = object : ValueEventListener {
+        val ref = database.child("notifications").child(userId)
+        val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                Log.d(TAG, "========== FIREBASE DATA RECEIVED ==========")
-
                 notifications.clear()
-
-                for (notificationSnapshot in snapshot.children) {
-                    val notificationId = notificationSnapshot.key ?: continue
-
-                    // ✅ MANUALLY parse each field instead of using getValue()
-                    val notification = Notification().apply {
-                        id = notificationId
-                        type = notificationSnapshot.child("type").getValue(String::class.java) ?: ""
-                        title = notificationSnapshot.child("title").getValue(String::class.java) ?: ""
-                        description = notificationSnapshot.child("description").getValue(String::class.java) ?: ""
-                        timestamp = notificationSnapshot.child("timestamp").getValue(Long::class.java) ?: 0L
-                        isRead = notificationSnapshot.child("isRead").getValue(Boolean::class.java) ?: false
-                        imageUrl = notificationSnapshot.child("imageUrl").getValue(String::class.java) ?: ""
-                        isFeatured = notificationSnapshot.child("isFeatured").getValue(Boolean::class.java) ?: false
-                        relatedId = notificationSnapshot.child("relatedId").getValue(String::class.java) ?: ""
-                        openedAt = notificationSnapshot.child("openedAt").getValue(Long::class.java) ?: 0L
-                    }
-
-                    Log.d(TAG, "Notification: ${notification.id}")
-                    Log.d(TAG, "  Title: ${notification.title}")
-                    Log.d(TAG, "  isRead: ${notification.isRead}")
-                    Log.d(TAG, "  Dot: ${if (notification.isRead) "HIDDEN" else "VISIBLE"}")
-
-                    notifications.add(notification)
+                for (child in snapshot.children) {
+                    parseNotification(child)?.let { notifications.add(it) }
                 }
-
                 notifications.sortByDescending { it.timestamp }
-
-                Log.d(TAG, "========== TOTAL: ${notifications.size} notifications ==========")
-
-                updateNotificationsList()
-                updateUnreadCount()
-                updateEmptyState()
+                notificationsAdapter.submitList(notifications.toList())
+                showState(if (notifications.isEmpty()) State.EMPTY else State.LIST)
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.e(TAG, "Failed to load notifications: ${error.message}")
+                showState(State.ERROR)
             }
         }
-
-        database.child("notifications")
-            .child(userId)
-            .addValueEventListener(notificationsListener!!)
+        notificationsRef = ref
+        notificationsListener = listener
+        ref.addValueEventListener(listener)
     }
 
-    private fun refreshNotifications() {
-        val userId = auth.currentUser?.uid ?: return
-
-        Log.d(TAG, "========== REFRESHING NOTIFICATIONS ==========")
-
-        database.child("notifications")
-            .child(userId)
-            .get()
-            .addOnSuccessListener { snapshot ->
-                notifications.clear()
-
-                for (notificationSnapshot in snapshot.children) {
-                    val notificationId = notificationSnapshot.key ?: continue
-
-
-                    val notification = Notification().apply {
-                        id = notificationId
-                        type = notificationSnapshot.child("type").getValue(String::class.java) ?: ""
-                        title = notificationSnapshot.child("title").getValue(String::class.java) ?: ""
-                        description = notificationSnapshot.child("description").getValue(String::class.java) ?: ""
-                        timestamp = notificationSnapshot.child("timestamp").getValue(Long::class.java) ?: 0L
-                        isRead = notificationSnapshot.child("isRead").getValue(Boolean::class.java) ?: false
-                        imageUrl = notificationSnapshot.child("imageUrl").getValue(String::class.java) ?: ""
-                        isFeatured = notificationSnapshot.child("isFeatured").getValue(Boolean::class.java) ?: false
-                        relatedId = notificationSnapshot.child("relatedId").getValue(String::class.java) ?: ""
-                        openedAt = notificationSnapshot.child("openedAt").getValue(Long::class.java) ?: 0L
-                    }
-
-                    Log.d(TAG, "Refresh: ${notification.id} - isRead=${notification.isRead}")
-                    notifications.add(notification)
-                }
-
-                notifications.sortByDescending { it.timestamp }
-                updateNotificationsList()
-                updateUnreadCount()
-
-                Log.d(TAG, "========== REFRESH COMPLETE ==========")
-            }
-            .addOnFailureListener { error ->
-                Log.e(TAG, "Failed to refresh: ${error.message}")
-            }
+    /** Parsed by hand: the stored shape has drifted, so getValue() is not trusted. */
+    private fun parseNotification(snapshot: DataSnapshot): Notification? {
+        val id = snapshot.key ?: return null
+        return Notification().apply {
+            this.id = id
+            type = snapshot.child("type").getValue(String::class.java) ?: ""
+            title = snapshot.child("title").getValue(String::class.java) ?: ""
+            description = snapshot.child("description").getValue(String::class.java) ?: ""
+            timestamp = snapshot.child("timestamp").getValue(Long::class.java) ?: 0L
+            isRead = snapshot.child("isRead").getValue(Boolean::class.java) ?: false
+            imageUrl = snapshot.child("imageUrl").getValue(String::class.java) ?: ""
+            isFeatured = snapshot.child("isFeatured").getValue(Boolean::class.java) ?: false
+            relatedId = snapshot.child("relatedId").getValue(String::class.java) ?: ""
+            openedAt = snapshot.child("openedAt").getValue(Long::class.java) ?: 0L
+        }
     }
-
 
     private fun handleNotificationClick(notification: Notification) {
-        Log.d(TAG, "=== Notification Clicked ===")
-        Log.d(TAG, "ID: ${notification.id}")
-        Log.d(TAG, "Title: ${notification.title}")
-        Log.d(TAG, "Type: ${notification.type}")
-        Log.d(TAG, "Current isRead: ${notification.isRead}")
-
         markNotificationAsOpened(notification.id)
 
         when (notification.type) {
             "LANDMARK", "SITE_UPDATE" -> {
-                if (!notification.relatedId.isNullOrEmpty() && notification.relatedId != "null") {
-                    navigateToLandmark(notification.relatedId)
+                if (notification.relatedId.isNotEmpty() && notification.relatedId != "null") {
+                    startActivity(
+                        Intent(this, LandmarkDetailActivity::class.java)
+                            .putExtra("LANDMARK_ID", notification.relatedId)
+                    )
                 } else {
-                    Toast.makeText(
-                        this,
-                        "No landmark associated with this notification",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showDialog(notification)
                 }
             }
-            "EVENT" -> {
-                Toast.makeText(
-                    this,
-                    "Event: ${notification.title}\n${notification.description}",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-            "SYSTEM" -> {
-                showSystemNotificationDialog(notification)
-            }
-            else -> {
-                Log.w(TAG, "Unknown notification type: ${notification.type}")
-                Toast.makeText(this, notification.title, Toast.LENGTH_SHORT).show()
-            }
+
+            // Events and system messages have no screen of their own: read them here.
+            else -> showDialog(notification)
         }
+    }
+
+    private fun showDialog(notification: Notification) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(notification.title)
+            .setMessage(notification.description)
+            .setPositiveButton(R.string.updates_dialog_close, null)
+            .show()
     }
 
     private fun markNotificationAsOpened(notificationId: String) {
-        if (notificationId.isEmpty()) {
-            Log.e(TAG, "Cannot mark notification as opened - empty ID")
-            return
-        }
+        val userId = auth.currentUser?.uid ?: return
+        if (notificationId.isEmpty()) return
 
-        val userId = auth.currentUser?.uid
-        if (userId == null) {
-            Log.e(TAG, "Cannot mark notification as opened - user not logged in")
-            return
-        }
-
-        val currentTime = System.currentTimeMillis()
-        val path = "notifications/$userId/$notificationId"
-
-        Log.d(TAG, "Marking notification as opened: $notificationId at $currentTime")
-
-        val updates = mapOf(
-            "isRead" to true,
-            "openedAt" to currentTime
-        )
-
-        database.child(path)
-            .updateChildren(updates)
-            .addOnSuccessListener {
-                Log.d(TAG, "✅ Successfully marked notification as opened: $notificationId")
-
-                val index = notifications.indexOfFirst { it.id == notificationId }
-                if (index != -1) {
-                    notifications[index] = notifications[index].copy(
-                        isRead = true,
-                        openedAt = currentTime
-                    )
-                    updateNotificationsList()
-                    updateUnreadCount()
-                }
-            }
+        database.child("notifications/$userId/$notificationId")
+            .updateChildren(mapOf("isRead" to true, "openedAt" to System.currentTimeMillis()))
             .addOnFailureListener { error ->
-                Log.e(TAG, "❌ Failed to mark as opened: ${error.message}")
+                Log.e(TAG, "Failed to mark as opened: ${error.message}")
             }
-    }
-
-    private fun navigateToLandmark(landmarkId: String) {
-        Log.d(TAG, "Navigating to landmark: $landmarkId")
-
-        val intent = Intent(this, LandmarkDetailActivity::class.java)
-        intent.putExtra("LANDMARK_ID", landmarkId)
-        startActivity(intent)
-    }
-
-    private fun showSystemNotificationDialog(notification: Notification) {
-        AlertDialog.Builder(this)
-            .setTitle(notification.title)
-            .setMessage(notification.description)
-            .setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .setCancelable(true)
-            .show()
+        // The live listener redraws the row, so nothing to patch by hand.
     }
 
     private fun markAllNotificationsAsRead() {
         val userId = auth.currentUser?.uid ?: return
 
-        Log.d(TAG, "Marking all notifications as read")
-
+        val now = System.currentTimeMillis()
         val updates = mutableMapOf<String, Any>()
-        val currentTime = System.currentTimeMillis()
-
         notifications.filter { !it.isRead }.forEach { notification ->
             updates["notifications/$userId/${notification.id}/isRead"] = true
-            updates["notifications/$userId/${notification.id}/openedAt"] = currentTime
+            updates["notifications/$userId/${notification.id}/openedAt"] = now
         }
-
-        if (updates.isEmpty()) {
-            Toast.makeText(this, "All notifications already read", Toast.LENGTH_SHORT).show()
-            return
-        }
+        if (updates.isEmpty()) return
 
         database.updateChildren(updates)
-            .addOnSuccessListener {
-                Log.d(TAG, "Successfully marked all as read")
-                Toast.makeText(this, "All marked as read", Toast.LENGTH_SHORT).show()
-            }
+            .addOnSuccessListener { snack(R.string.updates_all_read) }
             .addOnFailureListener { error ->
                 Log.e(TAG, "Failed to mark all as read: ${error.message}")
-                Toast.makeText(this, "Failed to update", Toast.LENGTH_SHORT).show()
+                snack(R.string.updates_mark_failed)
             }
     }
 
-    private fun updateNotificationsList() {
-        Log.d(TAG, "Updating adapter with ${notifications.size} notifications")
-        notificationsAdapter.submitList(notifications.toList())
-    }
+    // ------------------------------------------------------------ states
 
-    private fun updateUnreadCount() {
-        val unreadCount = notifications.count { !it.isRead }
-        binding.tvMarkAllRead.visibility = if (unreadCount > 0) View.VISIBLE else View.GONE
+    private fun showState(state: State) {
+        val list = state == State.LIST
+        binding.loadingState.visibility = if (state == State.LOADING) View.VISIBLE else View.GONE
+        binding.rvNotifications.visibility = if (list) View.VISIBLE else View.GONE
+        binding.statePanel.hide()
 
-        Log.d(TAG, "Unread count: $unreadCount")
-    }
-
-    private fun updateEmptyState() {
-        if (notifications.isEmpty()) {
-            binding.rvNotifications.visibility = View.GONE
+        // "Mark all as read" only when there is something to mark.
+        val unread = notifications.count { !it.isRead }
+        if (list && unread > 0) {
+            binding.header.setAction(getString(R.string.updates_mark_all)) { markAllNotificationsAsRead() }
         } else {
-            binding.rvNotifications.visibility = View.VISIBLE
+            binding.header.setAction(null)
         }
+
+        when (state) {
+            State.EMPTY -> binding.statePanel.show(
+                getString(R.string.updates_empty_title),
+                getString(R.string.updates_empty_body)
+            )
+
+            State.SIGNED_OUT -> binding.statePanel.show(
+                getString(R.string.updates_signed_out_title),
+                getString(R.string.updates_signed_out_body),
+                getString(R.string.saved_signed_out_action)
+            ) { startActivity(Intent(this, LoginActivity::class.java)) }
+
+            State.ERROR -> binding.statePanel.show(
+                getString(R.string.updates_error_title),
+                getString(R.string.search_error_body),
+                getString(R.string.action_retry)
+            ) { loadNotifications() }
+
+            else -> Unit
+        }
+
+        if (state == State.LOADING) pulse.start() else pulse.stop()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        notificationsListener?.let {
-            val userId = auth.currentUser?.uid
-            if (userId != null) {
-                database.child("notifications").child(userId).removeEventListener(it)
-                Log.d(TAG, "Removed notifications listener")
-            }
-        }
+    private fun snack(message: Int) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
+            .setBackgroundTint(ContextCompat.getColor(this, R.color.surface_high))
+            .setTextColor(ContextCompat.getColor(this, R.color.ivory))
+            .show()
     }
 
     companion object {

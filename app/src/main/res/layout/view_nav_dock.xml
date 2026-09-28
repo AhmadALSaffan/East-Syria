@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The dock: the navigation pill with the map button set into its middle. The
+  button rises above the pill on a canvas-coloured ring, which reads as a notch
+  cut into the bar. Four tabs around it; the map is never one of them.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.example.eastsyria.Nav.PillNavBar
+        android:id="@+id/dockPill"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_nav_pill"
+        android:elevation="14dp"
+        android:outlineAmbientShadowColor="#000000"
+        android:outlineSpotShadowColor="#000000" />
+
+    <FrameLayout
+        android:id="@+id/dockMapRing"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
+        android:layout_gravity="top|center_horizontal"
+        android:background="@drawable/bg_dock_ring"
+        android:elevation="16dp">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/dockMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/nav_map"
+            android:src="@drawable/ic_map_outlined"
+            app:backgroundTint="@color/wayfinding"
+            app:borderWidth="0dp"
+            app:elevation="0dp"
+            app:fabCustomSize="64dp"
+            app:fabSize="auto"
+            app:maxImageSize="30dp"
+            app:pressedTranslationZ="0dp"
+            app:tint="@color/canvas" />
+
+    </FrameLayout>
+
+</merge>

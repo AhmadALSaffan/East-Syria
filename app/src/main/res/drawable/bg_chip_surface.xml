@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Category chip: one step of lightness, no stroke, clay ripple. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#33E2703A">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/basalt_raised" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+</ripple>

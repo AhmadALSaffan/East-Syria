@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- City dropdown row. Was the cool blue-slate #2D3748; now the warm surface. -->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:textColor="@color/text_light_primary"
-    android:textSize="16sp"
-    android:background="@color/input_background"
+    android:background="@color/basalt_raised"
     android:ellipsize="end"
-    android:maxLines="1" />
+    android:maxLines="1"
+    android:minHeight="48dp"
+    android:gravity="center_vertical"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:textColor="@color/bone"
+    android:textSize="16sp" />

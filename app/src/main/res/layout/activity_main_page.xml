@@ -1,445 +1,462 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  THESIS: The home screen opens on a place, not a form. A full-bleed
+    photograph of a featured landmark fills the first viewport; search floats
+    over it. It refuses the header-plus-search-plus-icon-grid opening every
+    catalog app ships.
+  OWN-WORLD: Warm basalt canvas (#16120F), ivory type, terracotta acts, gold
+    marks a rating, teal is the map and nothing else. Amiri carries names in
+    Latin and Arabic; Roboto carries the interface. Photographs melt into the
+    canvas through scrims; nothing is boxed around them.
+  STORY: You arrive, a landmark is already looking back at you, you tap it or
+    reach for search, a category, or the map.
+  FIRST VIEWPORT: 480dp hero (name, Arabic name, place, one action, page
+    dots) under a floating search pill; the category row peeks beneath it;
+    a pill navigation floats above the foot with the map as its own button.
+  FORM: Photo-led hero carousel; user-pinned direction (no roll).
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the
+    finish review, the verdict, and DESIGN.md
+-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_dark"
-    android:fitsSystemWindows="false">
+    android:background="@color/canvas">
 
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background_dark"
-        android:fitsSystemWindows="true"
-        app:elevation="0dp">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="24dp">
-
-            <TextView
-                android:id="@+id/tvExploreLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="EXPLORE"
-                android:textSize="12sp"
-                android:textColor="@color/text_secondary"
-                android:letterSpacing="0.15"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="East Syria"
-                android:textSize="36sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_white"
-                android:fontFamily="serif"
-                app:layout_constraintTop_toBottomOf="@id/tvExploreLabel"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="4dp" />
-
-            <ImageView
-                android:id="@+id/ivBookmark"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_bookmark"
-                android:padding="12dp"
-                android:background="@drawable/circle_background_orange"
-                app:tint="@color/white"
-                android:clickable="true"
-                android:focusable="true"
-                app:layout_constraintTop_toTopOf="@id/tvTitle"
-                app:layout_constraintBottom_toBottomOf="@id/tvTitle"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/searchCard"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp"
-                app:cardBackgroundColor="@color/surface_dark"
-                app:layout_constraintTop_toBottomOf="@id/tvTitle"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="24dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_search"
-                        app:tint="@color/text_secondary" />
-
-                    <EditText
-                        android:id="@+id/etSearch"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:hint="Search landmarks, cities..."
-                        android:textColorHint="@color/text_secondary"
-                        android:textColor="@color/text_light"
-                        android:textSize="16sp"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp"
-                        android:inputType="text"
-                        android:imeOptions="actionSearch" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
+    <!-- ============================== content ============================== -->
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="100dp">
+            android:paddingBottom="176dp">
 
+            <!-- ============================ hero ============================ -->
 
-            <LinearLayout
+            <FrameLayout
+                android:id="@+id/heroContainer"
+                android:layout_width="match_parent"
+                android:layout_height="480dp">
+
+                <!-- Loading: the hero's own silhouette, pulsing. -->
+                <FrameLayout
+                    android:id="@+id/heroSkeleton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_skeleton_hero"
+                    android:importantForAccessibility="no">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:orientation="vertical"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="24dp"
+                        android:paddingBottom="72dp">
+
+                        <View
+                            android:layout_width="260dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/bg_skeleton_bar" />
+
+                        <View
+                            android:layout_width="180dp"
+                            android:layout_height="16dp"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/bg_skeleton_bar" />
+
+                        <View
+                            android:layout_width="156dp"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="22dp"
+                            android:background="@drawable/bg_skeleton_bar" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvFeaturedLandmarks"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    android:visibility="gone"
+                    tools:listitem="@layout/item_featured_landmark" />
+
+                <LinearLayout
+                    android:id="@+id/heroDots"
+                    android:layout_width="wrap_content"
+                    android:layout_height="6dp"
+                    android:layout_gravity="bottom|start"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginBottom="36dp"
+                    android:importantForAccessibility="no"
+                    android:orientation="horizontal" />
+
+                <!-- Empty and error share one panel; the copy changes, the shape does not. -->
+                <LinearLayout
+                    android:id="@+id/heroState"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_hero_empty"
+                    android:gravity="bottom"
+                    android:orientation="vertical"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:paddingBottom="64dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvStateTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/amiri"
+                        android:includeFontPadding="false"
+                        android:lineHeight="38sp"
+                        android:textColor="@color/ivory"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        tools:text="Nothing published yet" />
+
+                    <TextView
+                        android:id="@+id/tvStateBody"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:lineSpacingMultiplier="1.15"
+                        android:textColor="@color/ivory_dim"
+                        android:textSize="15sp"
+                        tools:text="New landmarks appear here as soon as they are published." />
+
+                    <TextView
+                        android:id="@+id/btnRetry"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/bg_hero_button_outline"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="24dp"
+                        android:text="@string/action_retry"
+                        android:textColor="@color/terracotta_soft"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <!-- ========================== categories ========================== -->
+
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
                 android:paddingStart="24dp"
-                android:paddingEnd="24dp"
-                android:paddingTop="24dp"
-                android:paddingBottom="16dp">
+                android:paddingEnd="16dp"
+                android:scrollbars="none">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Featured Landmarks"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_white" />
-
-                <TextView
-                    android:id="@+id/tvSeeAllFeatured"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SEE ALL"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/orange_accent"
-                    android:clickable="true"
-                    android:focusable="true" />
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/btnHistorical"
+                        style="@style/Widget.EastSyria.HomeCategory">
+
+                        <FrameLayout style="@style/Widget.EastSyria.HomeCategoryBox">
+
+                            <ImageView
+                                style="@style/Widget.EastSyria.HomeCategoryIcon"
+                                android:src="@drawable/ic_historical" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            style="@style/Widget.EastSyria.HomeCategoryLabel"
+                            android:text="@string/cat_historical" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnNature"
+                        style="@style/Widget.EastSyria.HomeCategory">
+
+                        <FrameLayout style="@style/Widget.EastSyria.HomeCategoryBox">
+
+                            <ImageView
+                                style="@style/Widget.EastSyria.HomeCategoryIcon"
+                                android:src="@drawable/ic_waves" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            style="@style/Widget.EastSyria.HomeCategoryLabel"
+                            android:text="@string/cat_nature" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnCulture"
+                        style="@style/Widget.EastSyria.HomeCategory">
+
+                        <FrameLayout style="@style/Widget.EastSyria.HomeCategoryBox">
+
+                            <ImageView
+                                style="@style/Widget.EastSyria.HomeCategoryIcon"
+                                android:src="@drawable/ic_people" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            style="@style/Widget.EastSyria.HomeCategoryLabel"
+                            android:text="@string/cat_culture" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnMuseums"
+                        style="@style/Widget.EastSyria.HomeCategory">
+
+                        <FrameLayout style="@style/Widget.EastSyria.HomeCategoryBox">
+
+                            <ImageView
+                                style="@style/Widget.EastSyria.HomeCategoryIcon"
+                                android:src="@drawable/ic_museum" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            style="@style/Widget.EastSyria.HomeCategoryLabel"
+                            android:text="@string/cat_museums" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnCuisine"
+                        style="@style/Widget.EastSyria.HomeCategory">
+
+                        <FrameLayout style="@style/Widget.EastSyria.HomeCategoryBox">
+
+                            <ImageView
+                                style="@style/Widget.EastSyria.HomeCategoryIcon"
+                                android:src="@drawable/ic_restaurant" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            style="@style/Widget.EastSyria.HomeCategoryLabel"
+                            android:text="@string/cat_cuisine" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnCrafts"
+                        style="@style/Widget.EastSyria.HomeCategory">
+
+                        <FrameLayout style="@style/Widget.EastSyria.HomeCategoryBox">
+
+                            <ImageView
+                                style="@style/Widget.EastSyria.HomeCategoryIcon"
+                                android:src="@drawable/ic_tools" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            style="@style/Widget.EastSyria.HomeCategoryLabel"
+                            android:text="@string/cat_crafts" />
+
+                    </LinearLayout>
+
+                    <!-- The index, not a category: outlined, so it reads as a different kind of thing. -->
+                    <LinearLayout
+                        android:id="@+id/btnMore"
+                        style="@style/Widget.EastSyria.HomeCategory">
+
+                        <FrameLayout
+                            style="@style/Widget.EastSyria.HomeCategoryBox"
+                            android:background="@drawable/bg_category_tile_all">
+
+                            <ImageView
+                                style="@style/Widget.EastSyria.HomeCategoryIcon"
+                                android:src="@drawable/ic_grid"
+                                android:tint="@color/ivory_dim" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            style="@style/Widget.EastSyria.HomeCategoryLabel"
+                            android:text="@string/cat_all" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <!-- ============================ trending ============================ -->
+
+            <LinearLayout
+                android:id="@+id/sectionTrending"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <LinearLayout style="@style/Widget.EastSyria.HomeSectionHeader">
+
+                    <TextView
+                        style="@style/Widget.EastSyria.HomeSectionTitle"
+                        android:text="@string/section_trending" />
+
+                    <View style="@style/Widget.EastSyria.HomeSectionRule" />
+
+                    <TextView
+                        android:id="@+id/tvViewMap"
+                        style="@style/Widget.EastSyria.HomeSectionAction"
+                        android:text="@string/action_view_map" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTrendingDestinations"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/item_trending_destination" />
 
             </LinearLayout>
 
-
-            <ProgressBar
-                android:id="@+id/progressFeatured"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:indeterminateTint="@color/orange_accent"
-                android:visibility="visible" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvFeaturedLandmarks"
+            <!-- Loading: two card silhouettes under the section's own title. -->
+            <LinearLayout
+                android:id="@+id/trendingSkeleton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp"
-                android:visibility="gone"
-                tools:listitem="@layout/item_featured_landmark" />
+                android:layout_marginTop="28dp"
+                android:importantForAccessibility="no"
+                android:orientation="vertical">
 
+                <View
+                    android:layout_width="132dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/bg_skeleton_bar" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/bg_skeleton_block" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/bg_skeleton_block" />
+
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Categories"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_white"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginBottom="16dp" />
-
-            <GridLayout
+                android:id="@+id/tvCatalogCount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="4"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp">
-
-
-                <LinearLayout
-                    android:id="@+id/btnHistorical"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="8dp">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="0dp"
-                        app:strokeWidth="0dp"
-                        app:cardBackgroundColor="@color/surface_dark">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_historical"
-                            android:layout_gravity="center"
-                            app:tint="@color/orange_accent" />
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="HISTORY"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_light"
-                        android:layout_marginTop="8dp" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/btnNature"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="8dp">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="0dp"
-                        app:strokeWidth="0dp"
-                        app:cardBackgroundColor="@color/surface_dark">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_nature"
-                            android:layout_gravity="center"
-                            app:tint="#4FC3F7" />
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="RIVERS"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_light"
-                        android:layout_marginTop="8dp" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/btnCulture"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="8dp">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="0dp"
-                        app:strokeWidth="0dp"
-                        app:cardBackgroundColor="@color/surface_dark">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_culture"
-                            android:layout_gravity="center"
-                            app:tint="#FF8A65" />
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="CULTURE"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_light"
-                        android:layout_marginTop="8dp" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/btnMore"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="8dp">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/categoryMore"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="0dp"
-                        app:strokeWidth="0dp"
-                        app:cardBackgroundColor="@color/surface_dark">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_more"
-                            android:layout_gravity="center"
-                            app:tint="@color/text_secondary" />
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="MORE"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_light"
-                        android:layout_marginTop="8dp" />
-
-                </LinearLayout>
-
-            </GridLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="28dp"
+                android:gravity="center"
                 android:paddingStart="24dp"
                 android:paddingEnd="24dp"
-                android:paddingTop="32dp"
-                android:paddingBottom="16dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Trending"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_white" />
-
-                <TextView
-                    android:id="@+id/tvViewMap"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="VIEW MAP"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/orange_accent"
-                    android:clickable="true"
-                    android:focusable="true" />
-
-            </LinearLayout>
-
-
-            <ProgressBar
-                android:id="@+id/progressTrending"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:indeterminateTint="@color/orange_accent"
-                android:visibility="visible" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTrendingDestinations"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp"
-                android:visibility="gone"
-                tools:listitem="@layout/item_trending_destination" />
+                android:textColor="@color/ivory_mute"
+                android:textSize="13sp"
+                tools:text="12 places catalogued" />
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
+    <!-- ============================ floating search ============================ -->
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
+    <FrameLayout
+        android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/surface_dark"
-        android:paddingBottom="8dp"
-        android:fitsSystemWindows="true"
-        app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/bottom_nav_color"
-        app:itemTextColor="@color/bottom_nav_color"
-        app:itemIconSize="24dp"
-        app:itemTextAppearanceActive="@style/BottomNavTextStyle"
-        app:itemTextAppearanceInactive="@style/BottomNavTextStyle"
-        app:labelVisibilityMode="labeled"
-        app:elevation="8dp" />
+        android:layout_gravity="top">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAdd"
-        android:layout_width="wrap_content"
+        <!-- Height is set in code (status bar inset + 76dp); a match_parent
+             backing inside this wrap_content bar swallowed the whole screen. -->
+        <View
+            android:id="@+id/topBarBg"
+            android:layout_width="match_parent"
+            android:layout_height="76dp"
+            android:alpha="0"
+            android:background="@drawable/bg_top_bar_solid"
+            android:importantForAccessibility="no" />
+
+        <LinearLayout
+            android:id="@+id/searchPill"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_search_pill"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_search"
+                app:tint="@color/terracotta_soft" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/home_search_hint"
+                android:textColor="@color/ivory_dim"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- The dock: four tabs around the map button. -->
+    <com.example.eastsyria.Nav.NavDock
+        android:id="@+id/navDock"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_map_outlined"
-        app:tint="@color/white"
-        app:backgroundTint="@color/teal_accent"
-        app:fabSize="normal"
-        app:elevation="16dp"
-        app:pressedTranslationZ="20dp"
-        app:borderWidth="0dp"
-        app:layout_anchor="@id/bottomNavigation"
-        app:layout_anchorGravity="center|top"
-        android:translationZ="20dp" />
+        android:layout_gravity="bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

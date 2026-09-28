@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The Approach, stop 3: the gate fills the frame and the opening is pure dark.
+  No warmth here on purpose — it is what makes the amber on stop 4 land.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="400dp"
+    android:height="420dp"
+    android:viewportWidth="400"
+    android:viewportHeight="420">
+
+    <!-- Wall runs off the top of the frame: you are right up against it, and
+         a visible top edge here reads as a stray bar under the status bar. -->
+    <path
+        android:fillColor="@color/stone_mid"
+        android:pathData="M0,0 L400,0 L400,420 L0,420 Z" />
+
+    <path
+        android:strokeColor="@color/surface"
+        android:strokeWidth="1.5"
+        android:strokeAlpha="0.45"
+        android:pathData="M0,54 L400,54 M0,86 L400,86 M0,118 L400,118
+            M0,150 L400,150 M0,182 L400,182 M0,214 L400,214
+            M0,246 L400,246 M0,278 L400,278 M0,310 L400,310
+            M0,342 L400,342 M0,374 L400,374 M0,406 L400,406" />
+
+    <!-- Archivolt: the stone band that rings the opening -->
+    <path
+        android:strokeColor="@color/stone_near"
+        android:strokeWidth="10"
+        android:pathData="M124,420 L124,296 Q124,190 200,134 Q276,190 276,296 L276,420" />
+
+    <!-- Impost blocks at the springing line -->
+    <path
+        android:fillColor="@color/stone_near"
+        android:pathData="M114,288h22v12h-22z M264,288h22v12h-22z" />
+
+    <path
+        android:fillColor="@color/opening"
+        android:pathData="M132,420 L132,298 Q132,198 200,146 Q268,198 268,298 L268,420 Z" />
+
+    <!-- Voussoir joints, radiating from the centre of the arch -->
+    <path
+        android:strokeColor="#FF1B1B1B"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M120,286 L136,286 M124,236 L140,240 M136,190 L152,198
+            M158,156 L168,170 M186,138 L190,156 M214,138 L210,156
+            M242,156 L232,170 M264,190 L248,198 M276,236 L260,240
+            M280,286 L264,286" />
+
+</vector>

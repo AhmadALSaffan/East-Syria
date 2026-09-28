@@ -1,272 +1,283 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  Personal details: a portrait, four fields, one filled action. Fields are the
+  shared warm text field; the sign-in email is shown but not editable here.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1A1A1A"
-    android:fillViewport="true">
+    android:background="@color/canvas"
+    android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.example.eastsyria.Ui.ScreenHeader
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="32dp">
+        app:headerTitle="@string/personal_title" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="48dp"
-            android:background="@drawable/bg_back_button"
-            android:src="@drawable/ic_arrow_left"
-            android:contentDescription="Back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <ScrollView
+            android:id="@+id/scrollDetails"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:scrollbars="none">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Personal Details"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/btnBack"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btnBack" />
+            <LinearLayout
+                android:id="@+id/formContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="24dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="32dp">
 
+                <!-- Failed to read the profile: say so, offer the one recovery. -->
+                <LinearLayout
+                    android:id="@+id/loadError"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/bg_segment_container"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:visibility="gone">
 
-        <FrameLayout
-            android:id="@+id/profileImageContainer"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="32dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnBack">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/personal_load_error"
+                        android:textColor="@color/ivory_dim"
+                        android:textSize="14sp" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imgProfile"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/ic_profile_placeholder"
-                app:civ_border_color="#F5A623"
-                app:civ_border_width="2dp"
-                tools:ignore="MissingClass" />
+                    <TextView
+                        android:id="@+id/btnLoadRetry"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="4dp"
+                        android:text="@string/action_retry"
+                        android:textColor="@color/terracotta_soft"
+                        android:textSize="14sp" />
 
-            <ImageView
-                android:id="@+id/btnEditPhoto"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="bottom|end"
-                android:layout_marginEnd="2dp"
-                android:layout_marginBottom="2dp"
-                android:background="@drawable/bg_circle_orange"
-                android:padding="7dp"
-                android:src="@drawable/ic_edit"
-                android:contentDescription="Edit Photo" />
-        </FrameLayout>
+                </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvChangePhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="CHANGE PHOTO"
-            android:textColor="#F5A623"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.08"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profileImageContainer" />
+                <FrameLayout
+                    android:id="@+id/profileImageContainer"
+                    android:layout_width="112dp"
+                    android:layout_height="112dp"
+                    android:layout_gravity="center_horizontal">
 
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/imgProfile"
+                        android:layout_width="104dp"
+                        android:layout_height="104dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/personal_change_photo"
+                        android:src="@drawable/ic_profile_placeholder"
+                        app:civ_border_color="@color/terracotta"
+                        app:civ_border_width="2dp" />
 
-        <TextView
-            android:id="@+id/labelFullName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="28dp"
-            android:text="FULL NAME"
-            android:textColor="#9E9E9E"
-            android:textSize="11sp"
-            android:letterSpacing="0.08"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvChangePhoto" />
+                    <ImageView
+                        android:id="@+id/btnEditPhoto"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="bottom|end"
+                        android:background="@drawable/bg_photo_edit"
+                        android:contentDescription="@string/personal_change_photo"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_camera"
+                        app:tint="@color/canvas" />
 
-        <EditText
-            android:id="@+id/etFullName"
-            android:layout_width="0dp"
-            android:layout_height="52dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/bg_input_field"
-            android:inputType="textPersonName"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#9E9E9E"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/labelFullName" />
+                </FrameLayout>
 
+                <TextView
+                    android:id="@+id/tvChangePhoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/personal_change_photo"
+                    android:textColor="@color/terracotta_soft"
+                    android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/labelEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:text="EMAIL ADDRESS"
-            android:textColor="#9E9E9E"
-            android:textSize="11sp"
-            android:letterSpacing="0.08"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etFullName" />
+                <TextView
+                    android:id="@+id/labelFullName"
+                    style="@style/TextAppearance.EastSyria.FilterGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/personal_full_name" />
 
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_width="0dp"
-            android:layout_height="52dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/bg_input_field"
-            android:inputType="textEmailAddress"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#9E9E9E"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/labelEmail" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilFullName"
+                    style="@style/Widget.EastSyria.TextField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etFullName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
+                        android:importantForAutofill="yes"
+                        android:inputType="textPersonName|textCapWords"
+                        android:textColor="@color/ivory"
+                        android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/labelPhone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:text="PHONE NUMBER"
-            android:textColor="#9E9E9E"
-            android:textSize="11sp"
-            android:letterSpacing="0.08"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etEmail" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/etPhone"
-            android:layout_width="0dp"
-            android:layout_height="52dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/bg_input_field"
-            android:inputType="phone"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#9E9E9E"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/labelPhone" />
+                <TextView
+                    android:id="@+id/labelEmail"
+                    style="@style/TextAppearance.EastSyria.FilterGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/personal_email" />
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilEmail"
+                    style="@style/Widget.EastSyria.TextField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:helperText="@string/personal_email_helper"
+                    app:helperTextTextColor="@color/ivory_mute">
 
-        <TextView
-            android:id="@+id/labelCity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:text="CITY"
-            android:textColor="#9E9E9E"
-            android:textSize="11sp"
-            android:letterSpacing="0.08"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etPhone" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/ivory_dim"
+                        android:textSize="16sp" />
 
-        <AutoCompleteTextView
-            android:id="@+id/etCity"
-            android:layout_width="0dp"
-            android:layout_height="52dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/bg_input_field"
-            android:paddingStart="16dp"
-            android:paddingEnd="48dp"
-            android:drawableStart="@drawable/ic_location"
-            android:drawableTint="#9E9E9E"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#9E9E9E"
-            android:textSize="15sp"
-            android:focusable="true"
-            android:inputType="none"
-            android:dropDownHeight="200dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/labelCity" />
+                </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:id="@+id/labelPhone"
+                    style="@style/TextAppearance.EastSyria.FilterGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/personal_phone" />
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilPhone"
+                    style="@style/Widget.EastSyria.TextField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
 
-        <TextView
-            android:id="@+id/tvDiscardChanges"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="Discard Changes"
-            android:textColor="#757575"
-            android:textSize="13sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etCity" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
+                        android:inputType="phone"
+                        android:textColor="@color/ivory"
+                        android:textSize="16sp" />
 
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnSaveChanges"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/bg_orange_button"
-            android:text="Save Changes"
-            android:textColor="#1A1A1A"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvDiscardChanges" />
+                <TextView
+                    android:id="@+id/labelCity"
+                    style="@style/TextAppearance.EastSyria.FilterGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/personal_city" />
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilCity"
+                    style="@style/Widget.EastSyria.TextField.Dropdown"
+                    app:startIconDrawable="@drawable/flag_syria"
+                    app:startIconTint="@null"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/etCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:textColor="@color/ivory"
+                        android:textSize="16sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSaveChanges"
+                    style="@style/Widget.EastSyria.Button.Pill"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/personal_save" />
+
+                <TextView
+                    android:id="@+id/tvDiscardChanges"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/personal_discard"
+                    android:textColor="@color/ivory_dim"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <!-- While loading or saving: the form is dimmed and cannot be touched. -->
         <View
             android:id="@+id/loadingOverlay"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="#CC000000"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#B316120F"
+            android:clickable="true"
+            android:focusable="true"
+            android:importantForAccessibility="no"
+            android:visibility="gone" />
 
         <ProgressBar
             android:id="@+id/progressBar"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:indeterminateTint="#F5A623"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/terracotta"
+            android:visibility="gone" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+    </FrameLayout>
+
+</LinearLayout>

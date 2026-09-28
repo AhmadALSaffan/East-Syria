@@ -1,13 +1,25 @@
 package com.example.eastsyria.MainPage.Adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.example.eastsyria.MainPage.Data.Landmark
 import com.example.eastsyria.R
 import com.example.eastsyria.databinding.ItemTrendingDestinationBinding
-import com.example.eastsyria.MainPage.Data.Landmark
 
+/**
+ * Trending cards: the photograph is the card, the name and place sit on a
+ * scrim at its foot.
+ *
+ * The review count this once rendered ("(1.2k)") was social proof the product
+ * has not earned — nothing in the app can author a review. The place is shown
+ * instead, which is real and more use to someone deciding whether to go. The
+ * rating stays as a curator's mark and hides entirely when it is unset rather
+ * than showing a hollow 0.0.
+ */
 class TrendingDestinationAdapter(
     private val destinations: List<Landmark>,
     private val onItemClick: (Landmark) -> Unit
@@ -17,25 +29,44 @@ class TrendingDestinationAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(landmark: Landmark) {
+            val context = binding.root.context
             binding.apply {
-                tvRating.text = landmark.rating.toString()
-                tvReviewCount.text = "(${formatReviewCount(landmark.reviewCount)})"
                 tvLandmarkName.text = landmark.name
-                tvDescription.text = landmark.description
-                Glide.with(binding.root.context)
+
+                val place = formatPlace(landmark)
+                tvLocation.text = place
+                tvLocation.visibility = if (place.isEmpty()) View.GONE else View.VISIBLE
+
+                if (landmark.rating > 0.0) {
+                    val rating = String.format("%.1f", landmark.rating)
+                    tvRating.text = rating
+                    layoutRating.contentDescription = context.getString(R.string.home_rating_desc, rating)
+                    layoutRating.visibility = View.VISIBLE
+                } else {
+                    layoutRating.visibility = View.GONE
+                }
+
+                Glide.with(context)
                     .load(landmark.imageUrl)
-                    .placeholder(R.drawable.placeholder_destination)
-                    .error(R.drawable.placeholder_destination)
+                    .placeholder(R.drawable.placeholder_dark)
+                    .error(R.drawable.placeholder_dark)
                     .centerCrop()
+                    .transition(DrawableTransitionOptions.withCrossFade(250))
                     .into(ivLandmark)
-                root.setOnClickListener { onItemClick(landmark) }
+
+                cardContent.setOnClickListener { onItemClick(landmark) }
             }
         }
 
-        private fun formatReviewCount(count: Int): String {
+        private fun formatPlace(landmark: Landmark): String {
+            val city = landmark.location.city.trim()
+            val governorate = landmark.location.governorate.trim()
             return when {
-                count >= 1000 -> String.format("%.1fk", count / 1000.0)
-                else -> count.toString()
+                city.isNotEmpty() && governorate.isNotEmpty() && city != governorate ->
+                    "$city, $governorate"
+
+                city.isNotEmpty() -> city
+                else -> governorate
             }
         }
     }

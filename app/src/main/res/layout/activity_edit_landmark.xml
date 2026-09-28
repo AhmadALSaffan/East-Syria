@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1A1A1A"
+    android:background="@color/canvas"
     android:id="@+id/scrollView">
 
     <LinearLayout
@@ -17,38 +18,42 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:paddingHorizontal="16dp"
-            android:background="@drawable/dash_bg_dark"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="48dp">
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btnBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/ic_back"
-                android:background="@null"
-                android:tint="#FFFFFF" />
+                android:background="@drawable/bg_icon_chip"
+                android:tint="@color/ivory"
+        android:padding="12dp"
+        android:contentDescription="@string/search_back"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Edit Landmark"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
+                android:textColor="@color/ivory"
+                android:textSize="26sp"
                 android:textStyle="bold"
-                android:layout_marginStart="12dp" />
+                android:layout_marginStart="12dp"
+        android:fontFamily="@font/amiri"
+        android:includeFontPadding="false"
+        android:lineHeight="32sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ADMIN MODE"
-                android:textColor="#FFA726"
+                android:text="Curator"
+                android:textColor="@color/gold"
                 android:textSize="11sp"
-                android:background="#2C1F00"
+                android:background="@drawable/bg_status_pending"
                 android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp" />
+                android:paddingVertical="4dp"/>
 
         </LinearLayout>
 
@@ -65,47 +70,51 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="General Information"
-                android:textColor="#FFA726"
-                android:textSize="14sp"
+                android:textColor="@color/ivory"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="12dp"
+        android:fontFamily="@font/amiri"
+        android:includeFontPadding="false"
+        android:lineHeight="30sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Landmark Name (English)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etNameEn"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="Palmyra Tetrapylon"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="12dp"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etNameAr" />
+                android:nextFocusDown="@id/etNameAr"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="اسم المعلم (Arabic)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etNameAr"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="اكتب الاسم"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
@@ -113,50 +122,53 @@
                 android:inputType="text"
                 android:gravity="start"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etCategoryEn" />
+                android:nextFocusDown="@id/etCategoryEn"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Category (English)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etCategoryEn"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="Archaeological Site"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="12dp"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etCategoryAr" />
+                android:nextFocusDown="@id/etCategoryAr"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="الفئة (Arabic)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etCategoryAr"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="موقع أثري"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:inputType="text"
                 android:gravity="end"
-                android:imeOptions="actionNext" />
+                android:imeOptions="actionNext"
+        android:textSize="16sp"/>
 
         </LinearLayout>
 
@@ -174,25 +186,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Landmark Narrative"
-                android:textColor="#FFA726"
-                android:textSize="14sp"
+                android:textColor="@color/ivory"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="12dp"
+        android:fontFamily="@font/amiri"
+        android:includeFontPadding="false"
+        android:lineHeight="30sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Short Description (English)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etDescriptionEn"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="A brief hook for the landmark..."
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="8dp"
@@ -201,22 +216,23 @@
                 android:inputType="textMultiLine"
                 android:gravity="top"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etDescriptionAr" />
+                android:nextFocusDown="@id/etDescriptionAr"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="وصف قصير (Arabic)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etDescriptionAr"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="وصف موجز و جذاب للمكان..."
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="8dp"
@@ -225,22 +241,23 @@
                 android:inputType="textMultiLine"
                 android:gravity="top|start"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etLongDescriptionEn" />
+                android:nextFocusDown="@id/etLongDescriptionEn"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Detailed Narrative (English)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etLongDescriptionEn"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="Extensive historical and cultural details..."
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="8dp"
@@ -249,29 +266,31 @@
                 android:inputType="textMultiLine"
                 android:gravity="top"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etLongDescriptionAr" />
+                android:nextFocusDown="@id/etLongDescriptionAr"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="السرد التفصيلي (Arabic)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etLongDescriptionAr"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="التفاصيل التاريخية والثقافية الكاملة..."
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="8dp"
                 android:layout_marginTop="4dp"
                 android:inputType="textMultiLine"
                 android:gravity="top|start"
-                android:imeOptions="actionNext" />
+                android:imeOptions="actionNext"
+        android:textSize="16sp"/>
 
         </LinearLayout>
 
@@ -289,28 +308,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Media Assets"
-                android:textColor="#FFA726"
-                android:textSize="14sp"
+                android:textColor="@color/ivory"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="12dp"
+        android:fontFamily="@font/amiri"
+        android:includeFontPadding="false"
+        android:lineHeight="30sp"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnPickImage"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:text="Change Image"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#2A2A2A"
-                android:layout_marginBottom="8dp" />
+                android:textColor="@color/ivory"
+                android:backgroundTint="@color/surface"
+                android:layout_marginBottom="8dp"
+        android:textAllCaps="false"/>
 
             <TextView
                 android:id="@+id/tvImageHint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Current image will be kept if unchanged"
-                android:textColor="#666666"
+                android:textColor="@color/ivory_mute"
                 android:textSize="12sp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="8dp"/>
 
             <ImageView
                 android:id="@+id/ivPreview"
@@ -318,7 +341,7 @@
                 android:layout_height="180dp"
                 android:scaleType="centerCrop"
                 android:visibility="gone"
-                android:background="#2A2A2A" />
+                android:background="@color/surface" />
 
         </LinearLayout>
 
@@ -336,47 +359,51 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Geographic Details"
-                android:textColor="#FFA726"
-                android:textSize="14sp"
+                android:textColor="@color/ivory"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="12dp"
+        android:fontFamily="@font/amiri"
+        android:includeFontPadding="false"
+        android:lineHeight="30sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="City (EN)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etCityEn"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="Tadmur"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="12dp"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etCityAr" />
+                android:nextFocusDown="@id/etCityAr"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="المدينة (AR)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etCityAr"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="تدمر"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
@@ -384,44 +411,46 @@
                 android:inputType="text"
                 android:gravity="start"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etGovernorateEn" />
+                android:nextFocusDown="@id/etGovernorateEn"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Governorate (EN)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etGovernorateEn"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="Homs"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="12dp"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etGovernorateAr" />
+                android:nextFocusDown="@id/etGovernorateAr"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="المحافظة (AR)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etGovernorateAr"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="حمص"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
@@ -429,29 +458,31 @@
                 android:inputType="text"
                 android:gravity="start"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etRegionEn" />
+                android:nextFocusDown="@id/etRegionEn"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Region (EN)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etRegionEn"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="Eastern Desert"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="12dp"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etLatitude" />
+                android:nextFocusDown="@id/etLatitude"
+        android:textSize="16sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -469,22 +500,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Latitude"
-                        android:textColor="#AAAAAA"
-                        android:textSize="12sp" />
+                        android:textColor="@color/ivory_dim"
+                        android:textSize="14sp"/>
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/etLatitude"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="52dp"
                         android:background="@drawable/dash_bg_dark"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#666666"
+                        android:textColor="@color/ivory"
+                        android:textColorHint="@color/ivory_mute"
                         android:hint="34.5546"
                         android:paddingHorizontal="12dp"
                         android:layout_marginTop="4dp"
                         android:inputType="numberDecimal"
                         android:imeOptions="actionNext"
-                        android:nextFocusDown="@id/etLongitude" />
+                        android:nextFocusDown="@id/etLongitude"
+        android:textSize="16sp"/>
 
                 </LinearLayout>
 
@@ -498,21 +530,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Longitude"
-                        android:textColor="#AAAAAA"
-                        android:textSize="12sp" />
+                        android:textColor="@color/ivory_dim"
+                        android:textSize="14sp"/>
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/etLongitude"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="52dp"
                         android:background="@drawable/dash_bg_dark"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#666666"
+                        android:textColor="@color/ivory"
+                        android:textColorHint="@color/ivory_mute"
                         android:hint="38.2672"
                         android:paddingHorizontal="12dp"
                         android:layout_marginTop="4dp"
                         android:inputType="numberDecimal"
-                        android:imeOptions="actionNext" />
+                        android:imeOptions="actionNext"
+        android:textSize="16sp"/>
 
                 </LinearLayout>
 
@@ -534,118 +567,126 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Historical Details"
-                android:textColor="#FFA726"
-                android:textSize="14sp"
+                android:textColor="@color/ivory"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="12dp"
+        android:fontFamily="@font/amiri"
+        android:includeFontPadding="false"
+        android:lineHeight="30sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Year Built"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etYearBuilt"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="e.g. 1927 or 300 BCE"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="12dp"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etBuiltBy" />
+                android:nextFocusDown="@id/etBuiltBy"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Built By"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etBuiltBy"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="e.g. Roman Empire / French Engineers"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="12dp"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etEra" />
+                android:nextFocusDown="@id/etEra"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Era / Period"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etEra"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="e.g. Roman Period / Byzantine Era"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="12dp"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etMaterial" />
+                android:nextFocusDown="@id/etMaterial"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Material"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etMaterial"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="e.g. Limestone / Iron / Stone"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="12dp"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etElevation" />
+                android:nextFocusDown="@id/etElevation"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Elevation"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etElevation"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="e.g. 244 meters above sea level"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:inputType="text"
-                android:imeOptions="actionNext" />
+                android:imeOptions="actionNext"
+        android:textSize="16sp"/>
 
         </LinearLayout>
 
@@ -663,74 +704,80 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Logistics &amp; Access"
-                android:textColor="#FFA726"
-                android:textSize="14sp"
+                android:textColor="@color/ivory"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="12dp"
+        android:fontFamily="@font/amiri"
+        android:includeFontPadding="false"
+        android:lineHeight="30sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Visiting Hours"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etVisitingHours"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="08:00 AM - 06:00 PM"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="12dp"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etEntryFee" />
+                android:nextFocusDown="@id/etEntryFee"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Entry Fee"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etEntryFee"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="Free / 500 SYP"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="12dp"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etBestTimeToVisit" />
+                android:nextFocusDown="@id/etBestTimeToVisit"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Best Time to Visit"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etBestTimeToVisit"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="Spring / Sunset"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:inputType="text"
-                android:imeOptions="actionNext" />
+                android:imeOptions="actionNext"
+        android:textSize="16sp"/>
 
         </LinearLayout>
 
@@ -748,54 +795,59 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Status &amp; Meta-tags"
-                android:textColor="#FFA726"
-                android:textSize="14sp"
+                android:textColor="@color/ivory"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="12dp"
+        android:fontFamily="@font/amiri"
+        android:includeFontPadding="false"
+        android:lineHeight="30sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Status (EN)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etStatus"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="published / pending"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="12dp"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:nextFocusDown="@id/etStatusArabic" />
+                android:nextFocusDown="@id/etStatusArabic"
+        android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="الحالة (AR)"
-                android:textColor="#AAAAAA"
-                android:textSize="12sp" />
+                android:textColor="@color/ivory_dim"
+                android:textSize="14sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etStatusArabic"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/dash_bg_dark"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:hint="منشور / قيد المراجعة"
                 android:paddingHorizontal="12dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="16dp"
                 android:inputType="text"
                 android:gravity="start"
-                android:imeOptions="actionDone" />
+                android:imeOptions="actionDone"
+        android:textSize="16sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -809,14 +861,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="FEATURED"
-                    android:textColor="#FFFFFF"
-                    android:textSize="13sp" />
+                    android:textColor="@color/ivory"
+                    android:textSize="13sp"/>
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchFeatured"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false" />
+                    android:checked="false"
+        app:thumbTint="@color/switch_thumb"
+        app:trackTint="@color/switch_track"/>
 
             </LinearLayout>
 
@@ -832,14 +886,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="TRENDING"
-                    android:textColor="#FFFFFF"
-                    android:textSize="13sp" />
+                    android:textColor="@color/ivory"
+                    android:textSize="13sp"/>
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchTrending"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false" />
+                    android:checked="false"
+        app:thumbTint="@color/switch_thumb"
+        app:trackTint="@color/switch_track"/>
 
             </LinearLayout>
 
@@ -854,14 +910,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="HISTORICAL"
-                    android:textColor="#FFFFFF"
-                    android:textSize="13sp" />
+                    android:textColor="@color/ivory"
+                    android:textSize="13sp"/>
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchHistorical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false" />
+                    android:checked="false"
+        app:thumbTint="@color/switch_thumb"
+        app:trackTint="@color/switch_track"/>
 
             </LinearLayout>
 
@@ -876,19 +934,21 @@
             android:layout_marginBottom="12dp"
             android:visibility="gone"
             android:indeterminate="true"
-            android:progressTint="#FFA726"
-            android:progressBackgroundTint="#2A2A2A" />
+            android:progressTint="@color/terracotta"
+            android:progressBackgroundTint="@color/surface" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSaveLandmark"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginHorizontal="16dp"
-            android:text="SAVE CHANGES"
-            android:textColor="#000000"
+            android:text="Save changes"
+            android:textColor="@color/canvas"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:background="@drawable/add_bg_orange" />
+            android:textStyle="normal"
+            android:background="@drawable/add_bg_orange"
+        android:textAllCaps="false"
+        android:fontFamily="sans-serif-medium"/>
 
         <Space
             android:layout_width="match_parent"

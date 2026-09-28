@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Scrim, not shadow: the art dissolves into the canvas so type sits clean. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="270"
+        android:startColor="#0016120F"
+        android:centerColor="#B316120F"
+        android:endColor="#FF16120F"
+        android:type="linear" />
+</shape>

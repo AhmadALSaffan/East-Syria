@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A hairline at rest, a terracotta edge while the field has the cursor. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/terracotta" android:state_focused="true" />
+    <item android:color="@color/line" />
+</selector>

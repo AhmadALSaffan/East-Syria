@@ -1,208 +1,244 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  The innermost room. The arch stands at full strength here — you have gone
+  as far in as the flow goes, and the code is the last door.
+-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_dark"
-    android:padding="32dp">
+    android:background="@color/basalt"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:scrollbars="none">
 
-
-    <ImageView
-        android:id="@+id/ivBack"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/ic_back"
-        app:tint="@color/text_light_secondary"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="8dp" />
-
-    <TextView
-        android:id="@+id/tvStep"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="STEP 2 OF 2"
-        android:textSize="12sp"
-        android:textColor="@color/text_light_secondary"
-        android:letterSpacing="0.1"
-        app:layout_constraintTop_toTopOf="@id/ivBack"
-        app:layout_constraintBottom_toBottomOf="@id/ivBack"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:paddingStart="28dp"
+        android:paddingEnd="28dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="28dp">
 
+        <ImageView
+            android:id="@+id/archBackdrop"
+            android:layout_width="0dp"
+            android:layout_height="440dp"
+            android:layout_marginTop="40dp"
+            android:alpha="0.85"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/art_arch_frame"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="16dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvStep"
-        app:layout_constraintVertical_bias="0.2">
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_icon_button"
+            android:clickable="true"
+            android:contentDescription="@string/auth_back"
+            android:focusable="true"
+            android:padding="13dp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tint="@color/bone_dim" />
+
+        <!-- Step 2 of 2: both segments spent. -->
+        <LinearLayout
+            android:id="@+id/stepRule"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/signup_step_2"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="@id/ivBack"
+            app:layout_constraintBottom_toBottomOf="@id/ivBack"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:alpha="0.45"
+                android:background="@color/clay" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/clay" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="Verify Your Account"
-            android:textColor="@color/orange_accent"
-            android:textSize="36sp"
-            android:textStyle="bold" />
-
+            android:layout_marginTop="56dp"
+            android:textAppearance="@style/TextAppearance.EastSyria.ScreenTitle"
+            android:text="@string/otp_title"
+            app:layout_constraintTop_toBottomOf="@id/ivBack"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/tvSubtitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:lineSpacingExtra="2dp"
-            android:text="Enter the 6-digit code we sent to your email"
-            android:textColor="@color/text_light_secondary"
-            android:textSize="14sp" />
-
+            android:layout_marginTop="10dp"
+            android:lineSpacingExtra="4dp"
+            android:textColor="@color/bone_dim"
+            android:textSize="15sp"
+            android:text="@string/otp_subtitle"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/llOtpRow"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:gravity="center"
+            android:layout_marginTop="44dp"
             android:orientation="horizontal"
-            android:weightSum="6">
+            android:weightSum="6"
+            app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etOtp1"
                 style="@style/OtpEditTextStyle"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:contentDescription="@string/otp_digit_1" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etOtp2"
                 style="@style/OtpEditTextStyle"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:contentDescription="@string/otp_digit_2" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etOtp3"
                 style="@style/OtpEditTextStyle"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:contentDescription="@string/otp_digit_3" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etOtp4"
                 style="@style/OtpEditTextStyle"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:contentDescription="@string/otp_digit_4" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etOtp5"
                 style="@style/OtpEditTextStyle"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:contentDescription="@string/otp_digit_5" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etOtp6"
                 style="@style/OtpEditTextStyle"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:contentDescription="@string/otp_digit_6" />
 
         </LinearLayout>
 
-
         <LinearLayout
+            android:id="@+id/llResendRow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="32dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/llOtpRow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Didn't receive code? "
-                android:textColor="@color/text_light_secondary"
-                android:textSize="14sp" />
+                android:textColor="@color/bone_dim"
+                android:textSize="14sp"
+                android:text="@string/otp_no_code" />
 
             <TextView
                 android:id="@+id/tvResendCode"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="Resend Code"
-                android:textColor="@color/orange_accent"
+                android:gravity="center"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textColor="@color/clay"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:text="@string/otp_resend" />
 
         </LinearLayout>
 
-    </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVerify"
+            style="@style/Widget.EastSyria.Button.Primary"
+            android:layout_width="0dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/otp_action"
+            app:layout_constraintTop_toBottomOf="@id/llResendRow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:indeterminateTint="@color/basalt"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/btnVerify"
+            app:layout_constraintBottom_toBottomOf="@id/btnVerify"
+            app:layout_constraintStart_toStartOf="@id/btnVerify"
+            app:layout_constraintEnd_toEndOf="@id/btnVerify" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnVerify"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/button_background_orange"
-        android:text="Verify and Continue"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:backgroundTint="@null"
-        app:cornerRadius="16dp"
-        app:icon="@drawable/ic_arrow_right"
-        app:iconGravity="end"
-        app:iconTint="@color/white"
-        app:layout_constraintBottom_toTopOf="@id/llLoginLink"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:indeterminateTint="@color/white"
-        app:layout_constraintTop_toTopOf="@id/btnVerify"
-        app:layout_constraintBottom_toBottomOf="@id/btnVerify"
-        app:layout_constraintStart_toStartOf="@id/btnVerify"
-        app:layout_constraintEnd_toEndOf="@id/btnVerify" />
-
-
-    <LinearLayout
-        android:id="@+id/llLoginLink"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="24dp">
-
-        <TextView
+        <LinearLayout
+            android:id="@+id/llLoginLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Already have an account? "
-            android:textSize="14sp"
-            android:textColor="@color/text_light_secondary" />
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/btnVerify"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="1">
 
-        <TextView
-            android:id="@+id/tvLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Log In"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/orange_accent"
-            android:clickable="true"
-            android:focusable="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/bone_dim"
+                android:textSize="14sp"
+                android:text="@string/signup_have_account" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textColor="@color/clay"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/signup_login" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

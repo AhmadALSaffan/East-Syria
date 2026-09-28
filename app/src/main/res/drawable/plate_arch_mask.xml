@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The signature of the home screen: the arch from the auth flow, now framing
+  landmarks instead of a form.
+
+  One path, two subpaths, fillType="evenOdd" — the rectangle fills, the arch
+  punches through it. Laid over a photograph it leaves the image visible only
+  inside the opening, so the plate reads as a doorway cut in the wall rather
+  than a card with a picture in it. The fill is the page canvas, not a card
+  surface, so no container survives around the image.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="176dp"
+    android:height="240dp"
+    android:viewportWidth="176"
+    android:viewportHeight="240">
+
+    <path
+        android:fillColor="@color/basalt"
+        android:fillType="evenOdd"
+        android:pathData="M0,0 L176,0 L176,240 L0,240 Z
+            M8,240 L8,130 Q8,40 88,28 Q168,40 168,130 L168,240 Z" />
+
+    <!-- Hairline following the opening: the arch's own edge. -->
+    <path
+        android:strokeColor="@color/hairline"
+        android:strokeWidth="1.5"
+        android:pathData="M8,240 L8,130 Q8,40 88,28 Q168,40 168,130 L168,240" />
+
+</vector>

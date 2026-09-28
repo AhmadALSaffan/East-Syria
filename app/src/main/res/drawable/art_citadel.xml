@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The Approach, stop 2: close enough to read the wall. Courses, merlons,
+  two towers, and the gate you will stand in front of on the next stop.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="400dp"
+    android:height="420dp"
+    android:viewportWidth="400"
+    android:viewportHeight="420">
+
+    <path
+        android:fillColor="@color/stone_mid"
+        android:pathData="M0,268 L400,268 L400,420 L0,420 Z" />
+
+    <path
+        android:strokeColor="@color/surface"
+        android:strokeWidth="1.5"
+        android:strokeAlpha="0.35"
+        android:pathData="M0,292 L400,292 M0,316 L400,316 M0,340 L400,340
+            M0,364 L400,364 M0,388 L400,388 M0,412 L400,412" />
+
+    <path
+        android:fillColor="@color/stone_mid"
+        android:pathData="M0,255h15v13h-15z M26,255h15v13h-15z M52,255h15v13h-15z
+            M78,255h15v13h-15z M104,255h15v13h-15z M130,255h15v13h-15z
+            M156,255h15v13h-15z M182,255h15v13h-15z M208,255h15v13h-15z
+            M234,255h15v13h-15z M260,255h15v13h-15z M286,255h15v13h-15z
+            M312,255h15v13h-15z M338,255h15v13h-15z M364,255h15v13h-15z
+            M390,255h10v13h-10z" />
+
+    <path
+        android:fillColor="@color/stone_near"
+        android:pathData="M52,214 L112,214 L112,420 L52,420 Z
+            M288,232 L340,232 L340,420 L288,420 Z" />
+
+    <path
+        android:fillColor="@color/stone_near"
+        android:pathData="M52,200h14v14h-14z M75,200h14v14h-14z M98,200h14v14h-14z
+            M288,218h13v14h-13z M308,218h13v14h-13z M327,218h13v14h-13z" />
+
+    <!-- Arrow slits -->
+    <path
+        android:fillColor="@color/opening"
+        android:pathData="M79,250h6v24h-6z M79,300h6v24h-6z M311,268h6v22h-6z" />
+
+    <!-- The gate, still small. Next stop you are standing in it. -->
+    <path
+        android:fillColor="@color/opening"
+        android:pathData="M176,420 L176,374 Q176,346 200,332 Q224,346 224,374 L224,420 Z" />
+
+</vector>

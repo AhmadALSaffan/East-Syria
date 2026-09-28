@@ -1,231 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  Search, on the warm palette. The field is the same floating pill as the home
+  screen's, so tapping it there and arriving here reads as one gesture: the pill
+  simply grew a keyboard. Filters are derived from the catalog, never typed in.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_dark">
+    android:background="@color/canvas"
+    android:orientation="vertical">
 
+    <!-- ============================== the field ============================== -->
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/searchCard"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="16dp"
-        app:cardBackgroundColor="@color/surface_dark"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="6dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_icon_chip"
+            android:contentDescription="@string/search_back"
+            android:padding="12dp"
+            android:src="@drawable/ic_back"
+            app:tint="@color/ivory" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/searchPill"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_search_pill"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="12dp">
+            android:paddingStart="20dp"
+            android:paddingEnd="4dp">
 
-            <ImageButton
-                android:id="@+id/btnBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Back"
-                android:src="@drawable/ic_back"
-                app:tint="@color/text_white" />
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_search"
+                app:tint="@color/terracotta_soft" />
 
             <EditText
                 android:id="@+id/etSearch"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="14dp"
                 android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:hint="Search landmarks, cities..."
+                android:background="@null"
+                android:hint="@string/home_search_hint"
                 android:imeOptions="actionSearch"
+                android:importantForAutofill="no"
                 android:inputType="text"
-                android:textColor="@color/text_white"
-                android:textColorHint="@color/text_secondary"
+                android:maxLines="1"
+                android:textColor="@color/ivory"
+                android:textColorHint="@color/ivory_mute"
                 android:textSize="16sp" />
 
             <ImageButton
                 android:id="@+id/btnClear"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Clear"
+                android:contentDescription="@string/search_clear"
+                android:padding="13dp"
                 android:src="@drawable/ic_close"
                 android:visibility="gone"
-                app:tint="@color/text_secondary" />
+                app:tint="@color/ivory_dim"
+                tools:visibility="visible" />
 
         </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 
+    <!-- =============================== filters =============================== -->
 
     <HorizontalScrollView
         android:id="@+id/filterScrollView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingStart="24dp"
+        android:paddingEnd="16dp"
         android:scrollbars="none"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchCard">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            app:singleSelection="true"
-            app:selectionRequired="true">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipAll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:checked="true"
-                android:text="All"
-                android:textColor="@color/text_white"
-                app:checkedIconVisible="false"
-                app:chipBackgroundColor="@color/chip_background_selector"
-                app:chipCornerRadius="20dp"
-                app:chipStrokeColor="@color/orange_accent"
-                app:chipStrokeWidth="0dp" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipHistorical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Historical"
-                android:textColor="@color/text_white"
-                app:checkedIconVisible="false"
-                app:chipBackgroundColor="@color/chip_background_selector"
-                app:chipCornerRadius="20dp"
-                app:chipStrokeColor="@color/orange_accent"
-                app:chipStrokeWidth="0dp" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipArchaeological"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Archaeological"
-                android:textColor="@color/text_white"
-                app:checkedIconVisible="false"
-                app:chipBackgroundColor="@color/chip_background_selector"
-                app:chipCornerRadius="20dp"
-                app:chipStrokeColor="@color/orange_accent"
-                app:chipStrokeWidth="0dp" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipNature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Nature"
-                android:textColor="@color/text_white"
-                app:checkedIconVisible="false"
-                app:chipBackgroundColor="@color/chip_background_selector"
-                app:chipCornerRadius="20dp"
-                app:chipStrokeColor="@color/orange_accent"
-                app:chipStrokeWidth="0dp" />
-
-        </com.google.android.material.chip.ChipGroup>
+            app:chipSpacingHorizontal="8dp"
+            app:selectionRequired="true"
+            app:singleLine="true"
+            app:singleSelection="true" />
 
     </HorizontalScrollView>
 
-
     <TextView
         android:id="@+id/tvResultsCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="All landmarks"
-        android:textColor="@color/text_secondary"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filterScrollView" />
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvSearchResults"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        android:clipToPadding="false"
-        android:paddingBottom="16dp"
-        android:layout_margin="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvResultsCount"
-        tools:listitem="@layout/item_search_result" />
-
-    <View
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/rvSearchResults"
-        app:layout_constraintStart_toStartOf="@+id/rvSearchResults"
-        app:layout_constraintTop_toBottomOf="parent" />
-
-
-    <LinearLayout
-        android:id="@+id/emptyState"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvResultsCount">
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        android:accessibilityLiveRegion="polite"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:textColor="@color/ivory_mute"
+        android:textSize="14sp"
+        tools:text="12 landmarks" />
 
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:alpha="0.3"
-            android:src="@drawable/ic_search"
-            app:tint="@color/text_secondary" />
+    <!-- ================================ list ================================ -->
 
-        <TextView
-            android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSearchResults"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingBottom="16dp"
+            tools:listitem="@layout/item_search_result" />
+
+        <!-- Loading: the row's own silhouette, pulsing. -->
+        <LinearLayout
+            android:id="@+id/loadingState"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="No results found"
-            android:textColor="@color/text_secondary"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:importantForAccessibility="no"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Try different keywords"
-            android:textColor="@color/text_secondary"
-            android:textSize="14sp" />
+            <include layout="@layout/item_search_skeleton" />
 
-    </LinearLayout>
+            <include layout="@layout/item_search_skeleton" />
 
+            <include layout="@layout/item_search_skeleton" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <include layout="@layout/item_search_skeleton" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <include layout="@layout/item_search_skeleton" />
+
+        </LinearLayout>
+
+        <!-- Empty and error share one shape; the copy names the problem. -->
+        <LinearLayout
+            android:id="@+id/messageState"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tvStateTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/amiri"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:lineHeight="34sp"
+                android:textColor="@color/ivory"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                tools:text="No landmarks found" />
+
+            <TextView
+                android:id="@+id/tvStateBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.15"
+                android:textColor="@color/ivory_dim"
+                android:textSize="15sp"
+                tools:text="Nothing matches “xyz”. Check the spelling or try a broader word." />
+
+            <TextView
+                android:id="@+id/btnStateAction"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_hero_button_outline"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:textColor="@color/terracotta_soft"
+                android:textSize="15sp"
+                tools:text="Clear search" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

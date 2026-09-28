@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The photograph melts into the canvas instead of ending at an edge. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="270"
+        android:startColor="#0016120F"
+        android:centerColor="#D916120F"
+        android:endColor="#FF16120F"
+        android:centerY="0.4"
+        android:type="linear" />
+</shape>

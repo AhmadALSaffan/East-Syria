@@ -45,5 +45,372 @@
 
     <string name="default_web_client_id">482676029898-9hrbu4uqfonqtlqrfkcusl0eafr0c4jd.apps.googleusercontent.com</string>
 
+    <!-- ============================================================
+         Onboarding: The Approach. Four stops, far to near.
+         ============================================================ -->
+    <string name="stop_horizon">The Horizon</string>
+    <string name="stop_walls">The Walls</string>
+    <string name="stop_gate">The Gate</string>
+    <string name="stop_threshold">The Threshold</string>
+
+    <string name="onboarding_1_title">Syria, from a distance</string>
+    <string name="onboarding_1_body">Fortresses, rivers, museums, kitchens and workshops — the places that carry the country\'s history, gathered into one catalog.</string>
+
+    <string name="onboarding_2_title">Every entry is vouched for</string>
+    <string name="onboarding_2_body">Landmarks are written and reviewed before they are published, in Arabic and English, with the practical facts you need to actually go.</string>
+
+    <string name="onboarding_3_title">Find it on the map</string>
+    <string name="onboarding_3_body">Six categories, full search, and a map that shows what stands near you. Keep the ones you mean to return to.</string>
+
+    <string name="onboarding_4_title">Come in</string>
+    <string name="onboarding_4_body">Create an account to save landmarks and carry your list with you.</string>
+
+    <string name="onboarding_plate_en">Tell Halaf</string>
+    <string name="onboarding_plate_ar">تل حلف</string>
+    <string name="onboarding_plate_place">Near Ras al-Ayn, Al-Hasakah</string>
+
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_next">Continue</string>
+    <string name="onboarding_start">Get started</string>
+    <string name="onboarding_open_map">Open the map</string>
+    <string name="onboarding_page_of">Stop %1$d of %2$d</string>
+    <string name="cd_onboarding_art">Illustration of the approach to a heritage site</string>
+
+    <!-- ============================================================
+         Auth: you are inside now.
+         ============================================================ -->
+    <string name="auth_back">Go back</string>
+
+    <string name="login_title">Welcome back</string>
+    <string name="login_subtitle">Sign in to reach your saved landmarks.</string>
+    <string name="login_email_label">Email</string>
+    <string name="login_email_hint">name@example.com</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_password_hint">Your password</string>
+    <string name="login_forgot">Forgot?</string>
+    <string name="login_action">Sign in</string>
+    <string name="login_divider">or</string>
+    <string name="login_google">Continue with Google</string>
+    <string name="login_no_account">New here?</string>
+    <string name="login_sign_up">Create an account</string>
+
+    <string name="signup_title">Create your account</string>
+    <string name="signup_subtitle">Two steps. The second one confirms your email.</string>
+    <string name="signup_step_1">Step 1 of 2</string>
+    <string name="signup_step_2">Step 2 of 2</string>
+    <string name="signup_name_label">Full name</string>
+    <string name="signup_name_hint">Your name</string>
+    <string name="signup_email_label">Email</string>
+    <string name="signup_city_label">City</string>
+    <string name="signup_city_hint">Where you are</string>
+    <string name="signup_phone_label">Phone</string>
+    <string name="signup_phone_hint">+963 9xx xxx xxx</string>
+    <string name="signup_password_label">Password</string>
+    <string name="signup_password_hint">At least 6 characters</string>
+    <string name="signup_terms">By creating an account you agree to our Terms of Service and Privacy Policy.</string>
+    <string name="signup_action">Create account</string>
+    <string name="signup_have_account">Already have an account?</string>
+    <string name="signup_login">Sign in</string>
+
+    <string name="otp_title">Check your email</string>
+    <string name="otp_subtitle">Enter the six-digit code we sent you. It is the last door.</string>
+    <!-- ============================================================
+         Home: The Field Desk. Instruments at the top, material below.
+         ============================================================ -->
+    <string name="home_title">East Syria</string>
+    <string name="home_search_hint">Search landmarks, cities…</string>
+    <string name="home_saved">Saved landmarks</string>
+    <string name="home_catalog_count">%1$d places catalogued</string>
+    <string name="home_catalog_counting">Loading the catalog…</string>
+    <string name="home_catalog_empty">Nothing published yet</string>
+
+    <string name="section_featured">Featured</string>
+    <string name="section_trending">Trending</string>
+    <string name="action_see_all">See all</string>
+    <string name="action_view_map">View map</string>
+
+    <string name="cat_historical">Historical</string>
+    <string name="cat_nature">Rivers</string>
+    <string name="cat_culture">Culture</string>
+    <string name="cat_museums">Museums</string>
+    <string name="cat_cuisine">Cuisine</string>
+    <string name="cat_crafts">Crafts</string>
+    <string name="cat_all">All</string>
+
+    <string name="cat_name_historical">Historical Sites</string>
+    <string name="cat_name_nature">Nature &amp; Rivers</string>
+    <string name="cat_name_culture">Local Culture</string>
+    <string name="cat_name_museums">Museums</string>
+    <string name="cat_name_cuisine">Cuisine</string>
+    <string name="cat_name_crafts">Handicrafts</string>
+
+    <string name="hero_view_landmark">View landmark</string>
+    <string name="hero_empty_title">Nothing published yet</string>
+    <string name="hero_empty_body">New landmarks appear here as soon as they are published.</string>
+    <string name="hero_error_title">Couldn\'t load the catalog</string>
+    <string name="hero_error_body">Check your connection, then try again.</string>
+    <string name="action_retry">Try again</string>
+    <string name="home_rating_desc">Rated %1$s</string>
+    <string name="home_meta_separator">%1$s · %2$s</string>
+
+    <string name="nav_explore">Explore</string>
+    <string name="nav_saved">Saved</string>
+    <string name="nav_updates">Updates</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_map">Open map</string>
+
+    <!-- Search -->
+    <string name="search_back">Go back</string>
+    <string name="search_clear">Clear search</string>
+    <string name="search_filter_all">All</string>
+    <plurals name="search_count_all">
+        <item quantity="one">%d landmark</item>
+        <item quantity="other">%d landmarks</item>
+    </plurals>
+    <plurals name="search_count_query">
+        <item quantity="one">%1$d result for “%2$s”</item>
+        <item quantity="other">%1$d results for “%2$s”</item>
+    </plurals>
+    <string name="search_empty_title">No landmarks found</string>
+    <string name="search_empty_body_query">Nothing matches “%1$s”. Check the spelling or try a broader word.</string>
+    <string name="search_empty_body_filter">There are no landmarks in this category yet.</string>
+    <string name="search_error_title">Couldn\'t load landmarks</string>
+    <string name="search_error_body">Check your connection, then try again.</string>
+
+    <string name="category_search_hint">Search this category</string>
+
+    <!-- Reports -->
+    <string name="reports_title">Reports</string>
+    <string name="reports_updated">Updated %1$s</string>
+    <string name="reports_day">Day</string>
+    <string name="reports_week">Week</string>
+    <string name="reports_month">Month</string>
+    <string name="reports_users">Users</string>
+    <string name="reports_delta_day">+%1$d in the last 24 hours</string>
+    <string name="reports_delta_week">+%1$d in the last 7 days</string>
+    <string name="reports_delta_month">+%1$d in the last 30 days</string>
+    <string name="reports_chart_title">What was added</string>
+    <string name="reports_chart_caption">New landmarks and new users in each stretch of the period.</string>
+    <string name="reports_chart_empty">Nothing was added in this period.</string>
+    <string name="reports_top_rated">Highest rated</string>
+    <string name="reports_top_rated_empty">No landmark has a rating yet.</string>
+    <string name="reports_error_title">Couldn\'t build the report</string>
+
+    <!-- Admin dashboard -->
+    <string name="admin_title">Curator</string>
+    <string name="admin_figure_unknown">–</string>
+    <string name="admin_stat_landmarks">Landmarks</string>
+    <string name="admin_stat_published">Published</string>
+    <string name="admin_stat_pending">Pending</string>
+    <string name="admin_add_landmark">Add landmark</string>
+    <string name="admin_reports">Reports</string>
+    <string name="admin_search_hint">Search by name or city</string>
+    <string name="admin_edit">Edit landmark</string>
+    <string name="admin_delete">Delete landmark</string>
+    <string name="admin_sign_out">Sign out</string>
+    <string name="admin_status_published">Published</string>
+    <string name="admin_status_pending">Pending</string>
+    <string name="admin_status_unknown">No status</string>
+    <string name="admin_unknown_city">City not set</string>
+    <string name="admin_empty_title">No landmarks yet</string>
+    <string name="admin_empty_body">Add the first landmark and it appears here.</string>
+    <string name="admin_no_match">No landmark matches “%1$s”.</string>
+    <string name="admin_error_title">Couldn\'t load the catalog</string>
+    <string name="admin_delete_title">Delete “%1$s”?</string>
+    <string name="admin_delete_body">It is removed from the catalog for everyone. You can undo this right after.</string>
+    <string name="admin_delete_confirm">Delete</string>
+    <string name="admin_delete_cancel">Keep it</string>
+    <string name="admin_deleted">Landmark deleted</string>
+    <string name="admin_delete_failed">Couldn\'t delete it. Try again.</string>
+    <string name="admin_restored">Landmark restored</string>
+
+    <!-- Personal details -->
+    <string name="personal_title">Personal details</string>
+    <string name="personal_change_photo">Change photo</string>
+    <string name="personal_full_name">Full name</string>
+    <string name="personal_email">Email</string>
+    <string name="personal_email_helper">This is the address you sign in with. It can\'t be changed here.</string>
+    <string name="personal_phone">Phone</string>
+    <string name="personal_city">City</string>
+    <string name="personal_save">Save changes</string>
+    <string name="personal_discard">Discard changes</string>
+    <string name="personal_load_error">Couldn\'t load your details.</string>
+    <string name="personal_required">Required</string>
+    <string name="personal_saved">Your details are saved</string>
+    <string name="personal_save_failed">Couldn\'t save your changes. Check your connection and try again.</string>
+    <string name="personal_image_too_large">That photo is over 1 MB even after compressing. Choose a smaller one.</string>
+    <string name="personal_photo_permission">Allow access to your photos to choose a picture.</string>
+    <string name="personal_photo_upload_failed">Couldn\'t upload your photo. Try again.</string>
+
+    <!-- Profile: the passport -->
+    <string name="profile_passport">Explorer\'s passport</string>
+    <string name="profile_stamps">Stamps</string>
+    <string name="profile_fact_since">Member since</string>
+    <string name="profile_fact_saved">Places saved</string>
+    <string name="profile_fact_kinds">Kinds of place</string>
+
+    <!-- Profile states -->
+    <string name="profile_error">Couldn\'t load your profile.</string>
+    <string name="profile_signed_out_title">You\'re not signed in</string>
+    <string name="profile_signed_out_body">Sign in to see your profile and the places you\'ve saved.</string>
+
+    <!-- Updates -->
+    <string name="updates_title">Updates</string>
+    <string name="updates_recent">Recent</string>
+    <string name="updates_earlier">Earlier</string>
+    <string name="updates_mark_all">Mark all as read</string>
+    <string name="updates_all_read">All updates marked as read</string>
+    <string name="updates_mark_failed">Couldn\'t mark them as read. Try again.</string>
+    <string name="updates_dialog_close">Close</string>
+    <string name="updates_empty_title">You\'re all caught up</string>
+    <string name="updates_empty_body">New landmarks and changes to places will appear here.</string>
+    <string name="updates_signed_out_title">Sign in to see your updates</string>
+    <string name="updates_signed_out_body">Updates are kept with your account.</string>
+    <string name="updates_error_title">Couldn\'t load your updates</string>
+
+    <!-- Filter sheet -->
+    <string name="filter_close">Close filters</string>
+    <string name="filter_rating">Minimum rating</string>
+    <string name="filter_rating_four">4.0 and up</string>
+    <string name="filter_rating_four_half">4.5 and up</string>
+    <string name="filter_condition">Condition</string>
+    <string name="filter_intact">Intact</string>
+    <string name="filter_ruins">Ruins</string>
+    <string name="filter_destroyed">Destroyed</string>
+    <string name="filter_curated">Curated</string>
+    <string name="filter_reset">Reset</string>
+    <string name="filter_apply">Show places</string>
+
+    <!-- Category list -->
+    <string name="category_filter">Filter places</string>
+    <string name="category_unesco">UNESCO World Heritage</string>
+    <string name="category_reset_filters">Reset filters</string>
+    <string name="category_empty_title">Nothing here yet</string>
+    <string name="category_filtered_empty_body">No place matches these filters. Loosen them to see more.</string>
+
+    <!-- Categories -->
+    <string name="categories_title">Categories</string>
+    <string name="categories_explore_map">Explore on the map</string>
+    <string name="categories_stats_failed">Couldn\'t load the counts and photographs.</string>
+    <plurals name="categories_place_count">
+        <item quantity="one">%d place</item>
+        <item quantity="other">%d places</item>
+    </plurals>
+
+    <!-- Saved -->
+    <string name="saved_title">Saved</string>
+    <string name="saved_search_hint">Search your saved landmarks</string>
+    <plurals name="saved_count">
+        <item quantity="one">%d saved landmark</item>
+        <item quantity="other">%d saved landmarks</item>
+    </plurals>
+    <string name="saved_empty_title">Nothing saved yet</string>
+    <string name="saved_empty_body">Tap the bookmark on any landmark to keep it here.</string>
+    <string name="saved_empty_action">Explore landmarks</string>
+    <string name="saved_signed_out_title">Sign in to see your saved list</string>
+    <string name="saved_signed_out_body">Your saved landmarks are kept with your account.</string>
+    <string name="saved_signed_out_action">Sign in</string>
+    <string name="saved_error_title">Couldn\'t load your saved list</string>
+    <string name="saved_no_match">No saved landmark matches “%1$s”.</string>
+    <string name="saved_removed">Removed from your saved list</string>
+    <string name="saved_undo">Undo</string>
+    <string name="saved_remove_failed">Couldn\'t remove it. Try again.</string>
+    <string name="saved_remove_desc">Remove %1$s from saved</string>
+
+    <!-- Landmark detail -->
+    <string name="detail_back">Go back</string>
+    <string name="detail_unbookmark">Remove from saved landmarks</string>
+    <string name="detail_error_title">Couldn\'t load this landmark</string>
+    <string name="detail_error_body">Check your connection, then try again.</string>
+    <string name="detail_missing_title">This landmark isn\'t available</string>
+    <string name="detail_missing_body">It may have been removed, or it is not published yet.</string>
+    <string name="detail_saved">Saved to your list</string>
+    <string name="detail_unsaved">Removed from your list</string>
+    <string name="detail_login_to_save">Sign in to save landmarks</string>
+    <string name="detail_save_failed">Couldn\'t update your saved list. Try again.</string>
+    <string name="detail_share_failed">Couldn\'t open the share sheet</string>
+    <string name="detail_maps_failed">No app could open the map</string>
+    <string name="detail_share_chooser">Share via</string>
+
+    <!-- ============================================================
+         Landmark detail: The Plinth. The object, its label, then the record.
+         ============================================================ -->
+    <string name="detail_share">Share this landmark</string>
+    <string name="detail_bookmark">Save this landmark</string>
+    <string name="detail_directions">Get directions</string>
+    <string name="detail_lang_english">English</string>
+    <string name="detail_lang_arabic">عربي</string>
+    <string name="detail_section_record">Record</string>
+    <string name="detail_section_visiting">Visiting</string>
+    <string name="detail_rating">Rated %1$s</string>
+
+    <!-- ============================================================
+         Profile: The Stamp Book. Your record, then what you kept.
+         ============================================================ -->
+    <string name="profile_title">Profile</string>
+    <string name="profile_back">Go back</string>
+    <string name="profile_edit">Edit photo</string>
+    <string name="profile_explorer_from">Explorer from %1$s</string>
+    <string name="profile_explorer">Explorer</string>
+    <string name="profile_member_since">Member since %1$s</string>
+    <string name="profile_saved">Saved</string>
+    <string name="profile_saved_count">%1$d kept</string>
+    <string name="profile_saved_empty">Nothing kept yet. Bookmark a landmark and it lands here.</string>
+    <string name="profile_saved_all">See all</string>
+    <string name="profile_account">Account</string>
+    <string name="profile_personal">Personal details</string>
+    <string name="profile_settings">Settings</string>
+    <string name="profile_about">About East Syria</string>
+    <string name="profile_privacy">Privacy agreement</string>
+    <string name="profile_soon">Soon</string>
+    <string name="profile_sign_out">Sign out</string>
+    <string name="profile_version">Version %1$s</string>
+
+    <!-- ============================================================
+         Map: The Survey Instrument. Calibrated, with a readout.
+         ============================================================ -->
+    <string name="map_filter_categories">Categories</string>
+    <string name="map_filter_distance">Distance from you</string>
+    <string name="map_filter_any_distance">Any distance</string>
+    <string name="map_filter_distance_km">%1$d km</string>
+    <string name="map_filter_distance_needs_location">Turn on location to filter by distance.</string>
+    <string name="map_filter_rating_three">3.0 and up</string>
+    <string name="map_filter_featured_only">Featured places only</string>
+    <string name="map_filter_trending_only">Trending places only</string>
+    <string name="map_load_failed">Couldn\'t load the landmarks.</string>
+    <string name="map_readout_failed">Couldn\'t read the catalog</string>
+    <string name="map_location_unavailable">Your location isn\'t available yet.</string>
+    <string name="map_location_permission">Allow location access to see distances and jump to where you are.</string>
+    <string name="map_search_hint">Search the map…</string>
+    <string name="map_filters">Filters</string>
+    <string name="map_all">All</string>
+    <string name="map_readout">%1$d of %2$d shown</string>
+    <string name="map_readout_loading">Reading the catalog…</string>
+    <string name="map_layers">Map layers</string>
+    <string name="map_zoom_in">Zoom in</string>
+    <string name="map_zoom_out">Zoom out</string>
+    <string name="map_my_location">My location</string>
+    <string name="map_distance">%1$s km away</string>
+    <string name="map_distance_unknown">Distance unavailable</string>
+
+    <string name="value_yes">Yes</string>
+    <string name="value_no">No</string>
+
+    <string name="record_year_built">Built</string>
+    <string name="record_elevation">Elevation</string>
+    <string name="record_material">Material</string>
+    <string name="record_visiting_hours">Hours</string>
+    <string name="record_entry_fee">Entry</string>
+    <string name="record_best_time">Best time</string>
+
+    <string name="otp_digit_1">Digit 1 of 6</string>
+    <string name="otp_digit_2">Digit 2 of 6</string>
+    <string name="otp_digit_3">Digit 3 of 6</string>
+    <string name="otp_digit_4">Digit 4 of 6</string>
+    <string name="otp_digit_5">Digit 5 of 6</string>
+    <string name="otp_digit_6">Digit 6 of 6</string>
+    <string name="otp_no_code">Didn\'t get it?</string>
+    <string name="otp_resend">Send it again</string>
+    <string name="otp_action">Verify and continue</string>
 
 </resources>

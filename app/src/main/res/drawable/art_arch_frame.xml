@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The arch you walked through on stop 4, seen from inside: a quiet hairline
+  standing behind every auth form. Same geometry as art_threshold, drawn as
+  line rather than mass, because you are past it now.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="400dp"
+    android:height="560dp"
+    android:viewportWidth="400"
+    android:viewportHeight="560">
+
+    <path
+        android:strokeColor="@color/hairline"
+        android:strokeWidth="2"
+        android:pathData="M60,560 L60,300 Q60,120 200,34 Q340,120 340,300 L340,560" />
+
+    <path
+        android:strokeColor="@color/hairline"
+        android:strokeWidth="1"
+        android:strokeAlpha="0.5"
+        android:pathData="M86,560 L86,306 Q86,146 200,66 Q314,146 314,306 L314,560" />
+
+    <!-- Springing line: where the curve begins -->
+    <path
+        android:strokeColor="@color/hairline"
+        android:strokeWidth="2"
+        android:strokeAlpha="0.7"
+        android:pathData="M36,300 L60,300 M340,300 L364,300" />
+
+</vector>

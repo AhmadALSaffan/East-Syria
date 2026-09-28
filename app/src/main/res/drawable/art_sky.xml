@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Approach, layer 1 of 3: atmosphere. Slowest parallax. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="400dp"
+    android:height="420dp"
+    android:viewportWidth="400"
+    android:viewportHeight="420">
+
+    <path android:pathData="M0,0h400v420h-400z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="200"
+                android:startY="0"
+                android:endX="200"
+                android:endY="420">
+                <item android:offset="0" android:color="#FF080808" />
+                <item android:offset="0.45" android:color="#FF101010" />
+                <item android:offset="0.78" android:color="#FF171614" />
+                <item android:offset="1" android:color="#FF1E1B18" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Two stars. Sparse on purpose; this is dusk, not night. -->
+    <path
+        android:pathData="M86,64m-1.6,0a1.6,1.6 0,1 1,3.2 0a1.6,1.6 0,1 1,-3.2 0"
+        android:fillColor="#FFFFFFFF"
+        android:fillAlpha="0.22" />
+    <path
+        android:pathData="M318,102m-1.2,0a1.2,1.2 0,1 1,2.4 0a1.2,1.2 0,1 1,-2.4 0"
+        android:fillColor="#FFFFFFFF"
+        android:fillAlpha="0.16" />
+
+</vector>

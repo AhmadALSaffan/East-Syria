@@ -1,26 +1,33 @@
 package com.example.eastsyria.Search
 
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.inputmethod.EditorInfo
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.eastsyria.Details.LandmarkDetailActivity
 import com.example.eastsyria.MainPage.Data.Landmark
 import com.example.eastsyria.R
 import com.example.eastsyria.databinding.ActivitySearchLandmarksBinding
+import com.google.android.material.chip.Chip
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlin.math.max
 
 class SearchLandmarksActivity : AppCompatActivity() {
 
@@ -28,7 +35,13 @@ class SearchLandmarksActivity : AppCompatActivity() {
     private val database = FirebaseDatabase.getInstance()
     private lateinit var adapter: SearchResultAdapter
     private val allLandmarks = mutableListOf<Landmark>()
-    private var currentCategory = "All"
+
+    /** Null means every category. */
+    private var currentCategory: String? = null
+    private var loaded = false
+    private var pulseAnimator: ValueAnimator? = null
+
+    private enum class State { LOADING, RESULTS, EMPTY, ERROR }
 
     companion object {
         private const val TAG = "SearchLandmarksActivity"
@@ -36,28 +49,54 @@ class SearchLandmarksActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hideSystemBars()
-        window.statusBarColor = ContextCompat.getColor(this, R.color.background_dark)
+        enableEdgeToEdge()
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = false
+            isAppearanceLightNavigationBars = false
+        }
         binding = ActivitySearchLandmarksBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupInsets()
         setupViews()
         setupRecyclerView()
         setupSearch()
-        setupFilters()
         loadAllLandmarks()
 
-        // Auto-focus search field
         binding.etSearch.requestFocus()
+        binding.etSearch.post {
+            WindowCompat.getInsetsController(window, binding.etSearch)
+                .show(WindowInsetsCompat.Type.ime())
+        }
+    }
+
+    override fun onDestroy() {
+        stopPulse()
+        super.onDestroy()
+    }
+
+    /** The list and the message panel lift above the keyboard and the gesture bar. */
+    private fun setupInsets() {
+        val gap = dp(10)
+        val listGap = dp(16)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val bottom = max(bars.bottom, ime.bottom)
+            binding.topBar.updatePadding(top = bars.top + gap)
+            binding.rvSearchResults.updatePadding(bottom = bottom + listGap)
+            binding.messageState.updatePadding(bottom = bottom)
+            insets
+        }
     }
 
     private fun setupViews() {
-        binding.btnBack.setOnClickListener {
-            finish()
-        }
-
-        binding.btnClear.setOnClickListener {
-            binding.etSearch.text.clear()
+        binding.btnBack.setOnClickListener { finish() }
+        binding.btnClear.setOnClickListener { binding.etSearch.text.clear() }
+        binding.btnStateAction.setOnClickListener {
+            if (!loaded) loadAllLandmarks() else resetSearch()
         }
     }
 
@@ -69,6 +108,15 @@ class SearchLandmarksActivity : AppCompatActivity() {
         binding.rvSearchResults.apply {
             adapter = this@SearchLandmarksActivity.adapter
             layoutManager = LinearLayoutManager(this@SearchLandmarksActivity)
+            // Reading the results is done with the keyboard out of the way.
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                        WindowCompat.getInsetsController(window, binding.etSearch)
+                            .hide(WindowInsetsCompat.Type.ime())
+                    }
+                }
+            })
         }
     }
 
@@ -77,9 +125,8 @@ class SearchLandmarksActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val query = s.toString()
-                binding.btnClear.visibility = if (query.isEmpty()) View.GONE else View.VISIBLE
-                performSearch(query)
+                binding.btnClear.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
+                performSearch()
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -87,7 +134,8 @@ class SearchLandmarksActivity : AppCompatActivity() {
 
         binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                performSearch(binding.etSearch.text.toString())
+                WindowCompat.getInsetsController(window, binding.etSearch)
+                    .hide(WindowInsetsCompat.Type.ime())
                 true
             } else {
                 false
@@ -95,38 +143,52 @@ class SearchLandmarksActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupFilters() {
-        binding.chipAll.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                currentCategory = "All"
-                performSearch(binding.etSearch.text.toString())
-            }
-        }
+    // ------------------------------------------------------------ filters
 
-        binding.chipHistorical.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                currentCategory = "Historical"
-                performSearch(binding.etSearch.text.toString())
-            }
-        }
+    /** One chip per category that exists in the catalog, plus "All". */
+    private fun buildFilters() {
+        val group = binding.chipGroup
+        group.setOnCheckedStateChangeListener(null)
+        group.removeAllViews()
+        currentCategory = null
 
-        binding.chipArchaeological.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                currentCategory = "Archaeological"
-                performSearch(binding.etSearch.text.toString())
-            }
-        }
+        val categories = adapter.categories()
+        // A single category makes the row a decision with one answer.
+        binding.filterScrollView.visibility = if (categories.size < 2) View.GONE else View.VISIBLE
+        if (categories.size < 2) return
 
-        binding.chipNature.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                currentCategory = "Nature"
-                performSearch(binding.etSearch.text.toString())
-            }
+        addChip(getString(R.string.search_filter_all), null, checked = true)
+        categories.forEach { addChip(it, it, checked = false) }
+
+        group.setOnCheckedStateChangeListener { _, checkedIds ->
+            val chip = checkedIds.firstOrNull()?.let { group.findViewById<Chip>(it) }
+            currentCategory = chip?.tag as? String
+            performSearch()
         }
     }
 
+    private fun addChip(label: String, category: String?, checked: Boolean) {
+        val chip = LayoutInflater.from(this)
+            .inflate(R.layout.item_filter_chip, binding.chipGroup, false) as Chip
+        chip.id = View.generateViewId()
+        chip.text = label
+        chip.tag = category
+        chip.isChecked = checked
+        binding.chipGroup.addView(chip)
+    }
+
+    private fun resetSearch() {
+        binding.etSearch.text.clear()
+        (binding.chipGroup.getChildAt(0) as? Chip)?.isChecked = true
+        currentCategory = null
+        performSearch()
+    }
+
+    // ------------------------------------------------------------ data
+
     private fun loadAllLandmarks() {
-        showLoading(true)
+        loaded = false
+        showState(State.LOADING)
 
         database.reference.child("landmarks")
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -142,31 +204,33 @@ class SearchLandmarksActivity : AppCompatActivity() {
                     }
 
                     adapter.updateData(allLandmarks)
-                    updateResultsCount()
-                    showLoading(false)
+                    loaded = true
+                    buildFilters()
+                    performSearch()
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     Log.e(TAG, "Error loading landmarks: ${error.message}")
-                    showLoading(false)
+                    showState(State.ERROR)
                 }
             })
     }
 
-    private fun performSearch(query: String) {
+    private fun performSearch() {
+        if (!loaded) return
+        val query = binding.etSearch.text.toString()
         adapter.filter(query, currentCategory)
-        updateResultsCount()
-
-        val isEmpty = adapter.getFilteredCount() == 0
-        showEmptyState(isEmpty)
+        updateResultsCount(query)
+        showState(if (adapter.getFilteredCount() == 0) State.EMPTY else State.RESULTS)
     }
 
-    private fun updateResultsCount() {
+    private fun updateResultsCount(query: String) {
         val count = adapter.getFilteredCount()
-        binding.tvResultsCount.text = when {
-            count == 0 -> "No results"
-            count == 1 -> "1 landmark found"
-            else -> "$count landmarks found"
+        val q = query.trim()
+        binding.tvResultsCount.text = if (q.isEmpty()) {
+            resources.getQuantityString(R.plurals.search_count_all, count, count)
+        } else {
+            resources.getQuantityString(R.plurals.search_count_query, count, count, q)
         }
     }
 
@@ -176,26 +240,66 @@ class SearchLandmarksActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        binding.rvSearchResults.visibility = if (isLoading) View.GONE else View.VISIBLE
+    // ------------------------------------------------------------ states
+
+    private fun showState(state: State) {
+        val results = state == State.RESULTS
+        val message = state == State.EMPTY || state == State.ERROR
+
+        binding.loadingState.visibility = if (state == State.LOADING) View.VISIBLE else View.GONE
+        binding.rvSearchResults.visibility = if (results) View.VISIBLE else View.GONE
+        binding.messageState.visibility = if (message) View.VISIBLE else View.GONE
+        binding.tvResultsCount.visibility =
+            if (results) View.VISIBLE else View.GONE
+
+        when (state) {
+            State.EMPTY -> {
+                val q = binding.etSearch.text.toString().trim()
+                binding.tvStateTitle.setText(R.string.search_empty_title)
+                val emptyCatalog = q.isEmpty() && currentCategory == null
+                when {
+                    q.isNotEmpty() ->
+                        binding.tvStateBody.text = getString(R.string.search_empty_body_query, q)
+
+                    emptyCatalog -> binding.tvStateBody.setText(R.string.hero_empty_body)
+                    else -> binding.tvStateBody.setText(R.string.search_empty_body_filter)
+                }
+                binding.btnStateAction.setText(R.string.search_clear)
+                // Clearing does nothing when the catalog itself has nothing in it.
+                binding.btnStateAction.visibility = if (emptyCatalog) View.GONE else View.VISIBLE
+            }
+
+            State.ERROR -> {
+                binding.tvStateTitle.setText(R.string.search_error_title)
+                binding.tvStateBody.setText(R.string.search_error_body)
+                binding.btnStateAction.setText(R.string.action_retry)
+                binding.btnStateAction.visibility = View.VISIBLE
+            }
+
+            else -> Unit
+        }
+
+        if (state == State.LOADING) startPulse() else stopPulse()
     }
 
-    private fun showEmptyState(isEmpty: Boolean) {
-        binding.emptyState.visibility = if (isEmpty) View.VISIBLE else View.GONE
-        binding.rvSearchResults.visibility = if (isEmpty) View.GONE else View.VISIBLE
-    }
-
-    private fun hideSystemBars() {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-        windowInsetsController.apply {
-            // Hide navigation bar
-            hide(WindowInsetsCompat.Type.navigationBars())
-
-            // Set behavior so it won't show when swiping
-            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    /** The row silhouettes breathe; nothing runs when the system has animations off. */
+    private fun startPulse() {
+        if (pulseAnimator != null || !ValueAnimator.areAnimatorsEnabled()) return
+        pulseAnimator = ValueAnimator.ofFloat(1f, 0.55f).apply {
+            duration = 900
+            repeatMode = ValueAnimator.REVERSE
+            repeatCount = ValueAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
+            addUpdateListener { binding.loadingState.alpha = it.animatedValue as Float }
+            start()
         }
     }
+
+    private fun stopPulse() {
+        pulseAnimator?.cancel()
+        pulseAnimator = null
+        binding.loadingState.alpha = 1f
+    }
+
+    private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 }

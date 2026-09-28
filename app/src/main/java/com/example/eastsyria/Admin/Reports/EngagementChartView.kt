@@ -6,7 +6,14 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
+import com.example.eastsyria.R
 
+/**
+ * A bar per time bucket, counted from real records. The tallest bar is gold and
+ * carries its value; everything else is terracotta. Drawn in the app's own
+ * colours and sized in dp, so it holds up on any screen density.
+ */
 class EngagementChartView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -15,32 +22,34 @@ class EngagementChartView @JvmOverloads constructor(
 
     private var data: List<Pair<String, Float>> = emptyList()
     private var maxValue: Float = 1f
+    private val density = resources.displayMetrics.density
 
     private val barPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = 0xFFC8A87A.toInt()
+        color = ContextCompat.getColor(context, R.color.terracotta)
     }
     private val highlightPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = 0xFFFF9800.toInt()
+        color = ContextCompat.getColor(context, R.color.gold)
+    }
+    private val trackPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = ContextCompat.getColor(context, R.color.surface)
     }
     private val labelPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = 0xFF888888.toInt()
-        textSize = 28f
+        color = ContextCompat.getColor(context, R.color.ivory_mute)
+        textSize = 12f * resources.displayMetrics.scaledDensity
         textAlign = Paint.Align.CENTER
     }
     private val valuePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = 0xFFFFFFFF.toInt()
-        textSize = 26f
+        color = ContextCompat.getColor(context, R.color.ivory)
+        textSize = 13f * resources.displayMetrics.scaledDensity
         textAlign = Paint.Align.CENTER
         isFakeBoldText = true
-    }
-    private val tooltipPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = 0xFFFF9800.toInt()
     }
 
     fun setData(entries: List<Pair<String, Float>>) {
         data = entries
         maxValue = entries.maxOfOrNull { it.second } ?: 1f
         if (maxValue == 0f) maxValue = 1f
+        contentDescription = entries.joinToString(", ") { "${it.first}: ${it.second.toInt()}" }
         invalidate()
     }
 
@@ -50,51 +59,40 @@ class EngagementChartView @JvmOverloads constructor(
 
         val w = width.toFloat()
         val h = height.toFloat()
-        val bottomPad = 60f
-        val topPad = 48f
-        val sidePad = 20f
+        val bottomPad = 28f * density
+        val topPad = 28f * density
         val chartH = h - bottomPad - topPad
-        val count = data.size
-        val slotW = (w - sidePad * 2) / count
-        val barW = slotW * 0.45f
+        val slotW = w / data.size
+        val barW = slotW * 0.5f
+        val radius = 10f * density
 
         var maxIdx = 0
-        var maxVal = 0f
-        for (i in data.indices) {
-            if (data[i].second > maxVal) { maxVal = data[i].second; maxIdx = i }
-        }
+        for (i in data.indices) if (data[i].second > data[maxIdx].second) maxIdx = i
 
         for (i in data.indices) {
             val (label, value) = data[i]
-            val ratio = if (maxValue > 0) value / maxValue else 0f
-            val barH = chartH * ratio
-            val left = sidePad + i * slotW + (slotW - barW) / 2
+            val left = i * slotW + (slotW - barW) / 2
             val right = left + barW
-            val top = topPad + chartH - barH
-            val bottom = topPad + chartH
-            val rect = RectF(left, top, right, bottom)
-            val paint = if (i == maxIdx) highlightPaint else barPaint
-            canvas.drawRoundRect(rect, 12f, 12f, paint)
 
-            canvas.drawText(
-                label.take(3).uppercase(),
-                left + barW / 2,
-                h - 10f,
-                labelPaint
+            // The empty track behind every bar, so a zero still reads as a bucket.
+            canvas.drawRoundRect(
+                RectF(left, topPad, right, topPad + chartH), radius, radius, trackPaint
             )
 
-            if (i == maxIdx) {
-                val tooltipW = 100f
-                val tooltipH = 44f
-                val tooltipLeft = left + barW / 2 - tooltipW / 2
-                val tooltipTop = top - tooltipH - 8f
+            val barH = chartH * (value / maxValue)
+            if (value > 0f) {
+                val top = topPad + chartH - barH
                 canvas.drawRoundRect(
-                    RectF(tooltipLeft, tooltipTop, tooltipLeft + tooltipW, tooltipTop + tooltipH),
-                    10f, 10f, tooltipPaint
+                    RectF(left, top, right, topPad + chartH),
+                    radius, radius,
+                    if (i == maxIdx) highlightPaint else barPaint
                 )
-                val displayVal = if (value >= 1000) String.format("%.1fk", value / 1000f) else value.toInt().toString()
-                canvas.drawText(displayVal, left + barW / 2, tooltipTop + 30f, valuePaint)
+                if (i == maxIdx) {
+                    canvas.drawText(value.toInt().toString(), left + barW / 2, top - 8f * density, valuePaint)
+                }
             }
+
+            canvas.drawText(label, left + barW / 2, h - 6f * density, labelPaint)
         }
     }
 }

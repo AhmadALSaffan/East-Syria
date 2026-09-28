@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The Approach: the warmth on the horizon. This single drawable carries the
+  light through the whole flow — the adapter raises its alpha stop by stop,
+  so the atmosphere warms as you get closer without a second asset.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="400dp"
+    android:height="420dp"
+    android:viewportWidth="400"
+    android:viewportHeight="420">
+
+    <path android:pathData="M0,0h400v420h-400z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="200"
+                android:centerY="318"
+                android:gradientRadius="268">
+                <item android:offset="0" android:color="#8CE2703A" />
+                <item android:offset="0.38" android:color="#47C06B4C" />
+                <item android:offset="0.72" android:color="#14AD5C3E" />
+                <item android:offset="1" android:color="#00AD5C3E" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+</vector>

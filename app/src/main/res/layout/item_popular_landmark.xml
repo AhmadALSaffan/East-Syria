@@ -1,108 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- A highest-rated landmark: photograph, name, category, the curator's rating. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    app:cardBackgroundColor="@color/surface_dark"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="0dp">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="14dp"
-        android:gravity="center_vertical">
+        android:paddingStart="24dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="12dp">
 
-        <ImageView
-            android:id="@+id/ivLandmarkImage"
-            android:layout_width="68dp"
-            android:layout_height="68dp"
-            android:scaleType="centerCrop"
-            android:background="@drawable/bg_landmark_image"
-            android:src="@drawable/ic_landmark_placeholder" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp">
+
+            <ImageView
+                android:id="@+id/ivLandmarkImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="14dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvLandmarkName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Landmark Name"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:textStyle="bold"
+                android:ellipsize="end"
+                android:fontFamily="@font/amiri"
+                android:includeFontPadding="false"
+                android:lineHeight="24sp"
                 android:maxLines="1"
-                android:ellipsize="end" />
+                android:textColor="@color/ivory"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="Palmyra" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvCategory"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/ivory_dim"
+                android:textSize="13sp"
+                tools:text="Archaeological" />
 
-                <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:src="@drawable/ic_visibility"
-                    android:tint="@color/text_secondary1" />
-
-                <TextView
-                    android:id="@+id/tvViews"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0 views"
-                    android:textColor="@color/text_secondary1"
-                    android:textSize="12sp"
-                    android:layout_marginStart="4dp" />
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="end">
+            android:layout_marginStart="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:src="@drawable/ic_star_filled"
-                    android:tint="@color/rating_star" />
-
-                <TextView
-                    android:id="@+id/tvRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0.0"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:layout_marginStart="4dp" />
-            </LinearLayout>
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_star"
+                app:tint="@color/gold" />
 
             <TextView
-                android:id="@+id/tvGrowth"
+                android:id="@+id/tvRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+0%"
-                android:textColor="@color/green"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp" />
+                android:layout_marginStart="4dp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/gold"
+                android:textSize="15sp"
+                tools:text="4.9" />
+
         </LinearLayout>
+
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="102dp"
+        android:background="@color/line" />
+
+</LinearLayout>

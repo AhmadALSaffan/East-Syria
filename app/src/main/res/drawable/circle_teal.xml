@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Wayfinding control. Teal, flat: only the docked map FAB is elevated. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#33FFFFFF">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/teal_accent" />
+        </shape>
+    </item>
+</ripple>

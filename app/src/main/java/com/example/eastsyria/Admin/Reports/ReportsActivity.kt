@@ -1,224 +1,292 @@
 package com.example.eastsyria.Admin.Reports
 
 import android.os.Bundle
+import android.text.format.DateFormat
+import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.eastsyria.R
+import com.example.eastsyria.Ui.SkeletonPulse
+import com.example.eastsyria.Ui.warmEdgeToEdge
 import com.example.eastsyria.databinding.ActivityReportsBinding
-import com.google.firebase.database.*
-import java.util.Calendar
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
+/**
+ * Reports, counted from the records themselves.
+ *
+ * The previous version showed placeholder figures, "views" that were really
+ * review counts, and a weekly engagement chart drawn from fixed multipliers
+ * (nothing in the app records a view). All of that is gone. What remains can
+ * be derived from `createdAt`, `status` and `rating`, and says so.
+ */
 class ReportsActivity : AppCompatActivity() {
+
+    private enum class Period(val millis: Long, val buckets: Int) {
+        DAY(24L * HOUR, 6),
+        WEEK(7L * 24 * HOUR, 7),
+        MONTH(30L * 24 * HOUR, 6)
+    }
+
+    private data class LandmarkRecord(
+        val name: String,
+        val category: String,
+        val status: String,
+        val rating: Double,
+        val imageUrl: String,
+        val createdAt: Long
+    )
 
     private lateinit var binding: ActivityReportsBinding
     private lateinit var database: DatabaseReference
-    private lateinit var landmarksAdapter: PopularLandmarksAdapter
-    private val landmarksList = mutableListOf<PopularLandmarkItem>()
-    private var currentPeriod = "daily"
+    private lateinit var pulse: SkeletonPulse
+    private lateinit var topRatedAdapter: PopularLandmarksAdapter
+    private val topRated = mutableListOf<PopularLandmarkItem>()
+
+    private var period = Period.WEEK
+    private var landmarks: List<LandmarkRecord> = emptyList()
+    private var userCreatedAt: List<Long> = emptyList()
+    private var loadedAt = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        warmEdgeToEdge()
         binding = ActivityReportsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        pulse = SkeletonPulse(binding.loadingState)
 
         database = FirebaseDatabase.getInstance().reference
 
-        setupTabButtons()
-        setupRecyclerView()
-        loadAllData("daily")
-
-        binding.btnBack.setOnClickListener { finish() }
-        binding.btnNotification.setOnClickListener { }
-        binding.btnFullReport.setOnClickListener { }
-        binding.btnFilterLandmarks.setOnClickListener { }
+        binding.header.onBack { finish() }
+        setupInsets()
+        setupTabs()
+        setupList()
+        load()
     }
 
-    private fun setupTabButtons() {
-        setActiveTab(binding.btnDaily)
-        setInactiveTab(binding.btnWeekly)
-        setInactiveTab(binding.btnMonthly)
+    override fun onDestroy() {
+        pulse.stop()
+        super.onDestroy()
+    }
 
-        binding.btnDaily.setOnClickListener {
-            currentPeriod = "daily"
-            setActiveTab(binding.btnDaily)
-            setInactiveTab(binding.btnWeekly)
-            setInactiveTab(binding.btnMonthly)
-            loadAllData("daily")
-        }
-        binding.btnWeekly.setOnClickListener {
-            currentPeriod = "weekly"
-            setInactiveTab(binding.btnDaily)
-            setActiveTab(binding.btnWeekly)
-            setInactiveTab(binding.btnMonthly)
-            loadAllData("weekly")
-        }
-        binding.btnMonthly.setOnClickListener {
-            currentPeriod = "monthly"
-            setInactiveTab(binding.btnDaily)
-            setInactiveTab(binding.btnWeekly)
-            setActiveTab(binding.btnMonthly)
-            loadAllData("monthly")
+    private fun setupInsets() {
+        val base = binding.reportsContent.paddingBottom
+        ViewCompat.setOnApplyWindowInsetsListener(binding.reportsContent) { view, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            view.updatePadding(bottom = base + bars.bottom)
+            insets
         }
     }
 
-    private fun setActiveTab(button: android.widget.TextView) {
-        button.setBackgroundResource(com.example.eastsyria.R.drawable.bg_tab_active)
-        button.setTextColor(resources.getColor(com.example.eastsyria.R.color.background_dark, null))
+    private fun setupTabs() {
+        val tabs = mapOf(
+            binding.btnDaily to Period.DAY,
+            binding.btnWeekly to Period.WEEK,
+            binding.btnMonthly to Period.MONTH
+        )
+        tabs.forEach { (view, value) ->
+            view.setOnClickListener {
+                period = value
+                paintTabs()
+                render()
+            }
+        }
+        paintTabs()
     }
 
-    private fun setInactiveTab(button: android.widget.TextView) {
-        button.setBackgroundResource(com.example.eastsyria.R.drawable.bg_tab_inactive)
-        button.setTextColor(resources.getColor(com.example.eastsyria.R.color.text_secondary1, null))
+    private fun paintTabs() {
+        listOf(
+            binding.btnDaily to Period.DAY,
+            binding.btnWeekly to Period.WEEK,
+            binding.btnMonthly to Period.MONTH
+        ).forEach { (view, value) ->
+            val selected = value == period
+            view.setBackgroundResource(if (selected) R.drawable.bg_tab_active else R.drawable.bg_tab_inactive)
+            view.setTextColor(
+                ContextCompat.getColor(this, if (selected) R.color.terracotta_soft else R.color.ivory_dim)
+            )
+            view.isSelected = selected
+        }
     }
 
-    private fun setupRecyclerView() {
-        landmarksAdapter = PopularLandmarksAdapter(landmarksList)
+    private fun setupList() {
+        topRatedAdapter = PopularLandmarksAdapter(topRated)
         binding.rvPopularLandmarks.layoutManager = LinearLayoutManager(this)
-        binding.rvPopularLandmarks.adapter = landmarksAdapter
+        binding.rvPopularLandmarks.adapter = topRatedAdapter
     }
 
-    private fun loadAllData(period: String) {
-        binding.progressBar.visibility = View.VISIBLE
-        loadLandmarksStats(period)
-        loadUsersStats(period)
-    }
+    // ------------------------------------------------------------ data
 
-    private fun loadLandmarksStats(period: String) {
+    /** Both reads have to land before there is a report to draw. */
+    private fun load() {
+        showLoading()
+        var landmarksDone = false
+        var usersDone = false
+        var failed = false
+
+        fun finishIfReady() {
+            if (failed || !landmarksDone || !usersDone) return
+            loadedAt = System.currentTimeMillis()
+            render()
+        }
+
+        fun fail(what: String, error: DatabaseError) {
+            if (failed) return
+            failed = true
+            Log.e(TAG, "Failed to read $what: ${error.message}")
+            showError()
+        }
+
         database.child("landmarks").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val now = System.currentTimeMillis()
-                val cutoff = getPeriodCutoff(period, now)
-                val prevCutoff = getPeriodCutoff(period, cutoff)
-
-                var totalLandmarks = 0L
-                var currentPeriodLandmarks = 0L
-                var prevPeriodLandmarks = 0L
-                var totalReviews = 0L
-                var currentPeriodReviews = 0L
-                var prevPeriodReviews = 0L
-
-                landmarksList.clear()
-                val allItems = mutableListOf<PopularLandmarkItem>()
-
-                for (child in snapshot.children) {
-                    if (child.value == null) continue
-                    val createdAt = child.child("createdAt").getValue(Long::class.java) ?: 0L
-                    val name = child.child("name").getValue(String::class.java) ?: continue
-                    val rating = child.child("rating").getValue(Double::class.java) ?: 0.0
-                    val reviewCount = child.child("reviewCount").getValue(Long::class.java) ?: 0L
-                    val imageUrl = child.child("imageUrl").getValue(String::class.java) ?: ""
-                    val isTrending = child.child("isTrending").getValue(Boolean::class.java) ?: false
-
-                    totalLandmarks++
-                    totalReviews += reviewCount
-
-                    if (createdAt >= cutoff) currentPeriodLandmarks++
-                    if (createdAt >= prevCutoff && createdAt < cutoff) prevPeriodLandmarks++
-                    if (createdAt >= cutoff) currentPeriodReviews += reviewCount
-                    if (createdAt >= prevCutoff && createdAt < cutoff) prevPeriodReviews += reviewCount
-
-                    val growthLabel = if (isTrending) "+trending" else ""
-                    allItems.add(PopularLandmarkItem(name, reviewCount, rating.toFloat(), growthLabel, imageUrl))
+                landmarks = snapshot.children.mapNotNull { child ->
+                    if (child.value == null) return@mapNotNull null
+                    val name = child.child("name").getValue(String::class.java) ?: return@mapNotNull null
+                    LandmarkRecord(
+                        name = name,
+                        category = child.child("category").getValue(String::class.java).orEmpty(),
+                        status = child.child("status").getValue(String::class.java).orEmpty(),
+                        rating = child.child("rating").getValue(Double::class.java) ?: 0.0,
+                        imageUrl = child.child("imageUrl").getValue(String::class.java).orEmpty(),
+                        createdAt = child.child("createdAt").getValue(Long::class.java) ?: 0L
+                    )
                 }
-
-                allItems.sortByDescending { it.views }
-                landmarksList.addAll(allItems.take(10))
-                landmarksAdapter.notifyDataSetChanged()
-
-                binding.tvTotalLandmarks.text = String.format("%,d", totalLandmarks)
-                val landmarksGrowth = calcGrowthPct(currentPeriodLandmarks, prevPeriodLandmarks)
-                binding.tvLandmarksGrowth.text = landmarksGrowth
-                applyGrowthColor(binding.tvLandmarksGrowth, landmarksGrowth)
-
-                binding.tvReviewGrowth.text = String.format("%,d", totalReviews)
-                val reviewGrowth = calcGrowthPct(currentPeriodReviews, prevPeriodReviews)
-                binding.tvReviewGrowthPct.text = reviewGrowth
-                applyGrowthColor(binding.tvReviewGrowthPct, reviewGrowth)
-
-                buildEngagementChart(allItems)
-                binding.progressBar.visibility = View.GONE
+                landmarksDone = true
+                finishIfReady()
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                binding.progressBar.visibility = View.GONE
-            }
+            override fun onCancelled(error: DatabaseError) = fail("landmarks", error)
         })
-    }
 
-    private fun loadUsersStats(period: String) {
         database.child("users").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val now = System.currentTimeMillis()
-                val cutoff = getPeriodCutoff(period, now)
-                val prevCutoff = getPeriodCutoff(period, cutoff)
-
-                var totalUsers = 0L
-                var currentPeriodUsers = 0L
-                var prevPeriodUsers = 0L
-
-                for (child in snapshot.children) {
-                    val createdAt = child.child("createdAt").getValue(Long::class.java) ?: 0L
-                    totalUsers++
-                    if (createdAt >= cutoff) currentPeriodUsers++
-                    if (createdAt >= prevCutoff && createdAt < cutoff) prevPeriodUsers++
+                userCreatedAt = snapshot.children.map {
+                    it.child("createdAt").getValue(Long::class.java) ?: 0L
                 }
-
-                binding.tvActiveUsers.text = String.format("%,d", totalUsers)
-                val usersGrowth = calcGrowthPct(currentPeriodUsers, prevPeriodUsers)
-                binding.tvUsersGrowth.text = usersGrowth
-                applyGrowthColor(binding.tvUsersGrowth, usersGrowth)
+                usersDone = true
+                finishIfReady()
             }
 
-            override fun onCancelled(error: DatabaseError) {}
+            override fun onCancelled(error: DatabaseError) = fail("users", error)
         })
     }
 
-    private fun buildEngagementChart(items: List<PopularLandmarkItem>) {
-        val days = listOf("MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN")
-        val cal = Calendar.getInstance()
-        val todayDow = cal.get(Calendar.DAY_OF_WEEK)
+    // ------------------------------------------------------------ drawing
 
-        val entries = days.mapIndexed { index, label ->
-            val factor = when {
-                index == 4 -> 1.0f
-                index == 5 -> 0.75f
-                index == 3 -> 0.54f
-                index == 6 -> 0.67f
-                index == 0 -> 0.33f
-                index == 1 -> 0.40f
-                else -> 0.46f
-            }
-            val totalReviews = items.sumOf { it.views }.toFloat()
-            Pair(label, totalReviews * factor / items.size.coerceAtLeast(1))
+    private fun render() {
+        val now = loadedAt
+        val since = now - period.millis
+
+        binding.tvLastUpdated.text = getString(
+            R.string.reports_updated,
+            DateFormat.getTimeFormat(this).format(Date(loadedAt))
+        )
+
+        binding.tvTotalLandmarks.text = format(landmarks.size)
+        binding.tvTotalUsers.text = format(userCreatedAt.size)
+        binding.tvPublished.text = format(landmarks.count { it.status.equals("published", true) })
+        binding.tvPending.text = format(landmarks.count { it.status.equals("pending", true) })
+
+        val newLandmarks = landmarks.count { it.createdAt >= since }
+        val newUsers = userCreatedAt.count { it >= since }
+        val deltaRes = when (period) {
+            Period.DAY -> R.string.reports_delta_day
+            Period.WEEK -> R.string.reports_delta_week
+            Period.MONTH -> R.string.reports_delta_month
         }
+        binding.tvLandmarksGrowth.text = getString(deltaRes, newLandmarks)
+        binding.tvUsersGrowth.text = getString(deltaRes, newUsers)
+
+        drawChart(now)
+        drawTopRated()
+        showContent()
+    }
+
+    /** Counts of new landmarks and new users per bucket of the chosen period. */
+    private fun drawChart(now: Long) {
+        val bucketMillis = period.millis / period.buckets
+        val start = now - period.millis
+        val counts = FloatArray(period.buckets)
+        (landmarks.map { it.createdAt } + userCreatedAt).forEach { created ->
+            if (created < start || created > now) return@forEach
+            val index = ((created - start) / bucketMillis).toInt().coerceIn(0, period.buckets - 1)
+            counts[index]++
+        }
+
+        val labelFormat = when (period) {
+            Period.DAY -> SimpleDateFormat("HH:mm", Locale.getDefault())
+            Period.WEEK -> SimpleDateFormat("EEE", Locale.getDefault())
+            Period.MONTH -> SimpleDateFormat("d MMM", Locale.getDefault())
+        }
+        val entries = counts.mapIndexed { i, value ->
+            labelFormat.format(Date(start + i * bucketMillis)) to value
+        }
+
         binding.engagementChartView.setData(entries)
+        val empty = counts.all { it == 0f }
+        binding.tvChartEmpty.visibility = if (empty) View.VISIBLE else View.GONE
+        binding.engagementChartView.visibility = if (empty) View.INVISIBLE else View.VISIBLE
     }
 
-    private fun getPeriodCutoff(period: String, from: Long): Long {
-        return when (period) {
-            "daily" -> from - 24 * 60 * 60 * 1000L
-            "weekly" -> from - 7 * 24 * 60 * 60 * 1000L
-            "monthly" -> from - 30L * 24 * 60 * 60 * 1000L
-            else -> from - 24 * 60 * 60 * 1000L
-        }
+    private fun drawTopRated() {
+        topRated.clear()
+        topRated.addAll(
+            landmarks.filter { it.rating > 0.0 }
+                .sortedByDescending { it.rating }
+                .take(5)
+                .map { PopularLandmarkItem(it.name, it.category, it.rating.toFloat(), it.imageUrl) }
+        )
+        topRatedAdapter.notifyDataSetChanged()
+        val empty = topRated.isEmpty()
+        binding.rvPopularLandmarks.visibility = if (empty) View.GONE else View.VISIBLE
+        binding.tvTopRatedEmpty.visibility = if (empty) View.VISIBLE else View.GONE
     }
 
-    private fun calcGrowthPct(current: Long, previous: Long): String {
-        return when {
-            previous == 0L && current > 0L -> "+100%"
-            previous == 0L -> "+0%"
-            else -> {
-                val pct = ((current - previous).toDouble() / previous * 100).toInt()
-                if (pct >= 0) "+$pct%" else "$pct%"
-            }
-        }
+    private fun format(value: Int): String = String.format(Locale.getDefault(), "%,d", value)
+
+    // ------------------------------------------------------------ states
+
+    private fun showLoading() {
+        binding.statePanel.hide()
+        binding.figuresGroup.visibility = View.GONE
+        binding.loadingState.visibility = View.VISIBLE
+        pulse.start()
     }
 
-    private fun applyGrowthColor(tv: android.widget.TextView, value: String) {
-        if (value.startsWith("-")) {
-            tv.setTextColor(resources.getColor(android.R.color.holo_red_light, null))
-        } else {
-            tv.setTextColor(resources.getColor(com.example.eastsyria.R.color.green, null))
-        }
+    private fun showContent() {
+        pulse.stop()
+        binding.statePanel.hide()
+        binding.loadingState.visibility = View.GONE
+        binding.figuresGroup.visibility = View.VISIBLE
+    }
+
+    private fun showError() {
+        pulse.stop()
+        binding.loadingState.visibility = View.GONE
+        binding.figuresGroup.visibility = View.GONE
+        binding.statePanel.show(
+            getString(R.string.reports_error_title),
+            getString(R.string.search_error_body),
+            getString(R.string.action_retry)
+        ) { load() }
+    }
+
+    companion object {
+        private const val TAG = "ReportsActivity"
+        private const val HOUR = 60L * 60 * 1000
     }
 }

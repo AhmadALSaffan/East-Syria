@@ -1,23 +1,27 @@
 package com.example.eastsyria.MainPage
 
+import android.animation.ValueAnimator
+import android.app.ActivityOptions
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.transition.TransitionManager
 import android.util.Log
 import android.view.View
-import android.widget.Toast
+import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updateLayoutParams
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.eastsyria.Categories.CategoriesActivity
 import com.example.eastsyria.CategoryList.CategoryListActivity
 import com.example.eastsyria.Details.LandmarkDetailActivity
@@ -25,6 +29,7 @@ import com.example.eastsyria.MainPage.Adapters.FeaturedLandmarkAdapter
 import com.example.eastsyria.MainPage.Adapters.TrendingDestinationAdapter
 import com.example.eastsyria.MainPage.Data.Landmark
 import com.example.eastsyria.Map.MapActivity
+import com.example.eastsyria.Nav.NavDock
 import com.example.eastsyria.Notifications.NotificationsActivity
 import com.example.eastsyria.Profile.ProfileActivity
 import com.example.eastsyria.R
@@ -32,67 +37,143 @@ import com.example.eastsyria.Saved.SavedLandmarksActivity
 import com.example.eastsyria.Search.SearchLandmarksActivity
 import com.example.eastsyria.databinding.ActivityMainPageBinding
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 
 class MainPageActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainPageBinding
-    private val auth: FirebaseAuth by lazy { Firebase.auth }
-    private val database: FirebaseDatabase by lazy { Firebase.database }
 
-    private lateinit var featuredAdapter: FeaturedLandmarkAdapter
+    private lateinit var heroAdapter: FeaturedLandmarkAdapter
     private lateinit var trendingAdapter: TrendingDestinationAdapter
 
-    private val featuredLandmarks = mutableListOf<Landmark>()
+    // What the hero shows: featured landmarks, falling back to trending, then
+    // to whatever is published, so the first viewport is never an empty frame
+    // while the catalog has something to show.
+    private val heroLandmarks = mutableListOf<Landmark>()
     private val trendingDestinations = mutableListOf<Landmark>()
+
+    private var landmarksRef: DatabaseReference? = null
+    private var landmarksListener: ValueEventListener? = null
+
+    private var heroPage = -1
+    private var pulseAnimator: ValueAnimator? = null
+
+    private enum class HeroState { LOADING, CONTENT, EMPTY, ERROR }
 
     companion object {
         const val EXTRA_SELECT_EXPLORE = "select_explore"
+        private const val MAX_HERO_PAGES = 5
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hideSystemBars()
         enableEdgeToEdge()
-        window.statusBarColor = ContextCompat.getColor(this, R.color.background_light)
 
         binding = ActivityMainPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+
+        // The hero photograph runs under both system bars, so their icons must
+        // stay light whatever the system theme says.
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.background_dark)
+        window.statusBarColor = Color.TRANSPARENT
         window.navigationBarColor = Color.TRANSPARENT
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = false
+            isAppearanceLightNavigationBars = false
+        }
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 
-        setupRecyclerViews()
+        setupInsets()
+        setupHero()
+        setupTrending()
+        setupNavigation()
         setupClickListeners()
+        setupScrollBehavior()
         loadLandmarksFromFirebase()
         handleExploreExtra(intent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Coming back from a tab: the selector glides home to Explore.
+        binding.navDock.select(NavDock.TAB_EXPLORE, animate = true)
+    }
+
+    override fun onDestroy() {
+        stopPulse()
+        detachLandmarksListener()
+        super.onDestroy()
+    }
+
     private fun handleExploreExtra(intent: Intent) {
         if (intent.getBooleanExtra(EXTRA_SELECT_EXPLORE, false)) {
-            binding.bottomNavigation.selectedItemId = R.id.nav_explore
+            binding.navDock.select(NavDock.TAB_EXPLORE, animate = false)
         }
     }
 
+    // ------------------------------------------------------------ chrome
 
-    private fun setupRecyclerViews() {
+    private fun setupInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            binding.topBarBg.updateLayoutParams<ViewGroup.LayoutParams> {
+                height = dp(76) + bars.top
+            }
+            binding.searchPill.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = dp(10) + bars.top
+            }
+            insets
+        }
+    }
 
-        featuredAdapter = FeaturedLandmarkAdapter(featuredLandmarks) { landmark ->
+    private fun setupNavigation() {
+        binding.navDock.attach(this, NavDock.TAB_EXPLORE)
+        binding.navDock.onReselected = { binding.scrollMain.smoothScrollTo(0, 0) }
+    }
+
+    /**
+     * The search pill floats over the hero and gains a solid backing once the
+     * hero has scrolled away.
+     */
+    private fun setupScrollBehavior() {
+        val fadeStart = dp(170)
+        val fadeSpan = dp(80)
+        binding.scrollMain.setOnScrollChangeListener(
+            androidx.core.widget.NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
+                binding.topBarBg.alpha = ((scrollY - fadeStart).toFloat() / fadeSpan).coerceIn(0f, 1f)
+            }
+        )
+    }
+
+    // ------------------------------------------------------------ hero and rails
+
+    private fun setupHero() {
+        heroAdapter = FeaturedLandmarkAdapter(heroLandmarks) { landmark ->
             openLandmarkDetail(landmark)
         }
+        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        val snap = PagerSnapHelper()
         binding.rvFeaturedLandmarks.apply {
-            adapter = featuredAdapter
-            layoutManager = LinearLayoutManager(this@MainPageActivity, LinearLayoutManager.HORIZONTAL, false)
+            adapter = heroAdapter
+            this.layoutManager = layoutManager
+            snap.attachToRecyclerView(this)
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    val page = snap.findSnapView(layoutManager)
+                        ?.let { layoutManager.getPosition(it) } ?: return
+                    setHeroPage(page)
+                }
+            })
         }
+    }
 
-
+    private fun setupTrending() {
         trendingAdapter = TrendingDestinationAdapter(trendingDestinations) { landmark ->
             openLandmarkDetail(landmark)
         }
@@ -102,124 +183,199 @@ class MainPageActivity : AppCompatActivity() {
         }
     }
 
+    private fun rebuildDots() {
+        binding.heroDots.removeAllViews()
+        heroPage = -1
+        if (heroLandmarks.size < 2) return
+        heroLandmarks.indices.forEach { _ ->
+            val dot = View(this).apply {
+                layoutParams = ViewGroup.MarginLayoutParams(dp(6), dp(6)).apply {
+                    marginEnd = dp(6)
+                }
+                setBackgroundResource(R.drawable.bg_dot)
+            }
+            binding.heroDots.addView(dot)
+        }
+        setHeroPage(0)
+    }
+
+    private fun setHeroPage(page: Int) {
+        if (page == heroPage || page !in 0 until binding.heroDots.childCount) return
+        heroPage = page
+        TransitionManager.beginDelayedTransition(binding.heroDots)
+        for (i in 0 until binding.heroDots.childCount) {
+            val dot = binding.heroDots.getChildAt(i)
+            val active = i == page
+            dot.setBackgroundResource(if (active) R.drawable.bg_dot_active else R.drawable.bg_dot)
+            dot.layoutParams = (dot.layoutParams as ViewGroup.MarginLayoutParams).apply {
+                width = if (active) dp(22) else dp(6)
+            }
+        }
+    }
+
     private fun openLandmarkDetail(landmark: Landmark) {
         val intent = Intent(this, LandmarkDetailActivity::class.java)
-        intent.putExtra("LANDMARK_ID", landmark.id)
         intent.putExtra("LANDMARK_ID", landmark.id)
         startActivity(intent)
     }
 
+    // ------------------------------------------------------------ data
 
     private fun loadLandmarksFromFirebase() {
-        showLoading(true)
-        val landmarksRef = database.reference.child("landmarks")
-        landmarksRef.addValueEventListener(object : ValueEventListener {
+        detachLandmarksListener()
+        showState(HeroState.LOADING)
+
+        val ref = Firebase.database.reference.child("landmarks")
+        val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                featuredLandmarks.clear()
-                trendingDestinations.clear()
+                val featured = mutableListOf<Landmark>()
+                val trending = mutableListOf<Landmark>()
+                val published = mutableListOf<Landmark>()
+
                 for (landmarkSnapshot in snapshot.children) {
                     try {
                         val landmark = landmarkSnapshot.getValue(Landmark::class.java)
                         if (landmark != null && landmark.status == "published") {
                             landmark.id = landmarkSnapshot.key ?: ""
-                            if (landmark.isFeatured) {
-                                featuredLandmarks.add(landmark)
-                            }
-                            if (landmark.isTrending) {
-                                trendingDestinations.add(landmark)
-                            }
+                            published.add(landmark)
+                            if (landmark.isFeatured) featured.add(landmark)
+                            if (landmark.isTrending) trending.add(landmark)
                         }
                     } catch (e: Exception) {
                         Log.e(TAG, "Error parsing landmark ${landmarkSnapshot.key}: ${e.message}", e)
                     }
                 }
-                featuredAdapter.notifyDataSetChanged()
+
+                val hero = when {
+                    featured.isNotEmpty() -> featured
+                    trending.isNotEmpty() -> trending
+                    else -> published
+                }.take(MAX_HERO_PAGES)
+
+                heroLandmarks.clear()
+                heroLandmarks.addAll(hero)
+                trendingDestinations.clear()
+                trendingDestinations.addAll(trending)
+                heroAdapter.notifyDataSetChanged()
                 trendingAdapter.notifyDataSetChanged()
-                showLoading(false)
-                if (featuredLandmarks.isEmpty() && trendingDestinations.isEmpty()) {
-                    showToast("No landmarks found")
+                rebuildDots()
+
+                if (published.isEmpty()) {
+                    showState(HeroState.EMPTY)
+                } else {
+                    showState(HeroState.CONTENT)
+                    binding.tvCatalogCount.text =
+                        getString(R.string.home_catalog_count, published.size)
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                showLoading(false)
-                showToast("Failed to load landmarks: ${error.message}")
+                Log.e(TAG, "Landmarks load cancelled: ${error.message}")
+                showState(HeroState.ERROR)
             }
-        })
+        }
+        landmarksRef = ref
+        landmarksListener = listener
+        ref.addValueEventListener(listener)
     }
 
+    private fun detachLandmarksListener() {
+        val ref = landmarksRef
+        val listener = landmarksListener
+        if (ref != null && listener != null) ref.removeEventListener(listener)
+        landmarksRef = null
+        landmarksListener = null
+    }
 
+    // ------------------------------------------------------------ states
+
+    private fun showState(state: HeroState) {
+        val loading = state == HeroState.LOADING
+        val content = state == HeroState.CONTENT
+
+        binding.heroSkeleton.visibility = if (loading) View.VISIBLE else View.GONE
+        binding.trendingSkeleton.visibility = if (loading) View.VISIBLE else View.GONE
+        binding.rvFeaturedLandmarks.visibility = if (content) View.VISIBLE else View.GONE
+        binding.heroDots.visibility = if (content) View.VISIBLE else View.GONE
+        binding.sectionTrending.visibility =
+            if (content && trendingDestinations.isNotEmpty()) View.VISIBLE else View.GONE
+        binding.tvCatalogCount.visibility = if (content) View.VISIBLE else View.GONE
+
+        val showPanel = state == HeroState.EMPTY || state == HeroState.ERROR
+        binding.heroState.visibility = if (showPanel) View.VISIBLE else View.GONE
+        if (state == HeroState.EMPTY) {
+            binding.tvStateTitle.setText(R.string.hero_empty_title)
+            binding.tvStateBody.setText(R.string.hero_empty_body)
+        } else if (state == HeroState.ERROR) {
+            binding.tvStateTitle.setText(R.string.hero_error_title)
+            binding.tvStateBody.setText(R.string.hero_error_body)
+        }
+        binding.btnRetry.visibility = if (state == HeroState.ERROR) View.VISIBLE else View.GONE
+
+        if (loading) startPulse() else stopPulse()
+    }
+
+    /** The two skeletons breathe together; nothing runs when animations are off. */
+    private fun startPulse() {
+        if (pulseAnimator != null || !ValueAnimator.areAnimatorsEnabled()) return
+        pulseAnimator = ValueAnimator.ofFloat(1f, 0.55f).apply {
+            duration = 900
+            repeatMode = ValueAnimator.REVERSE
+            repeatCount = ValueAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
+            addUpdateListener {
+                val alpha = it.animatedValue as Float
+                binding.heroSkeleton.alpha = alpha
+                binding.trendingSkeleton.alpha = alpha
+            }
+            start()
+        }
+    }
+
+    private fun stopPulse() {
+        pulseAnimator?.cancel()
+        pulseAnimator = null
+        binding.heroSkeleton.alpha = 1f
+        binding.trendingSkeleton.alpha = 1f
+    }
+
+    // ------------------------------------------------------------ clicks
 
     private fun setupClickListeners() {
         binding.apply {
-
-            etSearch.setOnClickListener {
+            searchPill.setOnClickListener {
                 startActivity(Intent(this@MainPageActivity, SearchLandmarksActivity::class.java))
             }
 
-
-            ivBookmark.setOnClickListener {
-                val intentSaved = Intent(this@MainPageActivity, SavedLandmarksActivity::class.java)
-                startActivity(intentSaved)
-            }
-
-
             btnHistorical.setOnClickListener {
-                startCategoryList("Historical Sites", "historical_sites")
+                startCategoryList(getString(R.string.cat_name_historical), "historical_sites")
             }
-
             btnNature.setOnClickListener {
-                startCategoryList("Nature & Rivers", "nature_rivers")
+                startCategoryList(getString(R.string.cat_name_nature), "nature_rivers")
             }
-
             btnCulture.setOnClickListener {
-                startCategoryList("Local Culture", "local_culture")
+                startCategoryList(getString(R.string.cat_name_culture), "local_culture")
             }
-
+            btnMuseums.setOnClickListener {
+                startCategoryList(getString(R.string.cat_name_museums), "museums")
+            }
+            btnCuisine.setOnClickListener {
+                startCategoryList(getString(R.string.cat_name_cuisine), "cuisine")
+            }
+            btnCrafts.setOnClickListener {
+                startCategoryList(getString(R.string.cat_name_crafts), "handicrafts")
+            }
             btnMore.setOnClickListener {
-                val intent = Intent(this@MainPageActivity, CategoriesActivity::class.java)
-                startActivity(intent)
+                startActivity(Intent(this@MainPageActivity, CategoriesActivity::class.java))
             }
 
-            tvSeeAllFeatured.setOnClickListener {
-                //showToast("View all featured landmarks")
-            }
-
-            tvViewMap.setOnClickListener {
-                //showToast("Map view")
-            }
-
-
-            fabAdd.setOnClickListener {
-               val mapIntent = Intent(this@MainPageActivity, MapActivity::class.java)
-                startActivity(mapIntent)
-            }
-
-            bottomNavigation.setOnItemSelectedListener { item ->
-                when (item.itemId) {
-                    R.id.nav_explore -> true
-                    R.id.nav_saved -> {
-                        val intentSaved = Intent(this@MainPageActivity, SavedLandmarksActivity::class.java)
-                        startActivity(intentSaved)
-                        false
-                    }
-                    R.id.nav_updates -> {
-                        val intentNotification = Intent(this@MainPageActivity,
-                            NotificationsActivity::class.java)
-                        startActivity(intentNotification)
-                        true
-                    }
-                    R.id.nav_profile -> {
-                        val intent = Intent(this@MainPageActivity, ProfileActivity::class.java)
-                        startActivity(intent)
-                        true
-                    }
-                    else -> false
-                }
-            }
-
-            bottomNavigation.selectedItemId = R.id.nav_explore
+            tvViewMap.setOnClickListener { openMap() }
+            btnRetry.setOnClickListener { loadLandmarksFromFirebase() }
         }
+    }
+
+    private fun openMap() {
+        startActivity(Intent(this, MapActivity::class.java))
     }
 
     private fun startCategoryList(name: String, type: String) {
@@ -230,38 +386,10 @@ class MainPageActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-
-    private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressFeatured.visibility = View.VISIBLE
-            binding.progressTrending.visibility = View.VISIBLE
-            binding.rvFeaturedLandmarks.visibility = View.GONE
-            binding.rvTrendingDestinations.visibility = View.GONE
-        } else {
-            binding.progressFeatured.visibility = View.GONE
-            binding.progressTrending.visibility = View.GONE
-            binding.rvFeaturedLandmarks.visibility = View.VISIBLE
-            binding.rvTrendingDestinations.visibility = View.VISIBLE
-        }
-    }
-
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun hideSystemBars() {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-        windowInsetsController.apply {
-            hide(WindowInsetsCompat.Type.navigationBars())
-
-            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
-    }
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleExploreExtra(intent)
     }
+
+    private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 }

@@ -1,289 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  The map filter sheet. Categories come from the catalog; distance is offered
+  only when the phone has a location to measure from.
+-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheet_background"
-    android:orientation="vertical"
-    android:padding="24dp">
-
+    android:fillViewport="true"
+    android:overScrollMode="never"
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:paddingStart="24dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="24dp">
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_dot"
+            android:importantForAccessibility="no" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/amiri"
+                android:includeFontPadding="false"
+                android:lineHeight="36sp"
+                android:text="@string/map_filters"
+                android:textColor="@color/ivory"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btnClose"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/filter_close"
+                android:padding="12dp"
+                android:src="@drawable/ic_close"
+                app:tint="@color/ivory_dim" />
+
+        </LinearLayout>
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Filters"
-            android:textColor="@color/text_white"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
-        <ImageButton
-            android:id="@+id/btnClose"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Close"
-            android:src="@drawable/ic_close"
-            app:tint="@color/text_white" />
-
-    </LinearLayout>
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/divider_color" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Category"
-        android:textColor="@color/text_white"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroupCategory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:selectionRequired="false"
-        app:singleSelection="false">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipHistorical"
+            style="@style/TextAppearance.EastSyria.FilterGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="Historical"
-            android:textColor="@color/text_white"
-            app:checkedIconVisible="true"
-            app:chipBackgroundColor="@color/chip_background_selector"
-            app:chipCornerRadius="20dp" />
+            android:text="@string/map_filter_categories" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipArchaeological"
-            android:layout_width="wrap_content"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupCategory"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="Archaeological"
-            android:textColor="@color/text_white"
-            app:checkedIconVisible="true"
-            app:chipBackgroundColor="@color/chip_background_selector"
-            app:chipCornerRadius="20dp" />
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="20dp"
+            app:chipSpacingHorizontal="8dp"
+            app:singleSelection="false" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipNature"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="Nature"
-            android:textColor="@color/text_white"
-            app:checkedIconVisible="true"
-            app:chipBackgroundColor="@color/chip_background_selector"
-            app:chipCornerRadius="20dp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipCulture"
-            android:layout_width="wrap_content"
+            <TextView
+                style="@style/TextAppearance.EastSyria.FilterGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/map_filter_distance" />
+
+            <TextView
+                android:id="@+id/tvDistanceValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/map_filter_any_distance"
+                android:textColor="@color/terracotta_soft"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/sliderDistance"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="Culture"
-            android:textColor="@color/text_white"
-            app:checkedIconVisible="true"
-            app:chipBackgroundColor="@color/chip_background_selector"
-            app:chipCornerRadius="20dp" />
-
-    </com.google.android.material.chip.ChipGroup>
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Distance"
-        android:textColor="@color/text_white"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+            android:contentDescription="@string/map_filter_distance"
+            android:stepSize="5"
+            android:value="100"
+            android:valueFrom="5"
+            android:valueTo="100"
+            app:haloColor="#33E2703A"
+            app:thumbColor="@color/terracotta"
+            app:tickVisible="false"
+            app:trackColorActive="@color/terracotta"
+            app:trackColorInactive="@color/surface_high" />
 
         <TextView
-            android:id="@+id/tvDistanceValue"
+            android:id="@+id/tvDistanceHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="@string/map_filter_distance_needs_location"
+            android:textColor="@color/ivory_mute"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+        <TextView
+            style="@style/TextAppearance.EastSyria.FilterGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Any distance"
-            android:textColor="@color/orange_accent"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:text="@string/filter_rating" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="20dp"
+            app:chipSpacingHorizontal="8dp"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipRatingAny"
+                style="@style/Widget.EastSyria.FilterChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/search_filter_all" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipRating3"
+                style="@style/Widget.EastSyria.FilterChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/map_filter_rating_three" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipRating4"
+                style="@style/Widget.EastSyria.FilterChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_rating_four" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipRating45"
+                style="@style/Widget.EastSyria.FilterChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_rating_four_half" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            style="@style/TextAppearance.EastSyria.FilterGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_curated" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/cbFeaturedOnly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:minHeight="48dp"
+            android:text="@string/map_filter_featured_only"
+            android:textColor="@color/ivory"
+            android:textSize="16sp"
+            app:thumbTint="@color/switch_thumb"
+            app:trackTint="@color/switch_track" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/cbTrendingOnly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:minHeight="48dp"
+            android:text="@string/map_filter_trending_only"
+            android:textColor="@color/ivory"
+            android:textSize="16sp"
+            app:thumbTint="@color/switch_thumb"
+            app:trackTint="@color/switch_track" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnClearFilters"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/filter_reset"
+                android:textAllCaps="false"
+                android:textColor="@color/ivory_dim"
+                android:textSize="16sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnApplyFilters"
+                style="@style/Widget.EastSyria.Button.Pill"
+                android:layout_width="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="@string/filter_apply" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <com.google.android.material.slider.Slider
-        android:id="@+id/sliderDistance"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:valueFrom="0"
-        android:valueTo="100"
-        android:value="100"
-        android:stepSize="5"
-        app:labelBehavior="gone"
-        app:thumbColor="@color/orange_accent"
-        app:trackColorActive="@color/orange_accent"
-        app:trackColorInactive="@color/surface_light" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Minimum Rating"
-        android:textColor="@color/text_white"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroupRating"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:selectionRequired="false"
-        app:singleSelection="true">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipRatingAny"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:checked="true"
-            android:text="Any"
-            android:textColor="@color/text_white"
-            app:checkedIconVisible="false"
-            app:chipBackgroundColor="@color/chip_background_selector"
-            app:chipCornerRadius="20dp" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipRating3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="3+ ⭐"
-            android:textColor="@color/text_white"
-            app:checkedIconVisible="false"
-            app:chipBackgroundColor="@color/chip_background_selector"
-            app:chipCornerRadius="20dp" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipRating4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="4+ ⭐"
-            android:textColor="@color/text_white"
-            app:checkedIconVisible="false"
-            app:chipBackgroundColor="@color/chip_background_selector"
-            app:chipCornerRadius="20dp" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipRating45"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="4.5+ ⭐"
-            android:textColor="@color/text_white"
-            app:checkedIconVisible="false"
-            app:chipBackgroundColor="@color/chip_background_selector"
-            app:chipCornerRadius="20dp" />
-
-    </com.google.android.material.chip.ChipGroup>
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Features"
-        android:textColor="@color/text_white"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
-    <CheckBox
-        android:id="@+id/cbFeaturedOnly"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Featured landmarks only"
-        android:textColor="@color/text_white"
-        android:buttonTint="@color/orange_accent" />
-
-    <CheckBox
-        android:id="@+id/cbTrendingOnly"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Trending destinations only"
-        android:textColor="@color/text_white"
-        android:buttonTint="@color/orange_accent" />
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/divider_color" />
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnClearFilters"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:text="Clear All"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:textColor="@color/text_white"
-            android:letterSpacing="0"
-            app:cornerRadius="12dp"
-            app:strokeColor="@color/orange_accent"
-            app:strokeWidth="2dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnApplyFilters"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:text="Apply Filters"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:letterSpacing="0"
-            android:backgroundTint="@color/orange_accent"
-            app:cornerRadius="12dp" />
-
-    </LinearLayout>
-
-
-</LinearLayout>
+</ScrollView>

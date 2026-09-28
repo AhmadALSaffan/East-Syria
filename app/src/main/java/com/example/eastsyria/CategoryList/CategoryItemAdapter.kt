@@ -1,160 +1,109 @@
 package com.example.eastsyria.CategoryList
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.eastsyria.R
-import com.example.eastsyria.databinding.ItemCategoryCardBinding
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.example.eastsyria.databinding.ItemSearchResultBinding
 
+/**
+ * The category rows: the shared landmark row with a short description and a
+ * bookmark. Which places are saved is handed in as a set by the screen, which
+ * reads it once and keeps it live; the adapter never goes to the network.
+ *
+ * With no [onBookmarkClick] (the category search) the bookmark is hidden and
+ * the chevron stays.
+ */
 class CategoryItemAdapter(
     items: List<CategoryItem>,
-    private val onItemClick: (CategoryItem) -> Unit
+    private val onItemClick: (CategoryItem) -> Unit,
+    private val onBookmarkClick: ((CategoryItem) -> Unit)? = null
 ) : RecyclerView.Adapter<CategoryItemAdapter.ItemViewHolder>() {
 
     private var items = items.filter { it.status == "published" }
-    private val auth = FirebaseAuth.getInstance()
-    private val database = FirebaseDatabase.getInstance()
+    private var savedIds: Set<String> = emptySet()
 
-    inner class ItemViewHolder(private val binding: ItemCategoryCardBinding) :
+    inner class ItemViewHolder(private val binding: ItemSearchResultBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: CategoryItem) {
+            val context = binding.root.context
             binding.apply {
-                tvItemName.text = item.name
-                tvDescription.text = item.description
+                tvLandmarkName.text = item.name
 
-                Glide.with(itemView.context)
-                    .load(item.imageUrl)
-                    .centerCrop()
-                    .placeholder(R.drawable.placeholder_site)
-                    .error(R.drawable.placeholder_site)
-                    .into(ivItemImage)
+                val place = item.location.city.trim().ifEmpty { item.location.governorate.trim() }
+                // The category, or UNESCO where the record says so. The publish state
+                // ("published") is a curator's concern and means nothing to a visitor.
+                val badge = if (item.getBadgeText().startsWith("UNESCO")) {
+                    context.getString(R.string.category_unesco)
+                } else {
+                    item.category.trim()
+                }
+                val meta = when {
+                    badge.isNotEmpty() && place.isNotEmpty() ->
+                        context.getString(R.string.home_meta_separator, badge, place)
+
+                    badge.isNotEmpty() -> badge
+                    else -> place
+                }
+                tvMeta.text = meta
+                tvMeta.visibility = if (meta.isEmpty()) View.GONE else View.VISIBLE
+
+                val description = item.description.trim()
+                tvDescription.text = description
+                tvDescription.visibility = if (description.isEmpty()) View.GONE else View.VISIBLE
 
                 if (item.rating > 0.0) {
+                    val rating = String.format("%.1f", item.rating)
+                    tvRating.text = rating
+                    layoutRating.contentDescription = context.getString(R.string.home_rating_desc, rating)
                     layoutRating.visibility = View.VISIBLE
-                    tvRating.text = item.rating.toString()
                 } else {
                     layoutRating.visibility = View.GONE
                 }
 
-                if (item.location.governorate.isNotEmpty()) {
-                    layoutLocation.visibility = View.VISIBLE
-                    tvLocation.text = item.location.governorate
-                } else {
-                    layoutLocation.visibility = View.GONE
-                }
+                Glide.with(context)
+                    .load(item.imageUrl)
+                    .placeholder(R.drawable.placeholder_dark)
+                    .error(R.drawable.placeholder_dark)
+                    .centerCrop()
+                    .transition(DrawableTransitionOptions.withCrossFade(200))
+                    .into(ivLandmark)
 
-                val badgeText = item.getBadgeText()
-                if (badgeText.isNotEmpty()) {
-                    tvBadge.visibility = View.VISIBLE
-                    tvBadge.text = badgeText
+                if (onBookmarkClick != null) {
+                    val saved = item.id in savedIds
+                    ivChevron.visibility = View.GONE
+                    btnBookmark.visibility = View.VISIBLE
+                    btnBookmark.setImageResource(
+                        if (saved) R.drawable.ic_bookmark_filled else R.drawable.ic_bookmark
+                    )
+                    btnBookmark.imageTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            context,
+                            if (saved) R.color.terracotta_soft else R.color.ivory
+                        )
+                    )
+                    btnBookmark.contentDescription = context.getString(
+                        if (saved) R.string.detail_unbookmark else R.string.detail_bookmark
+                    )
+                    btnBookmark.setOnClickListener { onBookmarkClick.invoke(item) }
                 } else {
-                    tvBadge.visibility = View.GONE
+                    ivChevron.visibility = View.VISIBLE
+                    btnBookmark.visibility = View.GONE
                 }
-
-                checkIfSaved(item, binding)
 
                 root.setOnClickListener { onItemClick(item) }
-                btnBookmark.setOnClickListener { toggleBookmark(item, binding) }
-                btnViewDetails.setOnClickListener { onItemClick(item) }
-            }
-        }
-
-        private fun checkIfSaved(item: CategoryItem, binding: ItemCategoryCardBinding) {
-            val userId = auth.currentUser?.uid
-            if (userId == null) {
-                updateBookmarkUI(binding, false)
-                return
-            }
-            if (item.id.isEmpty()) {
-                updateBookmarkUI(binding, false)
-                return
-            }
-            database.reference
-                .child("users")
-                .child(userId)
-                .child("savedLandmarks")
-                .child(item.id)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val isSaved = snapshot.exists()
-                        item.isBookmarked = isSaved
-                        updateBookmarkUI(binding, isSaved)
-                    }
-                    override fun onCancelled(error: DatabaseError) {
-                        updateBookmarkUI(binding, false)
-                    }
-                })
-        }
-
-        private fun toggleBookmark(item: CategoryItem, binding: ItemCategoryCardBinding) {
-            val userId = auth.currentUser?.uid
-            if (userId == null) {
-                Toast.makeText(binding.root.context, "Please log in to save landmarks", Toast.LENGTH_SHORT).show()
-                return
-            }
-            if (item.id.isEmpty()) {
-                Toast.makeText(binding.root.context, "Error: Invalid landmark ID", Toast.LENGTH_SHORT).show()
-                return
-            }
-            val savedRef = database.reference
-                .child("users")
-                .child(userId)
-                .child("savedLandmarks")
-                .child(item.id)
-
-            if (item.isBookmarked) {
-                savedRef.removeValue()
-                    .addOnSuccessListener {
-                        item.isBookmarked = false
-                        updateBookmarkUI(binding, false)
-                        Toast.makeText(binding.root.context, "Removed from saved", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(binding.root.context, "Failed to remove: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
-            } else {
-                val saveData = mapOf(
-                    "savedAt" to System.currentTimeMillis(),
-                    "landmarkId" to item.id,
-                    "name" to item.name,
-                    "imageUrl" to item.imageUrl,
-                    "category" to item.category
-                )
-                savedRef.setValue(saveData)
-                    .addOnSuccessListener {
-                        item.isBookmarked = true
-                        updateBookmarkUI(binding, true)
-                        Toast.makeText(binding.root.context, "Saved successfully", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(binding.root.context, "Failed to save: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
-            }
-        }
-
-        private fun updateBookmarkUI(binding: ItemCategoryCardBinding, saved: Boolean) {
-            if (saved) {
-                binding.btnBookmark.setImageResource(R.drawable.ic_bookmark_filled)
-                binding.btnBookmark.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.orange_accent))
-            } else {
-                binding.btnBookmark.setImageResource(R.drawable.ic_bookmark_border)
-                binding.btnBookmark.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.white))
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val binding = ItemCategoryCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemSearchResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ItemViewHolder(binding)
     }
 
@@ -166,6 +115,11 @@ class CategoryItemAdapter(
 
     fun updateItems(newItems: List<CategoryItem>) {
         items = newItems.filter { it.status == "published" }
+        notifyDataSetChanged()
+    }
+
+    fun setSavedIds(ids: Set<String>) {
+        savedIds = ids
         notifyDataSetChanged()
     }
 

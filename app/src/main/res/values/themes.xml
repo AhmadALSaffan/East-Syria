@@ -20,25 +20,455 @@
 
     <style name="OtpEditTextStyle">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">72dp</item>
-        <item name="android:layout_margin">4dp</item>
-        <item name="android:background">@drawable/otp_background</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginStart">3dp</item>
+        <item name="android:layout_marginEnd">3dp</item>
+        <item name="android:background">@drawable/bg_otp_cell</item>
         <item name="android:gravity">center</item>
         <item name="android:inputType">number</item>
         <item name="android:maxLength">1</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/bone</item>
+        <item name="android:textCursorDrawable">@null</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="Theme.EastSyria" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/orange_accent</item>
-        <item name="colorPrimaryVariant">@color/teal_accent</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="android:statusBarColor">@color/background_dark</item>
-        <item name="android:navigationBarColor">@color/background_dark</item>
+    <!-- ================================================================
+         The Approach: auth surfaces. You are inside now.
+         ================================================================ -->
+
+    <!-- Field labels: sentence case, medium weight, readable. Tracked capitals
+         wrecked Arabic joins and shouted at a form that is only asking a question. -->
+    <style name="TextAppearance.EastSyria.FieldLabel" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/ivory_dim</item>
+    </style>
+
+    <!-- Amiri is the building: brand and screen titles only. -->
+    <style name="TextAppearance.EastSyria.ScreenTitle" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/amiri</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:lineHeight">40sp</item>
+        <item name="android:textSize">34sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/bone</item>
+        <item name="android:letterSpacing">-0.02</item>
+    </style>
+
+    <!-- Dark ink on clay clears 5.5:1; bone on clay only reaches 3.16:1. -->
+    <style name="Widget.EastSyria.Button.Primary" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_height">56dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/basalt</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="backgroundTint">@color/clay</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="rippleColor">#33000000</item>
+        <item name="iconTint">@color/basalt</item>
+    </style>
+
+    <style name="Widget.EastSyria.Button.Outline" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_height">56dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/bone</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="strokeColor">@color/hairline</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="rippleColor">#22D17A5A</item>
+    </style>
+
+    <style name="Widget.EastSyria.Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_height">48dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/clay</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="rippleColor">#22D17A5A</item>
+    </style>
+
+    <!-- Outlined, on surface: a hairline at rest, a terracotta edge while it has the
+         cursor, and the error in the same warm colour. The hint lives in the field,
+         centred, so it never sits low the way the filled box let it. -->
+    <style name="Widget.EastSyria.TextField" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">@color/surface</item>
+        <item name="boxStrokeColor">@color/text_field_stroke</item>
+        <item name="boxStrokeErrorColor">@color/terracotta_soft</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxCornerRadiusTopStart">16dp</item>
+        <item name="boxCornerRadiusTopEnd">16dp</item>
+        <item name="boxCornerRadiusBottomStart">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">16dp</item>
+        <item name="hintEnabled">false</item>
+        <item name="startIconTint">@color/terracotta_soft</item>
+        <item name="endIconTint">@color/ivory_mute</item>
+        <item name="errorTextColor">@color/terracotta_soft</item>
+        <item name="errorIconTint">@color/terracotta_soft</item>
+        <item name="errorTextAppearance">@style/TextAppearance.EastSyria.FieldError</item>
+        <item name="helperTextTextAppearance">@style/TextAppearance.EastSyria.FieldError</item>
+        <item name="android:textColorHint">@color/ivory_mute</item>
+    </style>
+
+    <style name="TextAppearance.EastSyria.FieldError" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/terracotta_soft</item>
+    </style>
+
+    <!-- ================================================================
+         The Field Desk: home surface. parent="" on every one of these —
+         dot-named styles implicitly inherit their prefix, which would push
+         the chip's background onto its own icon.
+         ================================================================ -->
+
+    <style name="Widget.EastSyria.CategoryChip" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:minHeight">44dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/bg_chip_surface</item>
+        <item name="android:paddingStart">14dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="Widget.EastSyria.ChipIcon" parent="">
+        <item name="android:layout_width">18dp</item>
+        <item name="android:layout_height">18dp</item>
+        <item name="android:tint">@color/bone_dim</item>
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+
+    <style name="Widget.EastSyria.ChipLabel" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:textColor">@color/bone</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Title, then a rule running to the action. The same measured-hairline
+         language as the onboarding distance rule and the sign-up step rule. -->
+    <style name="Widget.EastSyria.SectionHeader" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+    </style>
+
+    <style name="Widget.EastSyria.SectionTitle" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/amiri</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textColor">@color/bone</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.EastSyria.SectionRule" parent="">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginStart">14dp</item>
+        <item name="android:layout_marginEnd">14dp</item>
+        <item name="android:background">@color/hairline</item>
+    </style>
+
+    <style name="Widget.EastSyria.SectionAction" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:textColor">@color/clay</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.12</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <!-- Profile register rows. parent="" throughout, same reason as above. -->
+
+    <style name="Widget.EastSyria.ProfileRow" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">60dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="Widget.EastSyria.RowIcon" parent="">
+        <item name="android:layout_width">22dp</item>
+        <item name="android:layout_height">22dp</item>
+        <item name="android:tint">@color/bone_dim</item>
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+
+    <style name="Widget.EastSyria.RowLabel" parent="">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:textColor">@color/bone</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="Widget.EastSyria.RowChevron" parent="">
+        <item name="android:layout_width">18dp</item>
+        <item name="android:layout_height">18dp</item>
+        <item name="android:tint">@color/ash</item>
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+
+    <!-- Replaces the chevron on a row that leads nowhere yet. -->
+    <style name="Widget.EastSyria.RowSoon" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/ash</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.12</item>
+    </style>
+
+    <style name="Widget.EastSyria.RowDivider" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/hairline</item>
+    </style>
+
+    <style name="Widget.EastSyria.TextField.Dropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxBackgroundColor">@color/surface</item>
+        <item name="boxStrokeColor">@color/text_field_stroke</item>
+        <item name="boxStrokeErrorColor">@color/terracotta_soft</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxCornerRadiusTopStart">16dp</item>
+        <item name="boxCornerRadiusTopEnd">16dp</item>
+        <item name="boxCornerRadiusBottomStart">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">16dp</item>
+        <item name="hintEnabled">false</item>
+        <item name="startIconTint">@color/terracotta_soft</item>
+        <item name="endIconTint">@color/ivory_mute</item>
+        <item name="errorTextColor">@color/terracotta_soft</item>
+        <item name="errorIconTint">@color/terracotta_soft</item>
+        <item name="errorTextAppearance">@style/TextAppearance.EastSyria.FieldError</item>
+        <item name="android:textColorHint">@color/ivory_mute</item>
+    </style>
+
+    <!-- ================================================================
+         Home v2: warm palette. Fixed dark, photograph first.
+         ================================================================ -->
+
+    <!-- The shared theme for every screen on the warm palette. -->
+    <style name="Theme.EastSyria.Warm" parent="Theme.EastSyria">
+        <item name="colorPrimary">@color/terracotta</item>
+        <item name="android:windowBackground">@color/canvas</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.EastSyria.Home" parent="Theme.EastSyria.Warm" />
+
+    <!-- Filter chip: a pill on surface; terracotta with ink text when chosen. -->
+    <style name="Widget.EastSyria.FilterChip" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="android:textColor">@color/filter_chip_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="chipBackgroundColor">@color/filter_chip_bg</item>
+        <item name="chipStrokeColor">@color/filter_chip_stroke</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipMinHeight">40dp</item>
+        <item name="chipCornerRadius">20dp</item>
+        <item name="chipStartPadding">14dp</item>
+        <item name="chipEndPadding">14dp</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="chipIconVisible">false</item>
+        <item name="rippleColor">#33E2703A</item>
+    </style>
+
+    <!-- The three counted facts on the passport. -->
+    <style name="TextAppearance.EastSyria.PassportFact" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/amiri</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:lineHeight">28sp</item>
+        <item name="android:textColor">@color/ivory</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.EastSyria.PassportLabel" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/ivory_mute</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- A big number in a figures card. -->
+    <style name="TextAppearance.EastSyria.Figure" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/amiri</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:lineHeight">44sp</item>
+        <item name="android:textColor">@color/ivory</item>
+        <item name="android:textSize">38sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- A group heading inside a sheet or form: sentence case, no tracking. -->
+    <style name="TextAppearance.EastSyria.FilterGroup" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/ivory_dim</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- The one filled action on a screen: a terracotta pill with ink text. -->
+    <style name="Widget.EastSyria.Button.Pill" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_height">56dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/canvas</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="backgroundTint">@color/terracotta</item>
+        <item name="cornerRadius">28dp</item>
+        <item name="iconTint">@color/canvas</item>
+        <item name="rippleColor">#33000000</item>
+    </style>
+
+    <style name="Widget.EastSyria.HomeCategory" parent="">
+        <item name="android:layout_width">76dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="Widget.EastSyria.HomeCategoryBox" parent="">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:background">@drawable/bg_category_tile</item>
+    </style>
+
+    <style name="Widget.EastSyria.HomeCategoryIcon" parent="">
+        <item name="android:layout_width">26dp</item>
+        <item name="android:layout_height">26dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:tint">@color/terracotta_soft</item>
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+
+    <style name="Widget.EastSyria.HomeCategoryLabel" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/ivory_dim</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Widget.EastSyria.HomeSectionHeader" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+    </style>
+
+    <style name="Widget.EastSyria.HomeSectionTitle" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/amiri</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textColor">@color/ivory</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.EastSyria.HomeSectionRule" parent="">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:background">@color/line</item>
+    </style>
+
+    <style name="Widget.EastSyria.HomeSectionAction" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/terracotta_soft</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <!-- The app is dark only: a fixed dark Material base means text fields,
+         dialogs, cursors and ripples never fall back to their light versions
+         when the phone is in light mode. -->
+    <style name="Theme.EastSyria" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/terracotta</item>
+        <item name="colorPrimaryVariant">@color/clay_deep</item>
+        <item name="colorOnPrimary">@color/canvas</item>
+        <item name="colorSecondary">@color/terracotta_soft</item>
+        <item name="colorOnSecondary">@color/canvas</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/ivory</item>
+        <item name="android:colorBackground">@color/canvas</item>
+        <item name="colorError">@color/terracotta_soft</item>
+        <item name="android:statusBarColor">@color/canvas</item>
+        <item name="android:navigationBarColor">@color/canvas</item>
         <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowBackground">@color/background_dark</item>
+        <item name="android:windowBackground">@color/canvas</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.EastSyria.Dialog</item>
+    </style>
+
+    <style name="ThemeOverlay.EastSyria.Dialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSurface">@color/surface_high</item>
+        <item name="colorOnSurface">@color/ivory</item>
+        <item name="colorPrimary">@color/terracotta_soft</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.EastSyria.Dialog</item>
+        <item name="android:textColorSecondary">@color/ivory_dim</item>
+    </style>
+
+    <style name="ShapeAppearance.EastSyria.Dialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
     </style>
 
         <style name="BottomNavTextStyle" parent="TextAppearance.AppCompat.Caption">

@@ -2,103 +2,124 @@ package com.example.eastsyria.Categories
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.eastsyria.CategoryList.CategoryListActivity
-import com.example.eastsyria.MainPage.MainPageActivity
+import com.example.eastsyria.CategoryList.CategoryRules
+import com.example.eastsyria.MainPage.Data.Landmark
 import com.example.eastsyria.Map.MapActivity
 import com.example.eastsyria.R
 import com.example.eastsyria.Saved.SavedLandmarksActivity
+import com.example.eastsyria.Ui.warmEdgeToEdge
 import com.example.eastsyria.databinding.ActivityCategoriesBinding
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class CategoriesActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCategoriesBinding
+    private lateinit var adapter: CategoryTileAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        warmEdgeToEdge()
         binding = ActivityCategoriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupClickListeners()
-        setupBottomNavigation()
+        setupHeader()
+        setupTiles()
+        setupInsets()
+        binding.btnExploreMap.setOnClickListener {
+            startActivity(Intent(this, MapActivity::class.java))
+        }
+        loadStats()
     }
 
-    // In CategoriesActivity.kt
-    private fun setupClickListeners() {
-        binding.apply {
-            btnBack.setOnClickListener { finish() }
+    private fun setupHeader() {
+        binding.header.onBack { finish() }
+        binding.header.setIconA(
+            R.drawable.ic_bookmark,
+            getString(R.string.home_saved)
+        ) { startActivity(Intent(this, SavedLandmarksActivity::class.java)) }
+    }
 
-            cardHistoricalSites.setOnClickListener {
-                startCategoryList("Historical Sites", "historical_sites")
-            }
-
-            cardNatureRivers.setOnClickListener {
-                startCategoryList("Nature & Rivers", "nature_rivers")
-            }
-
-            cardLocalCulture.setOnClickListener {
-                startCategoryList("Local Culture", "local_culture")
-            }
-
-            cardMuseums.setOnClickListener {
-                startCategoryList("Museums", "museums")
-            }
-
-            cardCuisine.setOnClickListener {
-                startCategoryList("Cuisine", "cuisine")
-            }
-
-            cardHandicrafts.setOnClickListener {
-                startCategoryList("Handicrafts", "handicrafts")
-            }
-
-            btnExploreMap.setOnClickListener {
-                val mapIntent = Intent(this@CategoriesActivity, MapActivity::class.java)
-                startActivity(mapIntent)
-            }
-            fabMap.setOnClickListener {
-                val mapIntent = Intent(this@CategoriesActivity, MapActivity::class.java)
-                startActivity(mapIntent)
-            }
-            btnBookmark.setOnClickListener {
-                val intent = Intent(this@CategoriesActivity, SavedLandmarksActivity::class.java)
-                startActivity(intent)
-            }
+    private fun setupTiles() {
+        adapter = CategoryTileAdapter { def ->
+            startActivity(
+                Intent(this, CategoryListActivity::class.java).apply {
+                    putExtra(CategoryListActivity.EXTRA_CATEGORY_NAME, getString(def.name))
+                    putExtra(CategoryListActivity.EXTRA_CATEGORY_TYPE, def.type)
+                }
+            )
+        }
+        binding.rvCategories.apply {
+            layoutManager = GridLayoutManager(this@CategoriesActivity, 2)
+            adapter = this@CategoriesActivity.adapter
         }
     }
 
-    private fun startCategoryList(name: String, type: String) {
-        val intent = Intent(this, CategoryListActivity::class.java).apply {
-            putExtra(CategoryListActivity.EXTRA_CATEGORY_NAME, name)
-            putExtra(CategoryListActivity.EXTRA_CATEGORY_TYPE, type)
+    private fun setupInsets() {
+        val base = binding.categoriesContent.paddingBottom
+        ViewCompat.setOnApplyWindowInsetsListener(binding.categoriesContent) { view, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            view.updatePadding(bottom = base + bars.bottom)
+            insets
         }
-        startActivity(intent)
     }
 
-    private fun setupBottomNavigation() {
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_explore -> {
-                    val intentSaved = Intent(this@CategoriesActivity, MainPageActivity::class.java)
-                    startActivity(intentSaved)
-                    false
+    /**
+     * One read of the catalog: how many published places each category holds,
+     * and the best-rated one's photograph. The tiles are already on screen, so
+     * a failure costs the counts, not the screen.
+     */
+    private fun loadStats() {
+        FirebaseDatabase.getInstance().reference.child("landmarks")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val landmarks = snapshot.children.mapNotNull {
+                        try {
+                            it.getValue(Landmark::class.java)
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error parsing landmark ${it.key}: ${e.message}")
+                            null
+                        }
+                    }.filter { it.status == "published" }
+
+                    val stats = CategoryRules.all.associate { def ->
+                        val inCategory = landmarks.filter {
+                            CategoryRules.matches(def.type, it.category, it.tags, it.name, it.isHistorical)
+                        }
+                        val best = inCategory
+                            .filter { it.imageUrl.isNotBlank() }
+                            .maxByOrNull { it.rating }
+                        def.type to CategoryStats(inCategory.size, best?.imageUrl.orEmpty())
+                    }
+                    adapter.updateStats(stats)
                 }
 
-                R.id.nav_saved -> {
-                    val intentSaved = Intent(this@CategoriesActivity, SavedLandmarksActivity::class.java)
-                    startActivity(intentSaved)
-                    false
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e(TAG, "Error loading category stats: ${error.message}")
+                    Snackbar.make(binding.root, R.string.categories_stats_failed, Snackbar.LENGTH_INDEFINITE)
+                        .setBackgroundTint(ContextCompat.getColor(this@CategoriesActivity, R.color.surface_high))
+                        .setTextColor(ContextCompat.getColor(this@CategoriesActivity, R.color.ivory))
+                        .setActionTextColor(ContextCompat.getColor(this@CategoriesActivity, R.color.terracotta_soft))
+                        .setAction(R.string.action_retry) { loadStats() }
+                        .show()
                 }
-                R.id.nav_profile -> {
-                    //val intentSaved = Intent(this@CategoriesActivity, SavedLandmarksActivity::class.java)
-                    //startActivity(intentSaved)
-                    false
-                }
-                else -> false
-            }
-        }
+            })
+    }
+
+    companion object {
+        private const val TAG = "CategoriesActivity"
     }
 }

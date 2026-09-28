@@ -5,7 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
+import com.example.eastsyria.Ui.lightBarIcons
+import com.example.eastsyria.Ui.showSnack
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -32,6 +33,7 @@ class AddLandmarkActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddLandmarkBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        lightBarIcons()
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
             val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -245,7 +247,7 @@ class AddLandmarkActivity : AppCompatActivity() {
                 return false
             }
             if (selectedImageUri == null) {
-                Toast.makeText(this@AddLandmarkActivity, "Please select an image", Toast.LENGTH_SHORT).show()
+                showSnack(binding.root, "Please select an image", long = true)
                 return false
             }
         }
@@ -270,7 +272,7 @@ class AddLandmarkActivity : AppCompatActivity() {
             }
             .addOnFailureListener {
                 setLoading(false)
-                Toast.makeText(this, "Image upload failed: ${it.message}", Toast.LENGTH_SHORT).show()
+                showSnack(binding.root, "Image upload failed: ${it.message}", long = true)
             }
     }
 
@@ -332,25 +334,17 @@ class AddLandmarkActivity : AppCompatActivity() {
                 databaseRef.child(newId).setValue(landmark)
                     .addOnSuccessListener {
                         setLoading(false)
-                        Toast.makeText(
-                            this@AddLandmarkActivity,
-                            "Landmark saved as #$newId",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showSnack(binding.root, "Landmark saved as #$newId", long = true)
                         startActivity(Intent(this@AddLandmarkActivity, MainPageAdminActivity::class.java))
                         finish()
                     }
                     .addOnFailureListener {
                         setLoading(false)
-                        Toast.makeText(
-                            this@AddLandmarkActivity,
-                            "Failed to save: ${it.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showSnack(binding.root, "Failed to save: ${it.message}", long = true)
                     }
             }.addOnFailureListener {
                 setLoading(false)
-                Toast.makeText(this@AddLandmarkActivity, "Failed to read DB: ${it.message}", Toast.LENGTH_SHORT).show()
+                showSnack(binding.root, "Failed to read DB: ${it.message}", long = true)
             }
         }
     }

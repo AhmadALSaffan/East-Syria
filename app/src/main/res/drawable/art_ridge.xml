@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The Approach, layer 2: the far ridge, with the citadel small enough to miss.
+  You are a long way off. Nothing here is meant to be legible in detail.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="400dp"
+    android:height="420dp"
+    android:viewportWidth="400"
+    android:viewportHeight="420">
+
+    <!-- Furthest ridge, barely separated from the sky -->
+    <path
+        android:fillColor="@color/basalt"
+        android:pathData="M0,420 L0,318 L58,309 L112,314 L166,304 L232,312 L296,303 L352,311 L400,305 L400,420 Z" />
+
+    <!-- Near ridge, carrying the citadel -->
+    <path
+        android:fillColor="@color/stone_far"
+        android:pathData="M0,420 L0,332 L44,327 L88,331 L124,322 L148,316
+            L150,316 L150,306
+            L152,306 L152,298 L158,298 L158,306
+            L164,306 L164,298 L170,298 L170,306
+            L176,306 L176,298 L182,298 L182,306
+            L188,306 L188,298 L194,298 L194,306
+            L196,306 L196,316
+            L216,320 L258,313 L300,321 L344,315 L400,325 L400,420 Z" />
+
+</vector>

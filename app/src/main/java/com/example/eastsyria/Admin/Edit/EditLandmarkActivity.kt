@@ -5,7 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
+import com.example.eastsyria.Ui.lightBarIcons
+import com.example.eastsyria.Ui.showSnack
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -41,11 +42,12 @@ class EditLandmarkActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditLandmarkBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        lightBarIcons()
 
         landmarkId = intent.getStringExtra("landmarkId") ?: ""
 
         if (landmarkId.isEmpty()) {
-            Toast.makeText(this, "Invalid landmark ID", Toast.LENGTH_SHORT).show()
+            showSnack(binding.root, "Invalid landmark ID", long = true)
             finish()
             return
         }
@@ -112,7 +114,7 @@ class EditLandmarkActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     showProgress(false)
                     if (!snapshot.exists()) {
-                        Toast.makeText(this@EditLandmarkActivity, "Landmark not found", Toast.LENGTH_SHORT).show()
+                        showSnack(binding.root, "Landmark not found", long = true)
                         finish()
                         return
                     }
@@ -121,7 +123,7 @@ class EditLandmarkActivity : AppCompatActivity() {
 
                 override fun onCancelled(error: DatabaseError) {
                     showProgress(false)
-                    Toast.makeText(this@EditLandmarkActivity, error.message, Toast.LENGTH_SHORT).show()
+                    showSnack(binding.root, error.message, long = true)
                 }
             })
     }
@@ -198,7 +200,7 @@ class EditLandmarkActivity : AppCompatActivity() {
             }
             .addOnFailureListener {
                 showProgress(false)
-                Toast.makeText(this, "Image upload failed: ${it.message}", Toast.LENGTH_SHORT).show()
+                showSnack(binding.root, "Image upload failed: ${it.message}", long = true)
             }
     }
 
@@ -249,7 +251,7 @@ class EditLandmarkActivity : AppCompatActivity() {
         database.child("landmarks").child(landmarkId).updateChildren(updates)
             .addOnSuccessListener {
                 showProgress(false)
-                Toast.makeText(this, "Landmark updated successfully", Toast.LENGTH_SHORT).show()
+                showSnack(binding.root, "Landmark updated successfully", long = true)
                 val intent = Intent(this, MainPageAdminActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 startActivity(intent)
@@ -257,7 +259,7 @@ class EditLandmarkActivity : AppCompatActivity() {
             }
             .addOnFailureListener {
                 showProgress(false)
-                Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                showSnack(binding.root, "Couldn't save the changes. ${it.message.orEmpty()}".trim(), long = true)
             }
     }
 

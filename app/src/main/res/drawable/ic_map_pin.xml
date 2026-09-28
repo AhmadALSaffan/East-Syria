@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The map pin: terracotta with a canvas eye, rendered to a bitmap for the SDK. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="34dp"
+    android:height="44dp"
+    android:viewportWidth="34"
+    android:viewportHeight="44">
+    <path
+        android:fillColor="@color/terracotta"
+        android:pathData="M17,1C8.2,1 1,8 1,16.6c0,10.6 13.2,24.7 15.2,26.8c0.4,0.4 1.2,0.4 1.6,0C19.8,41.3 33,27.2 33,16.6C33,8 25.8,1 17,1z" />
+    <path
+        android:strokeColor="@color/canvas"
+        android:strokeWidth="1.5"
+        android:pathData="M17,1C8.2,1 1,8 1,16.6c0,10.6 13.2,24.7 15.2,26.8c0.4,0.4 1.2,0.4 1.6,0C19.8,41.3 33,27.2 33,16.6C33,8 25.8,1 17,1z" />
+    <path
+        android:fillColor="@color/canvas"
+        android:pathData="M17,10.5m-5,0a5,5 0,1 1,10 0a5,5 0,1 1,-10 0" />
+</vector>

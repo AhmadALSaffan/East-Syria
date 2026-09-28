@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Syrian flag at row size: green, white and black bands, three red stars on the white. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="16dp"
+    android:viewportWidth="30"
+    android:viewportHeight="20">
+    <path
+        android:fillColor="#007A3D"
+        android:pathData="M0,0h30v6.67h-30z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M0,6.67h30v6.66h-30z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M0,13.33h30v6.67h-30z" />
+    <path
+        android:fillColor="#CE1126"
+        android:pathData="M8.50,7.20L9.13,9.13L11.16,9.13L9.52,10.33L10.15,12.27L8.50,11.07L6.85,12.27L7.48,10.33L5.84,9.13L7.87,9.13z M15.00,7.20L15.63,9.13L17.66,9.13L16.02,10.33L16.65,12.27L15.00,11.07L13.35,12.27L13.98,10.33L12.34,9.13L14.37,9.13z M21.50,7.20L22.13,9.13L24.16,9.13L22.52,10.33L23.15,12.27L21.50,11.07L19.85,12.27L20.48,10.33L18.84,9.13L20.87,9.13z" />
+</vector>

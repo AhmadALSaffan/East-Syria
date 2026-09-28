@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The shared empty / error / signed-out panel. The copy names the situation,
+  and there is at most one action, which names its own outcome.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/tvStateTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/amiri"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:lineHeight="34sp"
+        android:textColor="@color/ivory"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvStateBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.15"
+        android:textColor="@color/ivory_dim"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/btnStateAction"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/bg_hero_button_outline"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:textColor="@color/terracotta_soft"
+        android:textSize="15sp"
+        android:visibility="gone" />
+
+</merge>

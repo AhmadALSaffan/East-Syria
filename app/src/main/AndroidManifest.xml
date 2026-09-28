@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
+        android:name=".EastSyriaApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -58,21 +59,23 @@
             android:exported="false" />
         <activity
             android:name=".Search.SearchLandmarksActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.EastSyria.Warm" />
         <activity
             android:name=".Saved.SavedLandmarksActivity"
             android:exported="false" />
         <activity
             android:name=".Details.LandmarkDetailActivity"
             android:label="@string/empty_label"
-            android:theme="@style/Theme.EastSyria" />
+            android:theme="@style/Theme.EastSyria.Warm" />
         <activity
             android:name=".SignUp.VerificationActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MainPage.MainPageActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.EastSyria.Home" />
         <activity
             android:name=".SignUp.SignUpActivity"
             android:exported="false"

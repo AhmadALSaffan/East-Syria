@@ -10,17 +10,18 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updatePadding
 import com.bumptech.glide.Glide
 import com.example.eastsyria.Profile.ProfileActivity
 import com.example.eastsyria.R
+import com.example.eastsyria.Ui.warmEdgeToEdge
 import com.example.eastsyria.databinding.ActivityPersonalDetailsBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -42,11 +43,7 @@ class PersonalDetailsActivity : AppCompatActivity() {
             uri ?: return@registerForActivityResult
             val compressed = compressToUnder1MB(uri)
             if (compressed == null) {
-                Toast.makeText(
-                    this,
-                    "Image is larger than 1 MB and couldn't be compressed. Choose a smaller image.",
-                    Toast.LENGTH_LONG
-                ).show()
+                showMessage(R.string.personal_image_too_large)
                 return@registerForActivityResult
             }
             selectedImageUri = uri
@@ -56,24 +53,37 @@ class PersonalDetailsActivity : AppCompatActivity() {
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (granted) openImagePicker()
-            else Toast.makeText(this, "Permission denied. Cannot access gallery.", Toast.LENGTH_SHORT).show()
+            if (granted) openImagePicker() else showMessage(R.string.personal_photo_permission)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        warmEdgeToEdge()
         binding = ActivityPersonalDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupInsets()
         loadUserData()
         setupListeners()
         setupCityDropdown()
-        hideSystemBars()
+    }
+
+    /** The form scrolls clear of the gesture bar and the keyboard. */
+    private fun setupInsets() {
+        val base = binding.formContent.paddingBottom
+        ViewCompat.setOnApplyWindowInsetsListener(binding.formContent) { view, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+            view.updatePadding(bottom = base + maxOf(bars.bottom, ime.bottom))
+            insets
+        }
     }
 
     private fun setupCityDropdown() {
         val cities = resources.getStringArray(R.array.syria_cities)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, cities)
+        val adapter = ArrayAdapter(this, R.layout.dropdown_item_city, cities)
         binding.etCity.setAdapter(adapter)
         binding.etCity.setOnClickListener {
             binding.etCity.showDropDown()
@@ -84,6 +94,7 @@ class PersonalDetailsActivity : AppCompatActivity() {
     private fun loadUserData() {
         val uid = auth.currentUser?.uid ?: return
         setLoading(true)
+        binding.loadError.visibility = View.GONE
 
         dbRef.child("users").child(uid).get()
             .addOnSuccessListener { snap ->
@@ -113,14 +124,15 @@ class PersonalDetailsActivity : AppCompatActivity() {
                         .into(binding.imgProfile)
                 }
             }
-            .addOnFailureListener { e ->
+            .addOnFailureListener {
                 setLoading(false)
-                Toast.makeText(this, "Failed to load data: ${e.message}", Toast.LENGTH_SHORT).show()
+                binding.loadError.visibility = View.VISIBLE
             }
     }
 
     private fun setupListeners() {
-        binding.btnBack.setOnClickListener { finish() }
+        binding.header.onBack { finish() }
+        binding.btnLoadRetry.setOnClickListener { loadUserData() }
 
         binding.imgProfile.setOnClickListener { requestImagePermission() }
         binding.btnEditPhoto.setOnClickListener { requestImagePermission() }
@@ -217,9 +229,10 @@ class PersonalDetailsActivity : AppCompatActivity() {
         val phone    = binding.etPhone.text.toString().trim()
         val city     = binding.etCity.text.toString().trim()
 
-        if (fullName.isEmpty()) { binding.etFullName.error = "Required"; return }
-        if (email.isEmpty())    { binding.etEmail.error    = "Required"; return }
-        if (phone.isEmpty())    { binding.etPhone.error    = "Required"; return }
+        binding.tilFullName.error = null
+        binding.tilPhone.error = null
+        if (fullName.isEmpty()) { binding.tilFullName.error = getString(R.string.personal_required); return }
+        if (phone.isEmpty())    { binding.tilPhone.error    = getString(R.string.personal_required); return }
 
         setLoading(true)
 
@@ -236,7 +249,7 @@ class PersonalDetailsActivity : AppCompatActivity() {
         val compressed = compressToUnder1MB(selectedImageUri!!)
         if (compressed == null) {
             setLoading(false)
-            Toast.makeText(this, "Image exceeds 1 MB. Choose a smaller image.", Toast.LENGTH_SHORT).show()
+            showMessage(R.string.personal_image_too_large)
             return
         }
 
@@ -248,14 +261,14 @@ class PersonalDetailsActivity : AppCompatActivity() {
                     .addOnSuccessListener { downloadUri ->
                         saveToDatabase(uid, fullName, email, phone, city, downloadUri.toString())
                     }
-                    .addOnFailureListener { e ->
+                    .addOnFailureListener {
                         setLoading(false)
-                        Toast.makeText(this, "Could not get image URL: ${e.message}", Toast.LENGTH_SHORT).show()
+                        showMessage(R.string.personal_photo_upload_failed)
                     }
             }
-            .addOnFailureListener { e ->
+            .addOnFailureListener {
                 setLoading(false)
-                Toast.makeText(this, "Upload failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                showMessage(R.string.personal_photo_upload_failed)
             }
     }
 
@@ -274,12 +287,11 @@ class PersonalDetailsActivity : AppCompatActivity() {
         dbRef.child("users").child(uid).updateChildren(updates)
             .addOnSuccessListener {
                 setLoading(false)
-                Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
                 goToProfile()
             }
-            .addOnFailureListener { e ->
+            .addOnFailureListener {
                 setLoading(false)
-                Toast.makeText(this, "Save failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                showMessage(R.string.personal_save_failed)
             }
     }
 
@@ -299,14 +311,11 @@ class PersonalDetailsActivity : AppCompatActivity() {
         binding.btnEditPhoto.isEnabled    = !show
         binding.tvChangePhoto.isEnabled   = !show
     }
-    private fun hideSystemBars() {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-        windowInsetsController.apply {
-            hide(WindowInsetsCompat.Type.navigationBars())
-
-            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
+    private fun showMessage(resId: Int) {
+        Snackbar.make(binding.root, resId, Snackbar.LENGTH_LONG)
+            .setBackgroundTint(ContextCompat.getColor(this, R.color.surface_high))
+            .setTextColor(ContextCompat.getColor(this, R.color.ivory))
+            .show()
     }
 }

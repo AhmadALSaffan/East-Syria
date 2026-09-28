@@ -1,117 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  A hero page. The photograph runs full-bleed under the status bar and melts
+  into the canvas at its foot; the name, place and one action sit on that melt.
+  The category rides in the meta line, after the name, not above it.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="280dp"
-    android:layout_height="320dp"
-    android:layout_marginEnd="16dp"
-    app:cardCornerRadius="24dp"
-    app:cardElevation="0dp"
-    app:strokeWidth="0dp"
-    app:cardBackgroundColor="@color/card_dark">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ImageView
+        android:id="@+id/ivLandmark"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:contentDescription="@null"
+        android:scaleType="centerCrop" />
 
+    <!-- A flat 15% dim so a bright sky never fights the type. -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#14000000"
+        android:importantForAccessibility="no" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/categoryBadge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            app:strokeWidth="1dp"
-            app:strokeColor="@color/orange_accent"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_gravity="top"
+        android:background="@drawable/scrim_canvas_top"
+        android:importantForAccessibility="no" />
 
-            <TextView
-                android:id="@+id/tvCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="HISTORICAL"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:textColor="@color/orange_accent"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:paddingTop="6dp"
-                android:paddingBottom="6dp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/scrim_canvas_bottom"
+        android:importantForAccessibility="no" />
 
-        </com.google.android.material.card.MaterialCardView>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="72dp">
 
         <TextView
             android:id="@+id/tvLandmarkName"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ancient Citadel"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/text_white"
-            android:maxLines="1"
             android:ellipsize="end"
-            app:layout_constraintTop_toBottomOf="@id/categoryBadge"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="12dp" />
-
+            android:fontFamily="@font/amiri"
+            android:includeFontPadding="false"
+            android:lineHeight="42sp"
+            android:maxLines="2"
+            android:textColor="@color/ivory"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            tools:text="Qal'at Ja'bar" />
 
         <TextView
-            android:id="@+id/tvDescription"
-            android:layout_width="0dp"
+            android:id="@+id/tvNameArabic"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Heart of the Syrian desert"
-            android:textSize="14sp"
-            android:textColor="@color/text_secondary"
-            android:maxLines="2"
+            android:layout_marginTop="6dp"
             android:ellipsize="end"
-            app:layout_constraintTop_toBottomOf="@id/tvLandmarkName"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp" />
+            android:fontFamily="@font/amiri"
+            android:includeFontPadding="false"
+            android:lineHeight="34sp"
+            android:maxLines="1"
+            android:textAlignment="viewStart"
+            android:textColor="@color/ivory_dim"
+            android:textDirection="anyRtl"
+            android:textSize="24sp"
+            android:visibility="gone"
+            tools:text="قلعة جعبر"
+            tools:visibility="visible" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/imageContainer"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:strokeWidth="0dp"
-            app:cardBackgroundColor="@color/surface_dark"
-            app:layout_constraintTop_toBottomOf="@id/tvDescription"
-            app:layout_constraintBottom_toTopOf="@id/btnViewDetails"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp">
+            <TextView
+                android:id="@+id/tvMeta"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/ivory_dim"
+                android:textSize="15sp"
+                tools:text="Historical Sites · Ar-Raqqah" />
 
-            <ImageView
-                android:id="@+id/ivLandmark"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background" />
+            <LinearLayout
+                android:id="@+id/layoutRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
 
-        </com.google.android.material.card.MaterialCardView>
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_star"
+                    app:tint="@color/gold" />
 
+                <TextView
+                    android:id="@+id/tvRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/gold"
+                    android:textSize="15sp"
+                    tools:text="4.8" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnViewDetails"
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnView"
+            android:importantForAccessibility="no"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:text="View Details"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textAllCaps="false"
-            app:cornerRadius="12dp"
-            app:backgroundTint="@color/orange_accent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_hero_button"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="24dp"
+            android:paddingEnd="16dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/hero_view_landmark"
+                android:textColor="@color/canvas"
+                android:textSize="15sp" />
 
-</com.google.android.material.card.MaterialCardView>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="6dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_arrow_right"
+                app:tint="@color/canvas" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The Approach, stop 1: the Euphrates catching what is left of the light.
+  The reflection is built from broken horizontal strokes rather than one solid
+  shape — a filled trapezoid reads as a stray rectangle, not as water.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="400dp"
+    android:height="420dp"
+    android:viewportWidth="400"
+    android:viewportHeight="420">
+
+    <!-- Slightly lighter than the canvas: the water is holding the sky. -->
+    <path
+        android:fillColor="#FF242220"
+        android:pathData="M0,358 L400,358 L400,420 L0,420 Z" />
+
+    <!-- Far bank -->
+    <path
+        android:strokeColor="#FF35302A"
+        android:strokeWidth="2"
+        android:pathData="M0,358 L400,358" />
+
+    <!-- The glow, broken across the surface -->
+    <path
+        android:strokeColor="#FFE2703A"
+        android:strokeWidth="3"
+        android:strokeAlpha="0.55"
+        android:strokeLineCap="round"
+        android:pathData="M176,366 L224,366" />
+    <path
+        android:strokeColor="#FFE2703A"
+        android:strokeWidth="3"
+        android:strokeAlpha="0.42"
+        android:strokeLineCap="round"
+        android:pathData="M168,376 L232,376 M182,386 L218,386" />
+    <path
+        android:strokeColor="#FFE2703A"
+        android:strokeWidth="3"
+        android:strokeAlpha="0.28"
+        android:strokeLineCap="round"
+        android:pathData="M158,396 L242,396 M174,406 L226,406" />
+    <path
+        android:strokeColor="#FFE2703A"
+        android:strokeWidth="3"
+        android:strokeAlpha="0.16"
+        android:strokeLineCap="round"
+        android:pathData="M150,416 L250,416" />
+
+    <!-- Surface texture away from the reflection -->
+    <path
+        android:strokeColor="#FF3A3733"
+        android:strokeWidth="2"
+        android:strokeAlpha="0.55"
+        android:strokeLineCap="round"
+        android:pathData="M24,372 L92,372 M262,368 L330,368 M46,390 L114,390
+            M276,392 L356,392 M18,408 L86,408 M290,412 L364,412
+            M104,402 L132,402 M268,404 L296,404" />
+
+</vector>

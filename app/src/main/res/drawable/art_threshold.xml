@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The Approach, stop 4: the arch outgrows the frame and there is light inside.
+  The first and only amber in the onboarding flow.
+
+  The opening is deliberately narrower than the frame so the wall still reads
+  on both sides, and the light pools at 0.80 rather than at the very bottom —
+  below that the page scrim takes over and would swallow it.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="400dp"
+    android:height="420dp"
+    android:viewportWidth="400"
+    android:viewportHeight="420">
+
+    <path
+        android:fillColor="@color/stone_near"
+        android:pathData="M0,0 L400,0 L400,420 L0,420 Z" />
+
+    <path
+        android:strokeColor="#FF262626"
+        android:strokeWidth="1.5"
+        android:strokeAlpha="0.4"
+        android:pathData="M0,64 L400,64 M0,112 L400,112 M0,160 L400,160
+            M0,208 L400,208 M0,256 L400,256 M0,304 L400,304 M0,352 L400,352" />
+
+    <!-- Archivolt, cropped clean by the opening drawn over it -->
+    <path
+        android:strokeColor="@color/stone_lit"
+        android:strokeWidth="13"
+        android:pathData="M96,420 L96,300 Q96,120 200,-30 Q304,120 304,300 L304,420" />
+
+    <path android:pathData="M96,420 L96,300 Q96,120 200,-30 Q304,120 304,300 L304,420 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="200"
+                android:startY="-30"
+                android:endX="200"
+                android:endY="420">
+                <item android:offset="0" android:color="#FF0E0A06" />
+                <item android:offset="0.28" android:color="#FF241708" />
+                <item android:offset="0.52" android:color="#FF5C3811" />
+                <item android:offset="0.70" android:color="#FFA8712A" />
+                <item android:offset="0.80" android:color="#FFEDB55C" />
+                <item android:offset="0.845" android:color="#FF6B4718" />
+                <item android:offset="1" android:color="#FF2A1C0A" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- The sill you step over -->
+    <path
+        android:strokeColor="#FFFFD08A"
+        android:strokeWidth="2.5"
+        android:strokeAlpha="0.9"
+        android:pathData="M96,352 L304,352" />
+
+    <!-- Lamp glow -->
+    <path android:pathData="M200,62m-84,0a84,84 0,1 1,168 0a84,84 0,1 1,-168 0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="200"
+                android:centerY="62"
+                android:gradientRadius="84">
+                <item android:offset="0" android:color="#66FFD79A" />
+                <item android:offset="0.5" android:color="#1FFFC377" />
+                <item android:offset="1" android:color="#00FFC377" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <path
+        android:strokeColor="#FF120C06"
+        android:strokeWidth="2.5"
+        android:pathData="M200,0 L200,44" />
+    <path
+        android:fillColor="#FF120C06"
+        android:pathData="M182,46 Q200,31 218,46 L211,70 L189,70 Z" />
+    <path
+        android:fillColor="#FFFFE3AE"
+        android:fillAlpha="0.92"
+        android:pathData="M200,61m-5,0a5,5 0,1 1,10 0a5,5 0,1 1,-10 0" />
+
+</vector>

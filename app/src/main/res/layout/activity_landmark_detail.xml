@@ -1,813 +1,502 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  THESIS: The landmark is the first thing on screen and everything you need to
+    go is one thumb away. The photograph runs full-bleed and melts into the
+    canvas; the name sits on the melt, exactly as on the home hero, and the
+    one filled action floats at the foot so directions are never a scroll away.
+  OWN-WORLD: Warm canvas (#16120F), ivory type, terracotta acts, gold marks the
+    rating, Amiri carries the name in both scripts. Controls float as round
+    chips over the photograph; facts are a label-and-value register, not tiles.
+  STORY: You see the place, read what it is in your language of choice, check
+    the practical facts, and go.
+  FIRST VIEWPORT: 500dp photograph under three floating chips; the name, the
+    other-script name, category and place, and rating on the melt; the
+    directions pill at the foot.
+  FORM: Same world as the home hero; user-pinned direction (no roll).
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the
+    finish review, the verdict, and DESIGN.md
+-->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_dark"
-    android:fitsSystemWindows="true">
+    android:background="@color/canvas">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <!-- ============================== content ============================== -->
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollDetail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:fitsSystemWindows="false"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsingToolbar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="620dp"
-            app:contentScrim="@color/background_dark"
-            app:titleEnabled="false"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:statusBarScrim="@android:color/transparent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <!-- ============================ the object ============================ -->
 
-        <ImageView
-                android:id="@+id/ivHeroImage"
+            <FrameLayout
+                android:id="@+id/heroContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.5" />
+                android:layout_height="500dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/gradient_overlay"/>
+                <ImageView
+                    android:id="@+id/ivHeroImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/ic_back">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#14000000"
+                    android:importantForAccessibility="no" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_gravity="top"
+                    android:background="@drawable/scrim_canvas_top"
+                    android:importantForAccessibility="no" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/scrim_canvas_bottom"
+                    android:importantForAccessibility="no" />
+
+                <!-- Loading: the hero's own silhouette, pulsing. -->
+                <FrameLayout
+                    android:id="@+id/heroSkeleton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_skeleton_hero"
+                    android:importantForAccessibility="no">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:orientation="vertical"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="24dp"
+                        android:paddingBottom="28dp">
+
+                        <View
+                            android:layout_width="280dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/bg_skeleton_bar" />
+
+                        <View
+                            android:layout_width="180dp"
+                            android:layout_height="26dp"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/bg_skeleton_bar" />
+
+                        <View
+                            android:layout_width="220dp"
+                            android:layout_height="16dp"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/bg_skeleton_bar" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:orientation="horizontal"
-                    android:layout_marginEnd="8dp">
-
-                    <ImageButton
-                        android:id="@+id/btnShare"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_share"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        app:tint="@color/white"
-                        android:contentDescription="Share" />
-
-                    <ImageButton
-                        android:id="@+id/btnBookmark"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_bookmark"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        app:tint="@color/white"
-                        android:contentDescription="Bookmark" />
-
-                </LinearLayout>
-
-            </androidx.appcompat.widget.Toolbar>
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="8dp"
-                app:layout_collapseMode="parallax"
-                app:cardBackgroundColor="@color/card_dark">
-
-            <LinearLayout
+                    android:id="@+id/heroLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
                     android:orientation="vertical"
-                    android:padding="24dp">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/categoryBadge"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="0dp"
-                        app:strokeWidth="0dp"
-                        app:cardBackgroundColor="@color/orange_accent">
-
-                        <TextView
-                            android:id="@+id/tvCategory"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="HISTORICAL SITE"
-                            android:textSize="10sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/white"
-                            android:paddingStart="12dp"
-                            android:paddingEnd="12dp"
-                            android:paddingTop="6dp"
-                            android:paddingBottom="6dp" />
-
-                    </com.google.android.material.card.MaterialCardView>
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:paddingBottom="28dp">
 
                     <TextView
                         android:id="@+id/tvLandmarkName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Al-Rahba"
-                        android:textSize="32sp"
+                        android:fontFamily="@font/amiri"
+                        android:includeFontPadding="false"
+                        android:lineHeight="46sp"
+                        android:textColor="@color/ivory"
+                        android:textSize="40sp"
                         android:textStyle="bold"
-                        android:textColor="@color/text_white"
-                        android:layout_marginTop="12dp" />
+                        tools:text="Tell Halaf" />
 
                     <TextView
                         android:id="@+id/tvArabicName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="قلعة الرحبة"
-                        android:textSize="18sp"
-                        android:textColor="@color/text_secondary"
-                        android:layout_marginTop="4dp" />
-
-                    <TextView
-                        android:id="@+id/tvLocation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Mayadin, Deir ez-Zor Governorate"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_secondary"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginTop="6dp"
+                        android:fontFamily="@font/amiri"
+                        android:includeFontPadding="false"
+                        android:lineHeight="36sp"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/ivory_dim"
+                        android:textDirection="anyRtl"
+                        android:textSize="26sp"
+                        tools:text="تل حلف" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="16dp">
+                        android:layout_marginTop="12dp"
+                        android:gravity="top"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvMeta"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:lineSpacingMultiplier="1.1"
+                            android:maxLines="2"
+                            android:textColor="@color/ivory_dim"
+                            android:textSize="15sp"
+                            tools:text="Archaeological · Near Ras al-Ayn, Al-Hasakah Governorate" />
 
                         <LinearLayout
+                            android:id="@+id/layoutRating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:layout_marginStart="12dp"
                             android:gravity="center_vertical"
-                            android:background="@drawable/rating_background"
-                            android:paddingStart="12dp"
-                            android:paddingEnd="12dp"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="8dp">
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            tools:visibility="visible">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_star"
+                                app:tint="@color/gold" />
 
                             <TextView
                                 android:id="@+id/tvRating"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="4.4"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/text_white" />
-
-                            <ImageView
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:src="@drawable/ic_star"
-                                app:tint="@color/orange_accent"
-                                android:layout_marginStart="4dp" />
+                                android:layout_marginStart="4dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:textColor="@color/gold"
+                                android:textSize="15sp"
+                                tools:text="4.5" />
 
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/tvReviewCount"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Based on 523 reviews"
-                            android:textSize="12sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginStart="12dp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnGetDirections"
-                            android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:text="Get Directions"
-                            android:textColor="@color/background_dark"
-                            android:textStyle="bold"
-                            android:textAllCaps="false"
-                            android:textSize="12sp"
-                            app:icon="@drawable/ic_directions"
-                            app:iconTint="@color/background_dark"
-                            app:iconSize="18dp"
-                            app:cornerRadius="12dp"
-                            app:backgroundTint="@color/orange_accent" />
-
                     </LinearLayout>
 
                 </LinearLayout>
 
-            </com.google.android.material.card.MaterialCardView>
+            </FrameLayout>
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="24dp">
-
+            <!-- ============================ the reading =========================== -->
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:weightSum="3">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/surface_dark">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_calendar"
-                            app:tint="@color/orange_accent" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="BUILT IN"
-                            android:textSize="10sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="8dp" />
-
-                        <TextView
-                            android:id="@+id/tvBuiltIn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1207 CE"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_white"
-                            android:layout_marginTop="4dp" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/surface_dark">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_mountain"
-                            app:tint="@color/orange_accent" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="ELEVATION"
-                            android:textSize="10sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="8dp" />
-
-                        <TextView
-                            android:id="@+id/tvElevation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="244m"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_white"
-                            android:layout_marginTop="4dp" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/surface_dark">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_brick"
-                            app:tint="@color/orange_accent" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="MATERIAL"
-                            android:textSize="10sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="8dp" />
-
-                        <TextView
-                            android:id="@+id/tvMaterial"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Limestone"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_white"
-                            android:layout_marginTop="4dp"
-                            android:gravity="center"
-                            android:maxLines="2"
-                            android:ellipsize="end" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="32dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:background="@drawable/language_toggle_background"
-                android:padding="4dp">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnEnglish"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="English"
-                    android:textColor="@color/background_dark"
-                    android:textStyle="bold"
-                    android:textAllCaps="false"
-                    app:cornerRadius="8dp"
-                    app:backgroundTint="@color/white"
-                    style="@style/Widget.MaterialComponents.Button" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnArabic"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="عربي"
-                    android:textColor="@color/text_secondary"
-                    android:textStyle="bold"
-                    android:textAllCaps="false"
-                    app:cornerRadius="8dp"
-                    app:backgroundTint="@android:color/transparent"
-                    style="@style/Widget.MaterialComponents.Button.TextButton" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Strategically perched on a plateau overlooking the Euphrates valley, Al-Rahba is a masterpiece of Ayyubid and Mamluk military architecture."
-                android:textSize="15sp"
-                android:textColor="@color/text_light"
-                android:lineSpacingExtra="4dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="#2A1810">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_history"
-                        app:tint="@color/orange_accent" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="12dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Historical Significance"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/orange_accent" />
-
-                        <TextView
-                            android:id="@+id/tvHistoricalSignificance"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Historically, Al-Rahba was the scene of numerous sieges and played a pivotal role during the Mongol invasions of the 13th century."
-                            android:textSize="13sp"
-                            android:textColor="@color/text_light"
-                            android:lineSpacingExtra="2dp"
-                            android:layout_marginTop="8dp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="🏛️ Architectural Features"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_white"
-                android:layout_marginTop="32dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/surface_dark">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_brick"
-                        android:padding="12dp"
-                        android:background="@drawable/circle_background_orange"
-                        app:tint="@color/white" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="16dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Concentric Layout"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_white" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="A fortress within a fortress, providing multiple layers of defense."
-                            android:textSize="13sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="4dp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/surface_dark">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_water"
-                        android:padding="12dp"
-                        android:background="@drawable/circle_background_orange"
-                        app:tint="@color/white" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="16dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Massive Moat"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_white" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="A deep, wide defensive ditch carved directly into the rock plateau."
-                            android:textSize="13sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="4dp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/surface_dark">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_tower"
-                        android:padding="12dp"
-                        android:background="@drawable/circle_background_orange"
-                        app:tint="@color/white" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="16dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Tall Bastions"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_white" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Imposing towers that offered a commanding view of the river valley."
-                            android:textSize="13sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="4dp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Visitor Information"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_white"
-                android:layout_marginTop="32dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp" />
-
-            <LinearLayout
+                android:id="@+id/contentGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:background="@drawable/language_toggle_background"
-                android:padding="16dp">
+                android:paddingBottom="128dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="52dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/bg_segment_container"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:padding="4dp">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_clock"
-                        app:tint="@color/orange_accent" />
-
-                    <TextView
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEnglish"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="Visiting Hours"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_light"
-                        android:layout_marginStart="12dp" />
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:letterSpacing="0"
+                        android:text="@string/detail_lang_english"
+                        android:textAllCaps="false"
+                        android:textColor="@color/terracotta_soft"
+                        android:textSize="16sp"
+                        app:backgroundTint="#33E2703A"
+                        app:cornerRadius="22dp" />
 
-                    <TextView
-                        android:id="@+id/tvVisitingHours"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnArabic"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.2"
-                        android:text=""
-                        android:maxLines="2"
-                        android:ellipsize="end"
-                        android:gravity="end"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_white" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:letterSpacing="0"
+                        android:text="@string/detail_lang_arabic"
+                        android:textAllCaps="false"
+                        android:textColor="@color/ivory_dim"
+                        android:textSize="16sp"
+                        app:backgroundTint="@android:color/transparent"
+                        app:cornerRadius="22dp" />
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#3A3A3A"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp" />
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tvDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:lineSpacingExtra="7dp"
+                    android:textColor="@color/ivory_dim"
+                    android:textDirection="anyRtl"
+                    android:textSize="16sp"
+                    tools:text="Tell Halaf is one of the most significant archaeological sites in the Near East, dating back to the 6th millennium BCE." />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_ticket"
-                        app:tint="@color/orange_accent" />
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/tagGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="24dp"
+                    app:chipSpacingHorizontal="8dp"
+                    app:chipSpacingVertical="8dp" />
 
-                    <TextView
-                        android:layout_width="0dp"
+                <!-- ============================ the record =========================== -->
+
+                <LinearLayout
+                    android:id="@+id/recordSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        style="@style/Widget.EastSyria.HomeSectionHeader"
+                        android:layout_marginTop="36dp">
+
+                        <TextView
+                            style="@style/Widget.EastSyria.HomeSectionTitle"
+                            android:text="@string/detail_section_record" />
+
+                        <View
+                            style="@style/Widget.EastSyria.HomeSectionRule"
+                            android:layout_marginEnd="0dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/recordTable"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Entry Fee"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_light"
-                        android:layout_marginStart="12dp" />
-
-                    <TextView
-                        android:id="@+id/tvEntryFee"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.2"
-                        android:text=""
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:gravity="end"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="#4CAF50" />
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="24dp"
+                        android:orientation="vertical" />
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#3A3A3A"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp" />
-
                 <LinearLayout
+                    android:id="@+id/visitSection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_season"
-                        app:tint="@color/orange_accent" />
+                    <LinearLayout
+                        style="@style/Widget.EastSyria.HomeSectionHeader"
+                        android:layout_marginTop="36dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                        <TextView
+                            style="@style/Widget.EastSyria.HomeSectionTitle"
+                            android:text="@string/detail_section_visiting" />
+
+                        <View
+                            style="@style/Widget.EastSyria.HomeSectionRule"
+                            android:layout_marginEnd="0dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/visitTable"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Best Time"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_light"
-                        android:layout_marginStart="12dp" />
-
-                    <TextView
-                        android:id="@+id/tvBestTime"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.2"
-                        android:text=""
-                        android:maxLines="2"
-                        android:ellipsize="end"
-                        android:gravity="end"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_white" />
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="24dp"
+                        android:orientation="vertical" />
 
                 </LinearLayout>
 
             </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="#medieval   #fortress   #mamluk   #ayyubid   #euphrates"
-                android:textSize="13sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="16dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="50dp"/>
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <!-- ============================ missing / error ============================ -->
+
+    <LinearLayout
+        android:id="@+id/stateView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/canvas"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvStateTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/amiri"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:lineHeight="34sp"
+            android:textColor="@color/ivory"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            tools:text="Couldn't load this landmark" />
+
+        <TextView
+            android:id="@+id/tvStateBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.15"
+            android:textColor="@color/ivory_dim"
+            android:textSize="15sp"
+            tools:text="Check your connection, then try again." />
+
+        <TextView
+            android:id="@+id/btnRetry"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_hero_button_outline"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="@string/action_retry"
+            android:textColor="@color/terracotta_soft"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <!-- ============================ floating controls ============================ -->
+
+    <FrameLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top">
+
+        <!-- Height is set in code (status bar inset + 64dp); a match_parent
+             backing inside this wrap_content bar swallows the whole screen. -->
+        <View
+            android:id="@+id/topBarBg"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:alpha="0"
+            android:background="@drawable/bg_top_bar_solid"
+            android:importantForAccessibility="no" />
+
+        <LinearLayout
+            android:id="@+id/barRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_icon_chip"
+                android:contentDescription="@string/detail_back"
+                android:padding="12dp"
+                android:src="@drawable/ic_back"
+                app:tint="@color/ivory" />
+
+            <!-- The name, once the hero's own has scrolled beneath the bar. -->
+            <TextView
+                android:id="@+id/tvBarTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:alpha="0"
+                android:ellipsize="end"
+                android:fontFamily="@font/amiri"
+                android:importantForAccessibility="no"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:textColor="@color/ivory"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                tools:text="Tell Halaf" />
+
+            <ImageButton
+                android:id="@+id/btnShare"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_icon_chip"
+                android:contentDescription="@string/detail_share"
+                android:padding="12dp"
+                android:src="@drawable/ic_share"
+                app:tint="@color/ivory" />
+
+            <ImageButton
+                android:id="@+id/btnBookmark"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/bg_icon_chip"
+                android:contentDescription="@string/detail_bookmark"
+                android:padding="12dp"
+                android:src="@drawable/ic_bookmark"
+                app:tint="@color/ivory" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- The one filled action. It floats so directions are never a scroll away. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGetDirections"
+        style="@style/Widget.EastSyria.Button.Pill"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/detail_directions"
+        app:elevation="8dp"
+        app:icon="@drawable/ic_directions"
+        app:iconGravity="textStart"
+        app:iconSize="20dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
