@@ -117,7 +117,7 @@ class ReportsActivity : AppCompatActivity() {
             val selected = value == period
             view.setBackgroundResource(if (selected) R.drawable.bg_tab_active else R.drawable.bg_tab_inactive)
             view.setTextColor(
-                ContextCompat.getColor(this, if (selected) R.color.terracotta_soft else R.color.ivory_dim)
+                ContextCompat.getColor(this, if (selected) R.color.ivory else R.color.ivory_dim)
             )
             view.isSelected = selected
         }

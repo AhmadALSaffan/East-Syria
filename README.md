@@ -15,7 +15,7 @@
 
 <br />
 
-<img src="app/eastsyria.gif" alt="East Syria: the animated onboarding switching to Arabic, then the home screen" width="300" />
+<img src="app/eastsyria.gif" alt="East Syria: the animated onboarding switching to Arabic, beside the dark English screens" width="100%" />
 
 </div>
 
@@ -75,6 +75,15 @@ Each page plays a short scene of the real app: a search typing itself, the Euphr
 | **Light · العربية** | <img src="docs/screenshots/light-ar/about.jpg" width="170"> | <img src="docs/screenshots/light-ar/privacy.jpg" width="170"> |
 | **Dark · English** | <img src="docs/screenshots/dark-en/about.jpg" width="170"> | <img src="docs/screenshots/dark-en/privacy.jpg" width="170"> |
 
+### Curator tools
+
+Curators add, edit and publish landmarks, and see what was added over a day, a week or a month. The tools are bilingual too.
+
+| | Dashboard | Add a landmark | Edit a landmark | Reports |
+|:---:|:---:|:---:|:---:|:---:|
+| **Light · العربية** | <img src="docs/screenshots/light-ar/admin-dashboard.jpg" width="170"> | <img src="docs/screenshots/light-ar/admin-add.jpg" width="170"> | <img src="docs/screenshots/light-ar/admin-edit.jpg" width="170"> | <img src="docs/screenshots/light-ar/admin-reports.jpg" width="170"> |
+| **Dark · English** | <img src="docs/screenshots/dark-en/admin-dashboard.jpg" width="170"> | <img src="docs/screenshots/dark-en/admin-add.jpg" width="170"> | <img src="docs/screenshots/dark-en/admin-edit.jpg" width="170"> | <img src="docs/screenshots/dark-en/admin-reports.jpg" width="170"> |
+
 ---
 
 ## Features
@@ -91,7 +100,7 @@ Each page plays a short scene of the real app: a search typing itself, the Euphr
   - **Authenticator apps** (Google Authenticator, Microsoft Authenticator, Authy): set up with a QR code or key, a 6-digit code after signing in, and one-time recovery codes.
   - **Confirm it's you**: account details and security open only after signing in again (password or Google).
   - Password reset for email accounts.
-- 🛠️ **Curator tools**: add, edit and delete landmarks with photo upload and a publish state; reports counted from the records themselves.
+- 🛠️ **Curator tools**: add, edit and delete landmarks with photo upload and a publish state, in Arabic or English; reports counted from the records themselves.
 - ♿ **Every state designed**: loading skeletons, empty, error and signed-out states, with mirrored icons and layouts in Arabic.
 
 ---

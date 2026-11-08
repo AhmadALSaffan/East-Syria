@@ -1,5 +1,6 @@
 package com.example.eastsyria.Admin.Data
 
+import com.example.eastsyria.Ui.isArabic
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -30,8 +31,10 @@ class AdminLandmarkAdapter(
         val context = binding.root.context
         val item = list[position]
 
-        binding.tvName.text = item.name
-        binding.tvCity.text = item.location.city.ifEmpty { context.getString(R.string.admin_unknown_city) }
+        val arabic = context.isArabic()
+        binding.tvName.text = if (arabic && item.nameArabic.isNotBlank()) item.nameArabic else item.name
+        val city = if (arabic && item.location.cityArabic.isNotBlank()) item.location.cityArabic else item.location.city
+        binding.tvCity.text = city.ifEmpty { context.getString(R.string.admin_unknown_city) }
 
         when (item.status.lowercase()) {
             "published" -> {

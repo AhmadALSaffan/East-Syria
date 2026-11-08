@@ -13,6 +13,7 @@ data class LocationModel(
 data class LandmarkAdminModel(
     var id: String = "",
     val name: String = "",
+    val nameArabic: String = "",
     val category: String = "",
     val description: String = "",
     val imageUrl: String = "",

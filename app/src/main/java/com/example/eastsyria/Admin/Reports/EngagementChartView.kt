@@ -28,7 +28,7 @@ class EngagementChartView @JvmOverloads constructor(
         color = ContextCompat.getColor(context, R.color.terracotta)
     }
     private val highlightPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.gold)
+        color = ContextCompat.getColor(context, R.color.wayfinding)
     }
     private val trackPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = ContextCompat.getColor(context, R.color.surface)

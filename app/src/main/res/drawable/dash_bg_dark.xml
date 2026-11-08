@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  A field inside a form section. It sits one step above the section, and takes a
-  terracotta edge while it has the cursor, so you always know where you are.
--->
+<!-- A field inside a form section: page-coloured with a hairline, an ink edge while it has the cursor. -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_focused="true">
         <shape android:shape="rectangle">
-            <solid android:color="@color/surface_high" />
-            <stroke
-                android:width="2dp"
-                android:color="@color/terracotta" />
+            <solid android:color="@color/canvas" />
+            <stroke android:width="1.5dp" android:color="@color/ivory" />
             <corners android:radius="14dp" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/surface_high" />
+            <solid android:color="@color/canvas" />
+            <stroke android:width="1dp" android:color="@color/line" />
             <corners android:radius="14dp" />
         </shape>
     </item>

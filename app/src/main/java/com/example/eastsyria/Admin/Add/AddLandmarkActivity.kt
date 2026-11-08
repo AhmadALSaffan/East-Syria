@@ -1,5 +1,6 @@
 package com.example.eastsyria.Admin.Add
 
+import com.example.eastsyria.R
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -55,15 +56,15 @@ class AddLandmarkActivity : AppCompatActivity() {
         }
 
         binding.switchFeatured.setOnCheckedChangeListener { _, isChecked ->
-            binding.switchFeatured.text = if (isChecked) "Featured: ON" else "Featured: OFF"
+            binding.switchFeatured.setText(R.string.admin_featured)
         }
 
         binding.switchTrending.setOnCheckedChangeListener { _, isChecked ->
-            binding.switchTrending.text = if (isChecked) "Trending: ON" else "Trending: OFF"
+            binding.switchTrending.setText(R.string.admin_trending)
         }
 
         binding.switchHistorical.setOnCheckedChangeListener { _, isChecked ->
-            binding.switchHistorical.text = if (isChecked) "Historical: ON" else "Historical: OFF"
+            binding.switchHistorical.setText(R.string.admin_historical)
         }
 
         binding.btnSaveLandmark.setOnClickListener {
@@ -143,109 +144,109 @@ class AddLandmarkActivity : AppCompatActivity() {
             selectedImageUri = data?.data
             binding.ivPreview.setImageURI(selectedImageUri)
             binding.ivPreview.visibility = View.VISIBLE
-            binding.tvImageHint.text = "Image selected ✓"
+            binding.tvImageHint.setText(R.string.admin_image_chosen)
         }
     }
 
     private fun validateForm(): Boolean {
         binding.apply {
             if (etLandmarkId.text.isNullOrEmpty()) {
-                etLandmarkId.error = "Required"
+                etLandmarkId.error = getString(R.string.admin_required)
                 etLandmarkId.requestFocus()
                 return false
             }
             if (etNameEn.text.isNullOrEmpty()) {
-                etNameEn.error = "Required"
+                etNameEn.error = getString(R.string.admin_required)
                 etNameEn.requestFocus()
                 return false
             }
             if (etNameAr.text.isNullOrEmpty()) {
-                etNameAr.error = "Required"
+                etNameAr.error = getString(R.string.admin_required)
                 etNameAr.requestFocus()
                 return false
             }
             if (etCategoryEn.text.isNullOrEmpty()) {
-                etCategoryEn.error = "Required"
+                etCategoryEn.error = getString(R.string.admin_required)
                 etCategoryEn.requestFocus()
                 return false
             }
             if (etCategoryAr.text.isNullOrEmpty()) {
-                etCategoryAr.error = "Required"
+                etCategoryAr.error = getString(R.string.admin_required)
                 etCategoryAr.requestFocus()
                 return false
             }
             if (etDescriptionEn.text.isNullOrEmpty()) {
-                etDescriptionEn.error = "Required"
+                etDescriptionEn.error = getString(R.string.admin_required)
                 etDescriptionEn.requestFocus()
                 return false
             }
             if (etDescriptionAr.text.isNullOrEmpty()) {
-                etDescriptionAr.error = "Required"
+                etDescriptionAr.error = getString(R.string.admin_required)
                 etDescriptionAr.requestFocus()
                 return false
             }
             if (etLongDescriptionEn.text.isNullOrEmpty()) {
-                etLongDescriptionEn.error = "Required"
+                etLongDescriptionEn.error = getString(R.string.admin_required)
                 etLongDescriptionEn.requestFocus()
                 return false
             }
             if (etLongDescriptionAr.text.isNullOrEmpty()) {
-                etLongDescriptionAr.error = "Required"
+                etLongDescriptionAr.error = getString(R.string.admin_required)
                 etLongDescriptionAr.requestFocus()
                 return false
             }
             if (etCityEn.text.isNullOrEmpty()) {
-                etCityEn.error = "Required"
+                etCityEn.error = getString(R.string.admin_required)
                 etCityEn.requestFocus()
                 return false
             }
             if (etCityAr.text.isNullOrEmpty()) {
-                etCityAr.error = "Required"
+                etCityAr.error = getString(R.string.admin_required)
                 etCityAr.requestFocus()
                 return false
             }
             if (etGovernorateEn.text.isNullOrEmpty()) {
-                etGovernorateEn.error = "Required"
+                etGovernorateEn.error = getString(R.string.admin_required)
                 etGovernorateEn.requestFocus()
                 return false
             }
             if (etGovernorateAr.text.isNullOrEmpty()) {
-                etGovernorateAr.error = "Required"
+                etGovernorateAr.error = getString(R.string.admin_required)
                 etGovernorateAr.requestFocus()
                 return false
             }
             if (etRegionEn.text.isNullOrEmpty()) {
-                etRegionEn.error = "Required"
+                etRegionEn.error = getString(R.string.admin_required)
                 etRegionEn.requestFocus()
                 return false
             }
             if (etLatitude.text.isNullOrEmpty()) {
-                etLatitude.error = "Required"
+                etLatitude.error = getString(R.string.admin_required)
                 etLatitude.requestFocus()
                 return false
             }
             if (etLongitude.text.isNullOrEmpty()) {
-                etLongitude.error = "Required"
+                etLongitude.error = getString(R.string.admin_required)
                 etLongitude.requestFocus()
                 return false
             }
             if (etVisitingHours.text.isNullOrEmpty()) {
-                etVisitingHours.error = "Required"
+                etVisitingHours.error = getString(R.string.admin_required)
                 etVisitingHours.requestFocus()
                 return false
             }
             if (etEntryFee.text.isNullOrEmpty()) {
-                etEntryFee.error = "Required"
+                etEntryFee.error = getString(R.string.admin_required)
                 etEntryFee.requestFocus()
                 return false
             }
             if (etBestTimeToVisit.text.isNullOrEmpty()) {
-                etBestTimeToVisit.error = "Required"
+                etBestTimeToVisit.error = getString(R.string.admin_required)
                 etBestTimeToVisit.requestFocus()
                 return false
             }
             if (selectedImageUri == null) {
-                showSnack(binding.root, "Please select an image", long = true)
+                showSnack(binding.root, getString(R.string.admin_need_image), long = true)
                 return false
             }
         }
@@ -261,7 +262,7 @@ class AddLandmarkActivity : AppCompatActivity() {
             onSuccess = { url -> uploadToDatabase(url) },
             onError = {
                 setLoading(false)
-                showSnack(binding.root, "Image upload failed: ${it.message}", long = true)
+                showSnack(binding.root, getString(R.string.admin_upload_failed, it.message.orEmpty()), long = true)
             }
         )
     }
@@ -324,17 +325,17 @@ class AddLandmarkActivity : AppCompatActivity() {
                 databaseRef.child(newId).setValue(landmark)
                     .addOnSuccessListener {
                         setLoading(false)
-                        showSnack(binding.root, "Landmark saved as #$newId", long = true)
+                        showSnack(binding.root, getString(R.string.admin_saved_as, newId), long = true)
                         startActivity(Intent(this@AddLandmarkActivity, MainPageAdminActivity::class.java))
                         finish()
                     }
                     .addOnFailureListener {
                         setLoading(false)
-                        showSnack(binding.root, "Failed to save: ${it.message}", long = true)
+                        showSnack(binding.root, getString(R.string.admin_save_failed, it.message.orEmpty()), long = true)
                     }
             }.addOnFailureListener {
                 setLoading(false)
-                showSnack(binding.root, "Failed to read DB: ${it.message}", long = true)
+                showSnack(binding.root, getString(R.string.admin_read_failed, it.message.orEmpty()), long = true)
             }
         }
     }
@@ -342,7 +343,7 @@ class AddLandmarkActivity : AppCompatActivity() {
     private fun setLoading(loading: Boolean) {
         binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
         binding.btnSaveLandmark.isEnabled = !loading
-        binding.btnSaveLandmark.text = if (loading) "Saving..." else "SAVE LANDMARK"
+        binding.btnSaveLandmark.text = getString(if (loading) R.string.admin_saving else R.string.admin_save_new)
     }
     private fun sendLandmarkNotification(landmarkId: String, landmarkName: String, imageUrl: String) {
         val usersRef = FirebaseDatabase.getInstance().getReference("users")

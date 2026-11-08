@@ -251,7 +251,7 @@
                                         style="@style/TextAppearance.EastSyria.Figure"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:textColor="@color/gold"
+                                        android:textColor="@color/wayfinding"
                                         tools:text="0" />
 
                                     <TextView

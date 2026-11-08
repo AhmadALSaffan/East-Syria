@@ -33,7 +33,7 @@ class EditLandmarkActivity : AppCompatActivity() {
             selectedImageUri = it
             binding.ivPreview.visibility = View.VISIBLE
             binding.ivPreview.setImageURI(it)
-            binding.tvImageHint.text = "New image selected — will replace current"
+            binding.tvImageHint.setText(R.string.admin_image_replace)
         }
     }
 
@@ -46,7 +46,7 @@ class EditLandmarkActivity : AppCompatActivity() {
         landmarkId = intent.getStringExtra("landmarkId") ?: ""
 
         if (landmarkId.isEmpty()) {
-            showSnack(binding.root, "Invalid landmark ID", long = true)
+            showSnack(binding.root, getString(R.string.admin_bad_id), long = true)
             finish()
             return
         }
@@ -113,7 +113,7 @@ class EditLandmarkActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     showProgress(false)
                     if (!snapshot.exists()) {
-                        showSnack(binding.root, "Landmark not found", long = true)
+                        showSnack(binding.root, getString(R.string.admin_not_found), long = true)
                         finish()
                         return
                     }
@@ -141,7 +141,7 @@ class EditLandmarkActivity : AppCompatActivity() {
         currentImageUrl = snapshot.child("imageUrl").getValue(String::class.java).orEmpty()
         if (currentImageUrl.isNotEmpty()) {
             binding.ivPreview.visibility = View.VISIBLE
-            binding.tvImageHint.text = "Current image loaded"
+            binding.tvImageHint.setText(R.string.admin_image_current)
             Glide.with(this)
                 .load(currentImageUrl)
                 .centerCrop()
@@ -196,7 +196,7 @@ class EditLandmarkActivity : AppCompatActivity() {
             onSuccess = { url -> saveToFirebase(url) },
             onError = {
                 showProgress(false)
-                showSnack(binding.root, "Image upload failed: ${it.message}", long = true)
+                showSnack(binding.root, getString(R.string.admin_upload_failed, it.message.orEmpty()), long = true)
             }
         )
     }
@@ -248,7 +248,7 @@ class EditLandmarkActivity : AppCompatActivity() {
         database.child("landmarks").child(landmarkId).updateChildren(updates)
             .addOnSuccessListener {
                 showProgress(false)
-                showSnack(binding.root, "Landmark updated successfully", long = true)
+                showSnack(binding.root, getString(R.string.admin_updated), long = true)
                 val intent = Intent(this, MainPageAdminActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 startActivity(intent)
@@ -256,28 +256,28 @@ class EditLandmarkActivity : AppCompatActivity() {
             }
             .addOnFailureListener {
                 showProgress(false)
-                showSnack(binding.root, "Couldn't save the changes. ${it.message.orEmpty()}".trim(), long = true)
+                showSnack(binding.root, getString(R.string.admin_update_failed, it.message.orEmpty()).trim(), long = true)
             }
     }
 
     private fun validateInputs(): Boolean {
         if (binding.etNameEn.text.isNullOrBlank()) {
-            binding.etNameEn.error = "Required"
+            binding.etNameEn.error = getString(R.string.admin_required)
             binding.etNameEn.requestFocus()
             return false
         }
         if (binding.etNameAr.text.isNullOrBlank()) {
-            binding.etNameAr.error = "Required"
+            binding.etNameAr.error = getString(R.string.admin_required)
             binding.etNameAr.requestFocus()
             return false
         }
         if (binding.etDescriptionEn.text.isNullOrBlank()) {
-            binding.etDescriptionEn.error = "Required"
+            binding.etDescriptionEn.error = getString(R.string.admin_required)
             binding.etDescriptionEn.requestFocus()
             return false
         }
         if (binding.etCategoryEn.text.isNullOrBlank()) {
-            binding.etCategoryEn.error = "Required"
+            binding.etCategoryEn.error = getString(R.string.admin_required)
             binding.etCategoryEn.requestFocus()
             return false
         }
