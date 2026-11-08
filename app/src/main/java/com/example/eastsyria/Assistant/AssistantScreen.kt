@@ -84,6 +84,7 @@ data class ChatMessage(
 internal fun AssistantScreen(
     messages: List<ChatMessage>,
     thinking: Boolean,
+    remaining: Int?,
     landmarks: Map<String, Landmark>,
     onSend: (String) -> Unit,
     onOpenLandmark: (Landmark) -> Unit,
@@ -141,7 +142,12 @@ internal fun AssistantScreen(
             Spacer(Modifier.width(12.dp))
             Column {
                 Text(stringResource(R.string.assistant_title), style = EsType.title.copy(fontSize = 17.sp), color = c.ice)
-                Text(stringResource(R.string.assistant_subtitle), style = EsType.meta, color = c.iceMute)
+                val subtitle = stringResource(R.string.assistant_subtitle)
+                val left = remaining?.let {
+                    androidx.compose.ui.platform.LocalContext.current.resources
+                        .getQuantityString(R.plurals.assistant_left, it, it)
+                }
+                Text(if (left == null) subtitle else "$subtitle · $left", style = EsType.meta, color = c.iceMute)
             }
         }
         Box(Modifier.fillMaxWidth().height(1.dp).background(c.line))

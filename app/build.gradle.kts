@@ -18,8 +18,8 @@ android {
         applicationId = "com.example.eastsyria"
         minSdk = 31
         targetSdk = 36
-        versionCode = 4
-        versionName = "3.1"
+        versionCode = 5
+        versionName = "3.2"
         val properties = Properties()
         properties.load(FileInputStream(rootProject.file("local.properties")))
         val mapsApiKey = properties.getProperty("MAPS_API_KEY", "")

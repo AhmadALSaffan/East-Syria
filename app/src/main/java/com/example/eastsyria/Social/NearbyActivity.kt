@@ -64,6 +64,7 @@ class NearbyActivity : AppCompatActivity() {
     private var iAmVisible by mutableStateOf(false)
     private var state by mutableStateOf(State.OFF)
     private var people by mutableStateOf(listOf<NearbyPerson>())
+    private var farther by mutableIntStateOf(0)
     private var unread by mutableIntStateOf(0)
     private var stopNearby: () -> Unit = {}
     private var stopUnread: () -> Unit = {}
@@ -112,9 +113,9 @@ class NearbyActivity : AppCompatActivity() {
         state = State.LOCATING
         Presence.locate(this) { here: Location? ->
             if (here == null) { state = State.NO_FIX; return@locate }
-            Presence.publish(this)
+            Presence.publish(this, here)
             stopNearby()
-            stopNearby = Social.listenNearby(here) { people = it; state = State.LIST }
+            stopNearby = Social.listenNearby(here) { list, far -> people = list; farther = far; state = State.LIST }
         }
     }
 
@@ -163,6 +164,14 @@ class NearbyActivity : AppCompatActivity() {
                             )
                         }
                         if (people.isEmpty()) item { Note(R.string.nearby_empty_title, R.string.nearby_empty_body) }
+                        if (people.isEmpty() && farther > 0) item {
+                            Text(
+                                pluralStringResource(R.plurals.nearby_farther, farther),
+                                style = EsType.meta.copy(fontSize = 13.sp), color = c.iceMute,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+                            )
+                        }
                         items(people, key = { it.uid }) { p ->
                             PersonRow(
                                 p.photo, p.name,

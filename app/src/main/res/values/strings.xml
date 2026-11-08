@@ -565,7 +565,11 @@
     <string name="assistant_suggest_3">Which castles can I see near Deir ez-Zor?</string>
     <string name="assistant_suggest_4">Tell me the story of Dura-Europos</string>
     <string name="assistant_err_signed_out">Sign in to talk to the guide.</string>
-    <string name="assistant_err_limit">You have reached today\'s limit of questions. The guide is back tomorrow.</string>
+    <string name="assistant_err_limit">You have used your 5 free questions for today. The guide is back tomorrow.</string>
+    <plurals name="assistant_left">
+        <item quantity="one">%d free question left today</item>
+        <item quantity="other">%d free questions left today</item>
+    </plurals>
     <string name="assistant_err_not_configured">The guide is not switched on yet. Try again later.</string>
     <string name="assistant_err_failed">The guide could not answer just now. Try again in a moment.</string>
 
@@ -733,6 +737,10 @@
     <plurals name="nearby_count">
         <item quantity="one">%d person within 50 km</item>
         <item quantity="other">%d people within 50 km</item>
+    </plurals>
+    <plurals name="nearby_farther">
+        <item quantity="one">%d person has the app open farther than 50 km away</item>
+        <item quantity="other">%d people have the app open farther than 50 km away</item>
     </plurals>
     <string name="nearby_km">~%1$d km away</string>
     <string name="nearby_under_km">Less than 1 km away</string>

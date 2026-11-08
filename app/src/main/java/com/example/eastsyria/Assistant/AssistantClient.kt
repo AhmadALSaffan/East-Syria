@@ -31,6 +31,31 @@ object AssistantClient {
 
     private val endpoint = "${BuildConfig.SUPABASE_URL}/functions/v1/assistant"
 
+    /** Free questions left today, without using one; null when it can't be checked. */
+    suspend fun remaining(): Int? = withContext(Dispatchers.IO) {
+        val user = FirebaseAuth.getInstance().currentUser ?: return@withContext null
+        try {
+            val token = Tasks.await(user.getIdToken(false)).token ?: return@withContext null
+            val conn = (URL(endpoint).openConnection() as HttpURLConnection)
+            try {
+                conn.requestMethod = "POST"
+                conn.connectTimeout = 15_000
+                conn.readTimeout = 15_000
+                conn.doOutput = true
+                conn.setRequestProperty("Content-Type", "application/json")
+                conn.setRequestProperty("apikey", BuildConfig.SUPABASE_KEY)
+                conn.setRequestProperty("x-firebase-token", token)
+                conn.outputStream.use { it.write("""{"peek":true}""".toByteArray()) }
+                if (conn.responseCode != 200) return@withContext null
+                JSONObject(conn.inputStream.bufferedReader().use { it.readText() }).optInt("remaining", -1).takeIf { it >= 0 }
+            } finally {
+                conn.disconnect()
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
+
     suspend fun ask(history: List<Turn>, language: String): AssistantResult = withContext(Dispatchers.IO) {
         val user = FirebaseAuth.getInstance().currentUser ?: return@withContext AssistantResult.SignedOut
         val token = try {

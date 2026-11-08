@@ -464,7 +464,15 @@
     <string name="assistant_suggest_3">ما القلاع التي يمكنني زيارتها قرب دير الزور؟</string>
     <string name="assistant_suggest_4">احكِ لي قصة دورا أوروبوس</string>
     <string name="assistant_err_signed_out">سجّل الدخول لتتحدث مع الدليل.</string>
-    <string name="assistant_err_limit">بلغت الحد اليومي من الأسئلة. يعود الدليل غداً.</string>
+    <string name="assistant_err_limit">استخدمت أسئلتك المجانية الخمسة لهذا اليوم. يعود الدليل غداً.</string>
+    <plurals name="assistant_left">
+        <item quantity="zero">لا أسئلة مجانية متبقية اليوم</item>
+        <item quantity="one">سؤال مجاني واحد متبقٍ اليوم</item>
+        <item quantity="two">سؤالان مجانيان متبقيان اليوم</item>
+        <item quantity="few">%d أسئلة مجانية متبقية اليوم</item>
+        <item quantity="many">%d سؤالاً مجانياً متبقياً اليوم</item>
+        <item quantity="other">%d سؤال مجاني متبقٍ اليوم</item>
+    </plurals>
     <string name="assistant_err_not_configured">لم يُفعَّل الدليل بعد. حاول لاحقاً.</string>
     <string name="assistant_err_failed">تعذّر على الدليل الإجابة الآن. حاول بعد قليل.</string>
 
@@ -678,6 +686,14 @@
         <item quantity="few">%d أشخاص ضمن ٥٠ كم</item>
         <item quantity="many">%d شخصاً ضمن ٥٠ كم</item>
         <item quantity="other">%d شخص ضمن ٥٠ كم</item>
+    </plurals>
+    <plurals name="nearby_farther">
+        <item quantity="zero">لا أحد أبعد من ٥٠ كم</item>
+        <item quantity="one">شخص واحد يفتح التطبيق على بعد أكثر من ٥٠ كم</item>
+        <item quantity="two">شخصان يفتحان التطبيق على بعد أكثر من ٥٠ كم</item>
+        <item quantity="few">%d أشخاص يفتحون التطبيق على بعد أكثر من ٥٠ كم</item>
+        <item quantity="many">%d شخصاً يفتحون التطبيق على بعد أكثر من ٥٠ كم</item>
+        <item quantity="other">%d شخص يفتحون التطبيق على بعد أكثر من ٥٠ كم</item>
     </plurals>
     <string name="nearby_km">على بعد ~%1$d كم</string>
     <string name="nearby_under_km">على بعد أقل من ١ كم</string>

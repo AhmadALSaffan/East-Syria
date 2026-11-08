@@ -26,6 +26,7 @@ class AssistantActivity : AppCompatActivity() {
 
     private val messages = mutableStateListOf<ChatMessage>()
     private val thinking = mutableStateOf(false)
+    private val remaining = mutableStateOf<Int?>(null)
     private val landmarks = mutableStateMapOf<String, Landmark>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,10 +36,12 @@ class AssistantActivity : AppCompatActivity() {
             navigationBarStyle = SystemBarStyle.auto(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT),
         )
         loadCatalog()
+        lifecycleScope.launch { AssistantClient.remaining()?.let { remaining.value = it } }
         setContent {
             AssistantScreen(
                 messages = messages,
                 thinking = thinking.value,
+                remaining = remaining.value,
                 landmarks = landmarks,
                 onSend = ::send,
                 onOpenLandmark = { l ->
@@ -69,6 +72,11 @@ class AssistantActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val result = AssistantClient.ask(history, AppLanguage.current())
             thinking.value = false
+            when (result) {
+                is AssistantResult.Reply -> if (result.remaining >= 0) remaining.value = result.remaining
+                AssistantResult.DailyLimit -> remaining.value = 0
+                else -> {}
+            }
             messages += when (result) {
                 is AssistantResult.Reply -> ChatMessage(false, result.text, result.landmarkIds)
                 AssistantResult.SignedOut -> error(R.string.assistant_err_signed_out)

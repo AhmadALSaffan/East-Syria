@@ -60,6 +60,9 @@ object Social {
     private val db get() = FirebaseDatabase.getInstance().reference
     private val me get() = FirebaseAuth.getInstance().currentUser?.uid
 
+    /** Server clock minus phone clock, so a phone with a wrong clock still sees who is active. */
+    @Volatile internal var serverOffset = 0L
+
     fun chatId(a: String, b: String) = if (a < b) "${a}_$b" else "${b}_$a"
 
     // ------------------------------------------------------------------ visibility
@@ -77,8 +80,11 @@ object Social {
 
     // ------------------------------------------------------------------ nearby
 
-    /** People within [RADIUS_KM] who were active in the last 15 minutes, nearest first. */
-    fun listenNearby(here: Location, onChange: (List<NearbyPerson>) -> Unit): () -> Unit {
+    /**
+     * People within [RADIUS_KM] who were active in the last 15 minutes, nearest first, plus how many
+     * active people are farther away (a count only, nobody's name or distance).
+     */
+    fun listenNearby(here: Location, onChange: (List<NearbyPerson>, Int) -> Unit): () -> Unit {
         val myId = me ?: return {}
         val ref = db.child("nearby")
         var blocked = emptySet<String>()
@@ -86,7 +92,8 @@ object Social {
 
         fun emit() {
             val snap = last ?: return
-            val now = System.currentTimeMillis()
+            val now = System.currentTimeMillis() + serverOffset
+            var farther = 0
             val people = snap.children.mapNotNull { c ->
                 val uid = c.key ?: return@mapNotNull null
                 if (uid == myId || uid in blocked) return@mapNotNull null
@@ -97,16 +104,16 @@ object Social {
                 val d = FloatArray(1)
                 Location.distanceBetween(here.latitude, here.longitude, lat, lng, d)
                 val km = d[0] / 1000.0
-                if (km > RADIUS_KM) return@mapNotNull null
+                if (km > RADIUS_KM) { farther++; return@mapNotNull null }
                 NearbyPerson(uid, c.child("name").getValue(String::class.java).orEmpty(),
                     c.child("photo").getValue(String::class.java).orEmpty(), km, at)
             }.sortedBy { it.km }
-            onChange(people)
+            onChange(people, farther)
         }
 
         val nearbyListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) { last = snapshot; emit() }
-            override fun onCancelled(error: DatabaseError) = onChange(emptyList())
+            override fun onCancelled(error: DatabaseError) = onChange(emptyList(), 0)
         }
         val blocksRef = db.child("blocks").child(myId)
         val blocksListener = object : ValueEventListener {
@@ -252,6 +259,25 @@ object Presence : DefaultLifecycleObserver {
     private lateinit var app: Context
     private val handler = Handler(Looper.getMainLooper())
     private var ref: DatabaseReference? = null
+    private var lastFix: Location? = null
+    private var foreground = false
+    private val connected get() = FirebaseDatabase.getInstance().reference.child(".info/connected")
+    private val offset get() = FirebaseDatabase.getInstance().reference.child(".info/serverTimeOffset")
+
+    // The server removes nearby/{uid} whenever the connection drops, even for a second (a network
+    // switch, the phone dozing). Write it again as soon as we are back online.
+    private val onConnection = object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            if (foreground && snapshot.getValue(Boolean::class.java) == true) publish(app, lastFix)
+        }
+        override fun onCancelled(error: DatabaseError) {}
+    }
+    private val onOffset = object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            Social.serverOffset = snapshot.getValue(Long::class.java) ?: 0L
+        }
+        override fun onCancelled(error: DatabaseError) {}
+    }
     private val beat = object : Runnable {
         override fun run() { publish(app); handler.postDelayed(this, 3L * 60 * 1000) }
     }
@@ -259,15 +285,20 @@ object Presence : DefaultLifecycleObserver {
     fun install(context: Context) {
         app = context.applicationContext
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+        offset.addValueEventListener(onOffset)
     }
 
     override fun onStart(owner: LifecycleOwner) {
+        foreground = true
         handler.removeCallbacks(beat)
         handler.post(beat)
+        connected.addValueEventListener(onConnection)
     }
 
     override fun onStop(owner: LifecycleOwner) {
+        foreground = false
         handler.removeCallbacks(beat)
+        connected.removeEventListener(onConnection)
         withdraw()
     }
 
@@ -297,25 +328,30 @@ object Presence : DefaultLifecycleObserver {
         } catch (_: SecurityException) { finish(null) }
     }
 
-    fun publish(context: Context) {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+    /** Writes nearby/{uid}. [known] skips a second location request when the caller has a fix. */
+    fun publish(context: Context, known: Location? = null) {
+        if (FirebaseAuth.getInstance().currentUser == null) return
         if (!::app.isInitialized) app = context.applicationContext
         if (!Social.isVisible(context)) return
-        locate(context) { loc ->
-            loc ?: return@locate
-            Profile.mine { name, photo ->
-                val r = FirebaseDatabase.getInstance().reference.child("nearby").child(uid)
-                ref = r
-                r.onDisconnect().removeValue()
-                // Rounded to two decimals (about 1 km) before it leaves the phone.
-                r.setValue(mapOf(
-                    "name" to name,
-                    "photo" to photo,
-                    "lat" to (loc.latitude * 100).roundToInt() / 100.0,
-                    "lng" to (loc.longitude * 100).roundToInt() / 100.0,
-                    "at" to ServerValue.TIMESTAMP,
-                ))
-            }
+        if (known != null) return write(known)
+        locate(context) { fresh -> (fresh ?: lastFix)?.let { write(it) } }
+    }
+
+    private fun write(loc: Location) {
+        lastFix = loc
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        Profile.mine { name, photo ->
+            val r = FirebaseDatabase.getInstance().reference.child("nearby").child(uid)
+            ref = r
+            r.onDisconnect().removeValue()
+            // Rounded to two decimals (about 1 km) before it leaves the phone.
+            r.setValue(mapOf(
+                "name" to name,
+                "photo" to photo,
+                "lat" to (loc.latitude * 100).roundToInt() / 100.0,
+                "lng" to (loc.longitude * 100).roundToInt() / 100.0,
+                "at" to ServerValue.TIMESTAMP,
+            ))
         }
     }
 
