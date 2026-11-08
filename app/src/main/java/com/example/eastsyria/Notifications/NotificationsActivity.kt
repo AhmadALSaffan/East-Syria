@@ -226,8 +226,8 @@ class NotificationsActivity : AppCompatActivity() {
 
     private fun snack(message: Int) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
-            .setBackgroundTint(ContextCompat.getColor(this, R.color.surface_high))
-            .setTextColor(ContextCompat.getColor(this, R.color.ivory))
+            .setBackgroundTint(ContextCompat.getColor(this, R.color.ivory))
+            .setTextColor(ContextCompat.getColor(this, R.color.canvas))
             .show()
     }
 

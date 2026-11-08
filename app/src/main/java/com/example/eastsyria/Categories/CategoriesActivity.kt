@@ -110,9 +110,9 @@ class CategoriesActivity : AppCompatActivity() {
                 override fun onCancelled(error: DatabaseError) {
                     Log.e(TAG, "Error loading category stats: ${error.message}")
                     Snackbar.make(binding.root, R.string.categories_stats_failed, Snackbar.LENGTH_INDEFINITE)
-                        .setBackgroundTint(ContextCompat.getColor(this@CategoriesActivity, R.color.surface_high))
-                        .setTextColor(ContextCompat.getColor(this@CategoriesActivity, R.color.ivory))
-                        .setActionTextColor(ContextCompat.getColor(this@CategoriesActivity, R.color.terracotta_soft))
+                        .setBackgroundTint(ContextCompat.getColor(this@CategoriesActivity, R.color.ivory))
+                        .setTextColor(ContextCompat.getColor(this@CategoriesActivity, R.color.canvas))
+                        .setActionTextColor(ContextCompat.getColor(this@CategoriesActivity, R.color.canvas))
                         .setAction(R.string.action_retry) { loadStats() }
                         .show()
                 }

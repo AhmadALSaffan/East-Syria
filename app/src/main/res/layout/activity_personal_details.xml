@@ -264,7 +264,7 @@
             android:id="@+id/loadingOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#B316120F"
+            android:background="#B30B0C0E"
             android:clickable="true"
             android:focusable="true"
             android:importantForAccessibility="no"

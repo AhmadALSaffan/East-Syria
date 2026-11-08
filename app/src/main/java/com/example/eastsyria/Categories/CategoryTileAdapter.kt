@@ -46,6 +46,7 @@ class CategoryTileAdapter(
                     Glide.with(context)
                         .load(stat.imageUrl)
                         .centerCrop()
+                        .error(R.drawable.placeholder_dark)
                         .transition(DrawableTransitionOptions.withCrossFade(250))
                         .into(binding.ivTilePhoto)
                 }

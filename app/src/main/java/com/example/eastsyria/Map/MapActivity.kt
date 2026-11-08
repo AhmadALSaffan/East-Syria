@@ -1,5 +1,10 @@
 package com.example.eastsyria.Map
 
+import com.example.eastsyria.Ui.isNightMode
+import com.example.eastsyria.Search.categoryKey
+import com.example.eastsyria.Ui.localCategory
+import com.example.eastsyria.Ui.localDescription
+import com.example.eastsyria.Ui.localName
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -65,7 +70,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private var landmarksRef: DatabaseReference? = null
     private var landmarksListener: ValueEventListener? = null
 
-    private val pinIcon: BitmapDescriptor by lazy { bitmapFromVector(R.drawable.ic_map_pin) }
+    private val pinIcon: BitmapDescriptor by lazy { bitmapFromVector(R.drawable.ic_map_pin_v3) }
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -213,9 +218,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 setLoading(false)
                 binding.tvReadout.setText(R.string.map_readout_failed)
                 Snackbar.make(binding.root, R.string.map_load_failed, Snackbar.LENGTH_INDEFINITE)
-                    .setBackgroundTint(ContextCompat.getColor(this@MapActivity, R.color.surface_high))
-                    .setTextColor(ContextCompat.getColor(this@MapActivity, R.color.ivory))
-                    .setActionTextColor(ContextCompat.getColor(this@MapActivity, R.color.terracotta_soft))
+                    .setBackgroundTint(ContextCompat.getColor(this@MapActivity, R.color.ivory))
+                    .setTextColor(ContextCompat.getColor(this@MapActivity, R.color.canvas))
+                    .setActionTextColor(ContextCompat.getColor(this@MapActivity, R.color.canvas))
                     .setAction(R.string.action_retry) { loadLandmarks() }
                     .show()
             }
@@ -238,7 +243,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         val marker = googleMap.addMarker(
             MarkerOptions()
                 .position(LatLng(landmark.location.latitude, landmark.location.longitude))
-                .title(landmark.name)
+                .title(landmark.localName(this))
                 .icon(pinIcon)
                 .anchor(0.5f, 1f)
         )
@@ -268,8 +273,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.landmarkBottomCard.visibility = View.VISIBLE
         updateBottomMargins()
 
-        binding.tvLandmarkTitle.text = landmark.name
-        binding.tvLandmarkDescription.text = landmark.description
+        binding.tvLandmarkTitle.text = landmark.localName(this)
+        binding.tvLandmarkDescription.text = landmark.localDescription(this)
         binding.tvLandmarkDescription.visibility =
             if (landmark.description.isBlank()) View.GONE else View.VISIBLE
 
@@ -365,7 +370,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun applyDarkMapStyle() {
         try {
-            val applied = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))
+            val applied = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, if (isNightMode()) R.raw.map_style else R.raw.map_style_light))
             if (!applied) Log.e(TAG, "Map style parsing failed")
         } catch (e: Exception) {
             Log.e(TAG, "Map style error: ${e.message}", e)
@@ -414,13 +419,15 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         addChip(getString(R.string.map_all), null)
 
-        landmarks.map { it.category.trim() }
-            .filter { it.isNotEmpty() }
-            .distinct()
-            .sorted()
-            .forEach { category ->
-                val count = landmarks.count { it.category.equals(category, ignoreCase = true) }
-                addChip("$category ($count)", category)
+        // One chip per kind of place ("Archaeological Site" joins "Archaeological"), labelled in
+        // the app's language, most common first.
+        landmarks.filter { categoryKey(it.category).isNotEmpty() }
+            .groupBy { categoryKey(it.category) }
+            .entries
+            .sortedByDescending { it.value.size }
+            .forEach { (key, items) ->
+                val label = items.first().localCategory(this).substringBefore(" Site").trim()
+                addChip(getString(R.string.map_chip_count, label, items.size), key)
             }
     }
 
@@ -431,10 +438,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         var shown = landmarks.filter { landmark ->
             val matchesCategory =
-                activeCategory == null || landmark.category.equals(activeCategory, ignoreCase = true)
+                activeCategory == null || categoryKey(landmark.category) == activeCategory
             val matchesQuery = query.isBlank() ||
                     landmark.name.contains(query, ignoreCase = true) ||
-                    landmark.location.city.contains(query, ignoreCase = true)
+                    landmark.nameArabic.contains(query) ||
+                    landmark.location.city.contains(query, ignoreCase = true) ||
+                    landmark.location.cityArabic.contains(query)
             matchesCategory && matchesQuery
         }
 
@@ -489,8 +498,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun snack(message: Int) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
-            .setBackgroundTint(ContextCompat.getColor(this, R.color.surface_high))
-            .setTextColor(ContextCompat.getColor(this, R.color.ivory))
+            .setBackgroundTint(ContextCompat.getColor(this, R.color.ivory))
+            .setTextColor(ContextCompat.getColor(this, R.color.canvas))
             .show()
     }
 

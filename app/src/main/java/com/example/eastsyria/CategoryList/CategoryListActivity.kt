@@ -302,9 +302,9 @@ class CategoryListActivity : AppCompatActivity() {
 
     private fun snack(message: Int, action: Int? = null, onAction: (() -> Unit)? = null) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).apply {
-            setBackgroundTint(ContextCompat.getColor(context, R.color.surface_high))
-            setTextColor(ContextCompat.getColor(context, R.color.ivory))
-            setActionTextColor(ContextCompat.getColor(context, R.color.terracotta_soft))
+            setBackgroundTint(ContextCompat.getColor(context, R.color.ivory))
+            setTextColor(ContextCompat.getColor(context, R.color.canvas))
+            setActionTextColor(ContextCompat.getColor(context, R.color.canvas))
             if (action != null && onAction != null) setAction(action) { onAction() }
             show()
         }

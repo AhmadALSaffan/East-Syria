@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Search, on the warm palette. The field is the same floating pill as the home
+  Search (v3). The field is the same floating pill as the home
   screen's, so tapping it there and arriving here reads as one gesture: the pill
   simply grew a keyboard. Filters are derived from the catalog, never typed in.
 -->
@@ -18,46 +18,53 @@
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:paddingBottom="6dp">
+        android:paddingBottom="14dp">
 
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/bg_icon_chip"
-            android:contentDescription="@string/search_back"
-            android:padding="12dp"
-            android:src="@drawable/ic_back"
-            app:tint="@color/ivory" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                style="@style/Widget.EastSyria.V3.IconButton"
+                android:contentDescription="@string/search_back"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.ScreenTitle"
+                android:layout_marginStart="14dp"
+                android:text="@string/search_title" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/searchPill"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="12dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_search_pill"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_field"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="20dp"
+            android:paddingStart="18dp"
             android:paddingEnd="4dp">
 
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ic_search"
-                app:tint="@color/terracotta_soft" />
+                app:tint="@color/ivory_dim" />
 
             <EditText
                 android:id="@+id/etSearch"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="14dp"
+                android:layout_marginStart="12dp"
                 android:layout_weight="1"
                 android:background="@null"
                 android:hint="@string/home_search_hint"
@@ -65,17 +72,19 @@
                 android:importantForAutofill="no"
                 android:inputType="text"
                 android:maxLines="1"
+                android:textAlignment="viewStart"
                 android:textColor="@color/ivory"
                 android:textColorHint="@color/ivory_mute"
+                android:textCursorDrawable="@drawable/cursor_accent"
                 android:textSize="16sp" />
 
             <ImageButton
                 android:id="@+id/btnClear"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/search_clear"
-                android:padding="13dp"
+                android:padding="12dp"
                 android:src="@drawable/ic_close"
                 android:visibility="gone"
                 app:tint="@color/ivory_dim"
@@ -93,8 +102,8 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingStart="24dp"
-        android:paddingEnd="16dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="12dp"
         android:scrollbars="none"
         android:visibility="gone"
         tools:visibility="visible">
@@ -114,8 +123,8 @@
         android:id="@+id/tvResultsCount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="6dp"
         android:accessibilityLiveRegion="polite"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"

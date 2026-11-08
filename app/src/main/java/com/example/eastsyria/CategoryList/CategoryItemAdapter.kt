@@ -1,5 +1,6 @@
 package com.example.eastsyria.CategoryList
 
+import com.example.eastsyria.Ui.isArabic
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
@@ -34,15 +35,16 @@ class CategoryItemAdapter(
         fun bind(item: CategoryItem) {
             val context = binding.root.context
             binding.apply {
-                tvLandmarkName.text = item.name
+                val ar = context.isArabic()
+                tvLandmarkName.text = if (ar && item.nameArabic.isNotBlank()) item.nameArabic else item.name
 
-                val place = item.location.city.trim().ifEmpty { item.location.governorate.trim() }
+                val place = (if (ar && item.location.cityArabic.isNotBlank()) item.location.cityArabic else item.location.city).trim().ifEmpty { item.location.governorate.trim() }
                 // The category, or UNESCO where the record says so. The publish state
                 // ("published") is a curator's concern and means nothing to a visitor.
                 val badge = if (item.getBadgeText().startsWith("UNESCO")) {
                     context.getString(R.string.category_unesco)
                 } else {
-                    item.category.trim()
+                    (if (ar && item.categoryArabic.isNotBlank()) item.categoryArabic else item.category).trim()
                 }
                 val meta = when {
                     badge.isNotEmpty() && place.isNotEmpty() ->
@@ -54,7 +56,7 @@ class CategoryItemAdapter(
                 tvMeta.text = meta
                 tvMeta.visibility = if (meta.isEmpty()) View.GONE else View.VISIBLE
 
-                val description = item.description.trim()
+                val description = (if (ar && item.descriptionArabic.isNotBlank()) item.descriptionArabic else item.description).trim()
                 tvDescription.text = description
                 tvDescription.visibility = if (description.isEmpty()) View.GONE else View.VISIBLE
 
@@ -129,6 +131,7 @@ class CategoryItemAdapter(
         } else {
             items.filter {
                 it.name.contains(query, ignoreCase = true) ||
+                        it.nameArabic.contains(query) ||
                         it.description.contains(query, ignoreCase = true) ||
                         it.location.city.contains(query, ignoreCase = true) ||
                         it.location.governorate.contains(query, ignoreCase = true)

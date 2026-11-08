@@ -12,36 +12,36 @@
 
     <!-- Slightly lighter than the canvas: the water is holding the sky. -->
     <path
-        android:fillColor="#FF242220"
+        android:fillColor="#FF1C1E21"
         android:pathData="M0,358 L400,358 L400,420 L0,420 Z" />
 
     <!-- Far bank -->
     <path
-        android:strokeColor="#FF35302A"
+        android:strokeColor="#FF2B2F34"
         android:strokeWidth="2"
         android:pathData="M0,358 L400,358" />
 
     <!-- The glow, broken across the surface -->
     <path
-        android:strokeColor="#FFE2703A"
+        android:strokeColor="#FFD7141F"
         android:strokeWidth="3"
         android:strokeAlpha="0.55"
         android:strokeLineCap="round"
         android:pathData="M176,366 L224,366" />
     <path
-        android:strokeColor="#FFE2703A"
+        android:strokeColor="#FFD7141F"
         android:strokeWidth="3"
         android:strokeAlpha="0.42"
         android:strokeLineCap="round"
         android:pathData="M168,376 L232,376 M182,386 L218,386" />
     <path
-        android:strokeColor="#FFE2703A"
+        android:strokeColor="#FFD7141F"
         android:strokeWidth="3"
         android:strokeAlpha="0.28"
         android:strokeLineCap="round"
         android:pathData="M158,396 L242,396 M174,406 L226,406" />
     <path
-        android:strokeColor="#FFE2703A"
+        android:strokeColor="#FFD7141F"
         android:strokeWidth="3"
         android:strokeAlpha="0.16"
         android:strokeLineCap="round"
@@ -49,7 +49,7 @@
 
     <!-- Surface texture away from the reflection -->
     <path
-        android:strokeColor="#FF3A3733"
+        android:strokeColor="#FF30343A"
         android:strokeWidth="2"
         android:strokeAlpha="0.55"
         android:strokeLineCap="round"

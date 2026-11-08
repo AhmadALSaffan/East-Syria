@@ -10,12 +10,13 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import kotlin.math.max
 
-/** Edge to edge on the warm palette: the system bars never turn light on us. */
+/** Edge to edge; the bar icons follow the day (light) or night (dark) colours. */
 fun ComponentActivity.warmEdgeToEdge() {
     enableEdgeToEdge()
     WindowCompat.getInsetsController(window, window.decorView).apply {
-        isAppearanceLightStatusBars = false
-        isAppearanceLightNavigationBars = false
+        val day = !isNightMode()
+        isAppearanceLightStatusBars = day
+        isAppearanceLightNavigationBars = day
     }
 }
 
@@ -48,3 +49,8 @@ fun View.padTopForInsets() {
 }
 
 fun Activity.dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
+
+/** True when the app is drawing its night (dark) colours. */
+fun android.content.Context.isNightMode(): Boolean =
+    (resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+        android.content.res.Configuration.UI_MODE_NIGHT_YES

@@ -1,5 +1,6 @@
 package com.example.eastsyria.MainPage
 
+import com.example.eastsyria.Ui.isNightMode
 import android.animation.ValueAnimator
 import android.app.ActivityOptions
 import android.content.ContentValues.TAG
@@ -76,14 +77,14 @@ class MainPageActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        // The hero photograph runs under both system bars, so their icons must
-        // stay light whatever the system theme says.
+        // Bar icons follow the day/night colours of the page behind them.
         WindowCompat.setDecorFitsSystemWindows(window, false)
         window.statusBarColor = Color.TRANSPARENT
         window.navigationBarColor = Color.TRANSPARENT
         WindowCompat.getInsetsController(window, window.decorView).apply {
-            isAppearanceLightStatusBars = false
-            isAppearanceLightNavigationBars = false
+            val day = !isNightMode()
+            isAppearanceLightStatusBars = day
+            isAppearanceLightNavigationBars = day
         }
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 
@@ -93,6 +94,7 @@ class MainPageActivity : AppCompatActivity() {
         setupNavigation()
         setupClickListeners()
         setupScrollBehavior()
+        setupHeader()
         loadLandmarksFromFirebase()
         handleExploreExtra(intent)
     }
@@ -122,12 +124,11 @@ class MainPageActivity : AppCompatActivity() {
             val bars = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
             )
-            binding.topBarBg.updateLayoutParams<ViewGroup.LayoutParams> {
-                height = dp(76) + bars.top
-            }
-            binding.searchPill.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = dp(10) + bars.top
-            }
+            binding.topBarBg.updateLayoutParams<ViewGroup.LayoutParams> { height = bars.top }
+            binding.header.setPadding(
+                binding.header.paddingLeft, bars.top + dp(16),
+                binding.header.paddingRight, binding.header.paddingBottom,
+            )
             insets
         }
     }
@@ -137,13 +138,10 @@ class MainPageActivity : AppCompatActivity() {
         binding.navDock.onReselected = { binding.scrollMain.smoothScrollTo(0, 0) }
     }
 
-    /**
-     * The search pill floats over the hero and gains a solid backing once the
-     * hero has scrolled away.
-     */
+    /** Content scrolls under the status bar; a solid strip fades in behind it. */
     private fun setupScrollBehavior() {
-        val fadeStart = dp(170)
-        val fadeSpan = dp(80)
+        val fadeStart = dp(8)
+        val fadeSpan = dp(48)
         binding.scrollMain.setOnScrollChangeListener(
             androidx.core.widget.NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
                 binding.topBarBg.alpha = ((scrollY - fadeStart).toFloat() / fadeSpan).coerceIn(0f, 1f)
@@ -179,7 +177,7 @@ class MainPageActivity : AppCompatActivity() {
         }
         binding.rvTrendingDestinations.apply {
             adapter = trendingAdapter
-            layoutManager = LinearLayoutManager(this@MainPageActivity)
+            layoutManager = LinearLayoutManager(this@MainPageActivity, LinearLayoutManager.HORIZONTAL, false)
         }
     }
 
@@ -265,7 +263,7 @@ class MainPageActivity : AppCompatActivity() {
                 } else {
                     showState(HeroState.CONTENT)
                     binding.tvCatalogCount.text =
-                        getString(R.string.home_catalog_count, published.size)
+                        resources.getQuantityString(R.plurals.home_places, published.size, published.size)
                 }
             }
 
@@ -370,8 +368,38 @@ class MainPageActivity : AppCompatActivity() {
             }
 
             tvViewMap.setOnClickListener { openMap() }
+            btnSearchMap.setOnClickListener { openMap() }
+            cardAssistant.setOnClickListener {
+                startActivity(Intent(this@MainPageActivity, com.example.eastsyria.Assistant.AssistantActivity::class.java))
+            }
+            btnAvatar.setOnClickListener {
+                startActivity(Intent(this@MainPageActivity, com.example.eastsyria.Profile.ProfileActivity::class.java))
+            }
             btnRetry.setOnClickListener { loadLandmarksFromFirebase() }
         }
+    }
+
+    /** Greeting by the hour, and the user's photo or initial in the avatar. */
+    private fun setupHeader() {
+        val hour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
+        binding.tvGreeting.setText(
+            when (hour) {
+                in 5..11 -> R.string.home_greeting_morning
+                in 12..17 -> R.string.home_greeting_afternoon
+                else -> R.string.home_greeting_evening
+            }
+        )
+        val user = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser ?: return
+        val name = user.displayName?.takeIf { it.isNotBlank() } ?: user.email.orEmpty()
+        binding.tvAvatarInitial.text = name.firstOrNull()?.uppercase().orEmpty()
+        Firebase.database.reference.child("users").child(user.uid).child("imgUrl").get()
+            .addOnSuccessListener { snap ->
+                val url = snap.getValue(String::class.java)?.takeIf { it.isNotBlank() }
+                    ?: user.photoUrl?.toString() ?: return@addOnSuccessListener
+                if (isDestroyed) return@addOnSuccessListener
+                binding.ivAvatar.visibility = View.VISIBLE
+                com.bumptech.glide.Glide.with(this).load(url).circleCrop().into(binding.ivAvatar)
+            }
     }
 
     private fun openMap() {

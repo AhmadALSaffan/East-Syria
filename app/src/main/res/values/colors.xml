@@ -2,52 +2,52 @@
 <resources>
     <color name="background_white">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
-    <color name="text_primary">#16120F</color>
-    <color name="text_secondary">#B5A796</color>
-    <color name="text_hint">#9A8D7E</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#5F5D58</color>
+    <color name="text_hint">#76736C</color>
 
 
-    <color name="background_dark">#16120F</color>
-    <color name="text_light_primary">#F5EDE3</color>
-    <color name="text_light_secondary">#B5A796</color>
-    <color name="text_light_hint">#9A8D7E</color>
-    <color name="input_background">#221C17</color>
-    <color name="divider_dark">#362E27</color>
+    <color name="background_dark">#FFFFFF</color>
+    <color name="text_light_primary">#1B1B1A</color>
+    <color name="text_light_secondary">#5F5D58</color>
+    <color name="text_light_hint">#76736C</color>
+    <color name="input_background">#FFFFFF</color>
+    <color name="divider_dark">#E8E6E1</color>
 
 
-    <color name="orange_primary">#E2703A</color>
-    <color name="orange_accent">#E2703A</color>
-    <color name="beige_light">#F5E6D3</color>
-    <color name="brown_dark">#6B4423</color>
+    <color name="orange_primary">#1B1B1A</color>
+    <color name="orange_accent">#1B1B1A</color>
+    <color name="beige_light">#1B1B1A</color>
+    <color name="brown_dark">#E8E6E1</color>
     <color name="peach">#FFB399</color>
     <color name="cyan">#B3E5E6</color>
     <color name="pink">#FFD6E0</color>
     <color name="gray_light">#E8E8E8</color>
-    <color name="rating_star">#F0B44C</color>
+    <color name="rating_star">#1B1B1A</color>
 
     <color name="background_light">#FFFFFF</color>
-    <color name="text_dark">#16120F</color>
-    <color name="card_beige">#E8DCC4</color>
+    <color name="text_dark">#FFFFFF</color>
+    <color name="card_beige">#1B1B1A</color>
     <color name="card_green">#5A7C6F</color>
-    <color name="teal_accent">#2BA89A</color>
+    <color name="teal_accent">#4F6E8F</color>
 
 
     <!-- Dark Theme Colors -->
-    <color name="surface_dark">#221C17</color>
-    <color name="card_dark">#221C17</color>
+    <color name="surface_dark">#FFFFFF</color>
+    <color name="card_dark">#FFFFFF</color>
 
     <!-- Text Colors -->
-    <color name="text_white">#F5EDE3</color>
-    <color name="text_light">#F5EDE3</color>
-    <color name="text_secondary1">#B5A796</color>
-    <color name="text_dark1">#16120F</color>
-    <color name="text_light_secondary1">#9A8D7E</color>
+    <color name="text_white">#1B1B1A</color>
+    <color name="text_light">#1B1B1A</color>
+    <color name="text_secondary1">#5F5D58</color>
+    <color name="text_dark1">#FFFFFF</color>
+    <color name="text_light_secondary1">#76736C</color>
 
 
     <color name="black">#000000</color>
-    <color name="divider_color">#362E27</color>
+    <color name="divider_color">#E8E6E1</color>
     <color name="background_light1">#FFFFFF</color>
-    <color name="surface_light">#2E2620</color>
+    <color name="surface_light">#F3F2EE</color>
 
     <color name="green">#4CAF50</color>
     <color name="orange">#FFA726</color>
@@ -59,36 +59,36 @@
          ================================================================ -->
 
     <!-- Accents: clay acts, amber highlights. They never swap jobs. -->
-    <color name="clay">#E2703A</color>
-    <color name="clay_bright">#F09A6E</color>
-    <color name="clay_deep">#B9521F</color>
-    <color name="amber">#F0B44C</color>
-    <color name="amber_deep">#B8862F</color>
+    <color name="clay">#1B1B1A</color>
+    <color name="clay_bright">#1B1B1A</color>
+    <color name="clay_deep">#000000</color>
+    <color name="amber">#1B1B1A</color>
+    <color name="amber_deep">#76736C</color>
 
     <!-- Neutrals: three steps of lightness, no fourth. -->
-    <color name="basalt">#16120F</color>
-    <color name="basalt_deep">#0C0A08</color>
-    <color name="basalt_raised">#221C17</color>
-    <color name="basalt_high">#2E2620</color>
+    <color name="basalt">#FFFFFF</color>
+    <color name="basalt_deep">#F5F4F1</color>
+    <color name="basalt_raised">#FFFFFF</color>
+    <color name="basalt_high">#F3F2EE</color>
 
     <!-- Text -->
-    <color name="bone">#F5EDE3</color>
-    <color name="bone_dim">#B5A796</color>
+    <color name="bone">#1B1B1A</color>
+    <color name="bone_dim">#5F5D58</color>
     <!-- Warm-tinted secondary, for text sitting next to clay where a neutral
          gray reads clinical. Carries the Arabic name on the detail screen. -->
-    <color name="warm_gray">#B5A796</color>
+    <color name="warm_gray">#5F5D58</color>
     <!-- Lightest gray that still clears 4.5:1 on basalt_raised. Hints only. -->
-    <color name="bone_hint">#9A8D7E</color>
-    <color name="ash">#9A8D7E</color>
-    <color name="hairline">#362E27</color>
+    <color name="bone_hint">#76736C</color>
+    <color name="ash">#76736C</color>
+    <color name="hairline">#E8E6E1</color>
 
     <!-- The Approach: drawn stone and atmosphere -->
-    <color name="stone_far">#1D1814</color>
-    <color name="stone_mid">#241E19</color>
-    <color name="stone_near">#2C2520</color>
-    <color name="stone_lit">#3C3630</color>
-    <color name="river">#14100D</color>
-    <color name="opening">#0A0807</color>
+    <color name="stone_far">#F3F2EE</color>
+    <color name="stone_mid">#F3F2EE</color>
+    <color name="stone_near">#F3F2EE</color>
+    <color name="stone_lit">#E8E6E1</color>
+    <color name="river">#F5F4F1</color>
+    <color name="opening">#F5F4F1</color>
 
     <!-- ================================================================
          Warm palette (v2). Introduced with the main-page redesign; the rest
@@ -96,19 +96,37 @@
          screen. Terracotta acts, gold marks, wayfinding (teal) is the map
          and nothing else. Ink on terracotta and on wayfinding clears 5.8:1.
          ================================================================ -->
-    <color name="canvas">#16120F</color>
-    <color name="surface">#221C17</color>
-    <color name="surface_high">#2E2620</color>
-    <color name="line">#362E27</color>
+    <color name="canvas">#FFFFFF</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_high">#F3F2EE</color>
+    <color name="line">#E8E6E1</color>
 
-    <color name="ivory">#F5EDE3</color>
-    <color name="ivory_dim">#B5A796</color>
+    <color name="ivory">#1B1B1A</color>
+    <color name="ivory_dim">#5F5D58</color>
     <!-- Meta text and hints; 5.2:1 on surface. -->
-    <color name="ivory_mute">#9A8D7E</color>
+    <color name="ivory_mute">#76736C</color>
 
-    <color name="terracotta">#E2703A</color>
-    <color name="terracotta_soft">#F09A6E</color>
-    <color name="gold">#F0B44C</color>
-    <color name="wayfinding">#2BA89A</color>
+    <color name="terracotta">#1B1B1A</color>
+    <color name="terracotta_soft">#1B1B1A</color>
+    <color name="gold">#1B1B1A</color>
+    <!-- Text and icons on a racing-red fill. -->
+    <color name="on_accent">#FFFFFF</color>
+    <color name="wayfinding">#4F6E8F</color>
 
+
+    <!-- ================================================================
+         Stone & Ink (v4). Light by day (this file), dark at night
+         (values-night/colors.xml). The accent is the ink itself: a black
+         button by day, an ivory one at night. Colour comes from the photos.
+         ================================================================ -->
+    <!-- Text and icons on a photograph: always white, over a dark scrim. -->
+    <color name="on_photo">#FFFFFF</color>
+    <color name="on_photo_dim">#E6FFFFFF</color>
+    <!-- Errors stay red: the one place colour means "something is wrong". -->
+    <color name="error">#C0392B</color>
+    <!-- Photo melting into the page (detail hero). -->
+    <color name="scrim_canvas_0">#00FFFFFF</color>
+    <color name="scrim_canvas_80">#CCFFFFFF</color>
+    <color name="photo_icon">#1B1B1A</color>
+    <color name="ripple">#14000000</color>
 </resources>

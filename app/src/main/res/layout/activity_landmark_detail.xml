@@ -4,7 +4,7 @@
     go is one thumb away. The photograph runs full-bleed and melts into the
     canvas; the name sits on the melt, exactly as on the home hero, and the
     one filled action floats at the foot so directions are never a scroll away.
-  OWN-WORLD: Warm canvas (#16120F), ivory type, terracotta acts, gold marks the
+  OWN-WORLD: Warm canvas (#0B0C0E), ivory type, terracotta acts, gold marks the
     rating, Amiri carries the name in both scripts. Controls float as round
     chips over the photograph; facts are a label-and-value register, not tiles.
   STORY: You see the place, read what it is in your language of choice, check
@@ -205,7 +205,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="128dp">
+                android:paddingBottom="148dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -229,9 +229,9 @@
                         android:letterSpacing="0"
                         android:text="@string/detail_lang_english"
                         android:textAllCaps="false"
-                        android:textColor="@color/terracotta_soft"
+                        android:textColor="@color/ivory"
                         android:textSize="16sp"
-                        app:backgroundTint="#33E2703A"
+                        app:backgroundTint="@color/surface_high"
                         app:cornerRadius="22dp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -284,28 +284,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        style="@style/Widget.EastSyria.HomeSectionHeader"
-                        android:layout_marginTop="36dp">
-
-                        <TextView
-                            style="@style/Widget.EastSyria.HomeSectionTitle"
-                            android:text="@string/detail_section_record" />
-
-                        <View
-                            style="@style/Widget.EastSyria.HomeSectionRule"
-                            android:layout_marginEnd="0dp" />
-
-                    </LinearLayout>
+                    <TextView
+                        style="@style/Widget.EastSyria.V3.GroupLabel"
+                        android:layout_marginTop="32dp"
+                        android:text="@string/detail_section_record" />
 
                     <LinearLayout
                         android:id="@+id/recordTable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="24dp"
-                        android:orientation="vertical" />
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/bg_group"
+                        android:orientation="vertical"
+                        android:paddingStart="16dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="4dp" />
 
                 </LinearLayout>
 
@@ -315,28 +310,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        style="@style/Widget.EastSyria.HomeSectionHeader"
-                        android:layout_marginTop="36dp">
-
-                        <TextView
-                            style="@style/Widget.EastSyria.HomeSectionTitle"
-                            android:text="@string/detail_section_visiting" />
-
-                        <View
-                            style="@style/Widget.EastSyria.HomeSectionRule"
-                            android:layout_marginEnd="0dp" />
-
-                    </LinearLayout>
+                    <TextView
+                        style="@style/Widget.EastSyria.V3.GroupLabel"
+                        android:layout_marginTop="32dp"
+                        android:text="@string/detail_section_visiting" />
 
                     <LinearLayout
                         android:id="@+id/visitTable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="24dp"
-                        android:orientation="vertical" />
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/bg_group"
+                        android:orientation="vertical"
+                        android:paddingStart="16dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="4dp" />
 
                 </LinearLayout>
 
@@ -434,11 +424,11 @@
                 android:id="@+id/btnBack"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:background="@drawable/bg_icon_chip"
+                android:background="@drawable/bg_photo_button"
                 android:contentDescription="@string/detail_back"
                 android:padding="12dp"
                 android:src="@drawable/ic_back"
-                app:tint="@color/ivory" />
+                app:tint="@color/photo_icon" />
 
             <!-- The name, once the hero's own has scrolled beneath the bar. -->
             <TextView
@@ -463,26 +453,34 @@
                 android:id="@+id/btnShare"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:background="@drawable/bg_icon_chip"
+                android:background="@drawable/bg_photo_button"
                 android:contentDescription="@string/detail_share"
                 android:padding="12dp"
                 android:src="@drawable/ic_share"
-                app:tint="@color/ivory" />
+                app:tint="@color/photo_icon" />
 
             <ImageButton
                 android:id="@+id/btnBookmark"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="12dp"
-                android:background="@drawable/bg_icon_chip"
+                android:background="@drawable/bg_photo_button"
                 android:contentDescription="@string/detail_bookmark"
                 android:padding="12dp"
                 android:src="@drawable/ic_bookmark"
-                app:tint="@color/ivory" />
+                app:tint="@color/photo_icon" />
 
         </LinearLayout>
 
     </FrameLayout>
+
+    <View
+        android:id="@+id/bottomScrim"
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/scrim_canvas_bottom_solid"
+        android:importantForAccessibility="no" />
 
     <!-- The one filled action. It floats so directions are never a scroll away. -->
     <com.google.android.material.button.MaterialButton

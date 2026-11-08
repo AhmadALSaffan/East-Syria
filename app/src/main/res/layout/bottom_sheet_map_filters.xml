@@ -108,7 +108,7 @@
             android:value="100"
             android:valueFrom="5"
             android:valueTo="100"
-            app:haloColor="#33E2703A"
+            app:haloColor="@color/ripple"
             app:thumbColor="@color/terracotta"
             app:tickVisible="false"
             app:trackColorActive="@color/terracotta"

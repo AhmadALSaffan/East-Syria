@@ -8,6 +8,9 @@
         <item name="colorSecondaryVariant">@color/brown_dark</item>
         <item name="colorOnSecondary">@color/white</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <!-- Obsidian from the first frame: no light flash at launch. -->
+        <item name="android:windowSplashScreenBackground">@color/canvas</item>
+        <item name="android:windowBackground">@color/canvas</item>
         <item name="materialButtonStyle">@style/Widget.App.Button</item>
     </style>
 

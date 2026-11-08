@@ -852,7 +852,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="PENDING"
-                    android:textColor="@color/terracotta"
+                    android:textColor="@color/terracotta_soft"
                     android:textSize="13sp"
                     android:textStyle="bold"/>
 
@@ -953,7 +953,7 @@
             android:layout_height="56dp"
             android:layout_marginHorizontal="16dp"
             android:text="Save landmark"
-            android:textColor="@color/canvas"
+            android:textColor="@color/on_accent"
             android:textSize="16sp"
             android:textStyle="normal"
             android:background="@drawable/add_bg_orange"

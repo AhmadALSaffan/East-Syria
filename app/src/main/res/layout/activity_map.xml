@@ -226,17 +226,18 @@
 
         </LinearLayout>
 
-        <!-- Wayfinding, so teal: the one place on this screen that colour appears. -->
+        <!-- Where am I: the one red control on the map. -->
         <ImageButton
             android:id="@+id/fabMyLocation"
             android:layout_width="52dp"
             android:layout_height="52dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/circle_teal"
+            android:background="@drawable/bg_circle_accent"
             android:contentDescription="@string/map_my_location"
+            android:elevation="4dp"
             android:padding="14dp"
             android:src="@drawable/ic_my_location"
-            app:tint="@color/canvas" />
+            app:tint="@color/on_accent" />
 
     </LinearLayout>
 
@@ -258,7 +259,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:rippleColor="#33F5EDE3"
+        app:rippleColor="@color/ripple"
         app:strokeColor="@color/line"
         app:strokeWidth="1dp"
         tools:visibility="visible">
@@ -301,13 +302,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:fontFamily="@font/amiri"
-                    android:includeFontPadding="false"
-                    android:lineHeight="24sp"
+                    android:fontFamily="sans-serif-medium"
                     android:maxLines="2"
                     android:textColor="@color/ivory"
-                    android:textSize="21sp"
-                    android:textStyle="bold"
+                    android:textSize="17sp"
                     tools:text="Dura-Europos" />
 
                 <TextView
@@ -338,12 +336,14 @@
             </LinearLayout>
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="8dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_circle_accent"
                 android:importantForAccessibility="no"
+                android:padding="11dp"
                 android:src="@drawable/ic_arrow_right"
-                app:tint="@color/ivory_mute" />
+                app:tint="@color/on_accent" />
 
         </LinearLayout>
 

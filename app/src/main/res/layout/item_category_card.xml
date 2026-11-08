@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:text="Homs Governorate"
                     android:textSize="14sp"
-                    android:textColor="@color/terracotta"
+                    android:textColor="@color/terracotta_soft"
                     android:layout_marginStart="6dp" />
 
             </LinearLayout>
@@ -159,7 +159,7 @@
                     android:text="View Details"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="@color/terracotta"
+                    android:textColor="@color/terracotta_soft"
                     android:drawableEnd="@drawable/ic_arrow_right"
                     android:drawableTint="@color/terracotta"
                     android:drawablePadding="4dp"

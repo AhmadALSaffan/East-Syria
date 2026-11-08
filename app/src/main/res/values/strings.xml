@@ -69,6 +69,53 @@
     <string name="onboarding_plate_ar">تل حلف</string>
     <string name="onboarding_plate_place">Near Ras al-Ayn, Al-Hasakah</string>
 
+
+    <!-- Onboarding v3: animated scenes of the app (search, map, bilingual entry, saving). -->
+    <string name="onb_wordmark">East Syria</string>
+    <string name="onb_1_title">Find any landmark</string>
+    <string name="onb_1_body">Fortresses, ruins, museums and kitchens of eastern Syria, gathered into one catalog you can search in a second.</string>
+    <string name="onb_2_title">Every site on one map</string>
+    <string name="onb_2_body">See what stands along the Euphrates and near you, then open any pin for the hours, the fees and the way there.</string>
+    <string name="onb_3_title">In Arabic and English</string>
+    <string name="onb_3_body">Every entry is written and checked in both languages, with the practical facts you need to actually go.</string>
+    <string name="onb_4_title">Keep the ones you love</string>
+    <string name="onb_4_body">Save landmarks to your collection and hear first when a new site is added.</string>
+
+    <string name="onb_search_hint">Search landmarks</string>
+    <string name="onb_search_query">Euphrates</string>
+    <string name="onb_search_count">3 LANDMARKS ON THE RIVER</string>
+    <string name="onb_search_r1">Qalaat Jabar</string>
+    <string name="onb_search_r1_meta">Castle · Al-Raqqa</string>
+    <string name="onb_search_r2">Al-Rahba</string>
+    <string name="onb_search_r2_meta">Castle · Al-Mayadin</string>
+    <string name="onb_search_r3">Dura-Europos</string>
+    <string name="onb_search_r3_meta">Ancient city · Deir ez-Zor</string>
+
+    <string name="onb_map_pin1">Qalaat Jabar</string>
+    <string name="onb_map_pin2">Deir ez-Zor</string>
+    <string name="onb_map_pin3">Dura-Europos</string>
+    <string name="onb_map_pin4">Mari</string>
+    <string name="onb_map_card_meta">Ancient city · 3rd century BC</string>
+    <string name="onb_map_open">Open</string>
+
+    <string name="onb_entry_reviewed">REVIEWED</string>
+    <string name="onb_entry_era">Era</string>
+    <string name="onb_entry_era_value">6th millennium BC</string>
+    <string name="onb_entry_region">Region</string>
+    <string name="onb_entry_region_value">Al-Hasakah</string>
+    <string name="onb_entry_entry">Entry</string>
+    <string name="onb_entry_entry_value">Free</string>
+
+    <string name="onb_save_name">Palmyra</string>
+    <string name="onb_save_meta">Tadmur · Homs desert</string>
+    <string name="onb_save_collection">Your collection</string>
+    <string name="onb_save_note_title">NEW LANDMARK ADDED</string>
+    <string name="onb_save_note_body">Mari Ancient City</string>
+
+    <string name="onb_continue_google">Continue with Google</string>
+    <string name="onb_continue_email">Continue with email</string>
+    <string name="onb_have_account">I already have an account</string>
+
     <string name="onboarding_skip">Skip</string>
     <string name="onboarding_next">Continue</string>
     <string name="onboarding_start">Get started</string>
@@ -89,7 +136,7 @@
     <string name="login_password_hint">Your password</string>
     <string name="login_forgot">Forgot?</string>
     <string name="login_action">Sign in</string>
-    <string name="login_divider">or</string>
+    <string name="login_divider">or use your email</string>
     <string name="login_google">Continue with Google</string>
     <string name="login_no_account">New here?</string>
     <string name="login_sign_up">Create an account</string>
@@ -413,4 +460,168 @@
     <string name="otp_resend">Send it again</string>
     <string name="otp_action">Verify and continue</string>
 
+    <!-- ============================================================
+         v3 redesign
+         ============================================================ -->
+    <string name="home_title_explore">Explore East Syria</string>
+    <string name="home_greeting_morning">Good morning</string>
+    <string name="home_greeting_afternoon">Good afternoon</string>
+    <string name="home_greeting_evening">Good evening</string>
+    <string name="home_browse">Browse by kind</string>
+    <plurals name="home_places">
+        <item quantity="one">%d place</item>
+        <item quantity="other">%d places</item>
+    </plurals>
+    <string name="place_city_governorate">%1$s, %2$s</string>
+
+    <string name="search_title">Search</string>
+    <string name="map_chip_count">%1$s · %2$d</string>
+    <string name="onb_page_of">Page %1$d of %2$d</string>
+    <string name="language_english">English</string>
+    <string name="language_arabic">العربية</string>
+    <string name="profile_more">More</string>
+
+    <!-- Settings -->
+    <string name="settings_language">Language</string>
+    <string name="settings_language_hint">The whole app switches, including the onboarding scenes and the landmark records.</string>
+    <string name="settings_app">App</string>
+    <string name="settings_clear_cache">Clear saved photos</string>
+    <string name="settings_clear_cache_hint">Frees space; photos download again when you open them.</string>
+    <string name="settings_cache_cleared">Saved photos cleared</string>
+    <string name="settings_replay_intro">Watch the intro again</string>
+
+    <!-- About -->
+    <string name="about_intro">East Syria is a bilingual guide to the heritage of eastern Syria: the fortresses, ancient cities, rivers, museums, kitchens and workshops that carry the region\'s history.</string>
+    <string name="about_inside_title">What is inside</string>
+    <string name="about_inside_body">Every landmark has a written record in Arabic and English, photographs, the practical facts for a visit (hours, entry and the best time to go) and its place on the map. Save the ones you mean to visit and you will hear when new sites are added.</string>
+    <string name="about_care_title">How entries are made</string>
+    <string name="about_care_body">Landmarks are written and reviewed by the curators before they are published. If something is wrong or missing, tell us and we will correct it.</string>
+    <string name="about_credits_title">Photo credits</string>
+    <string name="about_credits_body">Mari, Zimri-Lim palace: Heretiq, CC BY-SA 2.5, via Wikimedia Commons. Other photographs belong to the East Syria project.</string>
+    <string name="about_contact">Made by</string>
+    <string name="about_made_by">Ahmad Al Saffan on GitHub</string>
+
+    <!-- Privacy -->
+    <string name="privacy_intro">This explains what East Syria keeps about you and why. In short: only what the app needs to give you an account and your saved places.</string>
+    <string name="privacy_collect_title">What we collect</string>
+    <string name="privacy_collect_body">Your name and email address, and if you add them, your phone number, your city and a profile photo. We also keep the landmarks you save and the updates sent to you. If you sign in with Google, we receive your name and email from Google.</string>
+    <string name="privacy_store_title">Where it is kept</string>
+    <string name="privacy_store_body">Your account and saved places are stored with Google Firebase. Profile photos and landmark photos are stored with Supabase. Both keep the data on secured servers; the app talks to them over encrypted connections.</string>
+    <string name="privacy_share_title">Who can see it</string>
+    <string name="privacy_share_body">Only you can read your account details and saved places. The curators who run the app can see the list of accounts to send updates. We do not sell your data or share it with advertisers, and the app shows no ads.</string>
+    <string name="privacy_choices_title">Your choices</string>
+    <string name="privacy_choices_body">You can change your details and photo in Personal details at any time. To delete your account and everything stored with it, contact us through the project page in About, and it will be removed.</string>
+    <string name="privacy_updated">Last updated November 2026.</string>
+
+    <!-- Messages (sign in, sign up, verification) -->
+    <string name="err_google_unavailable">Google sign-in isn\'t available right now. Try your email instead.</string>
+    <string name="err_offline">No connection. Check your network and try again.</string>
+    <string name="err_google_failed">Google sign-in didn\'t work. Try again or use your email.</string>
+    <string name="err_sign_in">We couldn\'t sign you in. Try again in a moment.</string>
+    <string name="err_account_setup">We couldn\'t finish setting up your account. Try again.</string>
+    <string name="err_server">We couldn\'t reach the server. Check your connection and try again.</string>
+    <string name="login_forgot_need_email">Enter your email first, then tap Forgot.</string>
+    <string name="err_email_required">Email is required</string>
+    <string name="err_email_invalid">Please enter a valid email</string>
+    <string name="err_password_required">Password is required</string>
+    <string name="err_password_short">Password must be at least 6 characters</string>
+    <string name="err_account_missing">We couldn\'t find that account. Try again.</string>
+    <string name="err_wrong_password">That email and password don\'t match. Check them and try again.</string>
+    <string name="err_too_many">Too many attempts. Wait a moment and try again.</string>
+    <string name="err_not_set_up">Your account isn\'t set up yet. Please sign up first.</string>
+    <string name="err_load_account_offline">We couldn\'t load your account. Check your connection and try again.</string>
+    <string name="err_load_account">We couldn\'t load your account. Try again in a moment.</string>
+    <string name="login_reset_sent">Password reset email sent to %1$s</string>
+    <string name="login_reset_failed">Failed to send reset email: %1$s</string>
+    <string name="err_name_required">Full name is required</string>
+    <string name="err_name_short">Name must be at least 3 characters</string>
+    <string name="err_phone_required">Phone number is required</string>
+    <string name="err_phone_invalid">Please enter a valid phone number</string>
+    <string name="err_city_required">Please select a city</string>
+    <string name="otp_sent">Verification code sent to %1$s</string>
+    <string name="otp_send_failed">Failed to send verification email. Please try again.</string>
+    <string name="err_generic">Error: %1$s</string>
+    <string name="otp_need_code">Please enter the 6-digit code</string>
+    <string name="otp_expired">Verification code has expired. Please request a new one.</string>
+    <string name="otp_invalid">Invalid verification code. Please try again.</string>
+    <string name="otp_account_created">Account created successfully!</string>
+    <string name="otp_profile_failed">Account created but failed to save profile: %1$s</string>
+    <string name="otp_create_failed">Failed to create account: %1$s</string>
+    <string name="otp_sending">Sending new code...</string>
+    <string name="otp_resent">New verification code sent to %1$s</string>
+    <string name="otp_send_failed_short">Failed to send email. Please try again.</string>
+    <string name="otp_resend_in">Resend in %1$ss</string>
+    <string name="detail_share_footer">Discover more Syrian landmarks with East Syria app</string>
+
+    <!-- AI guide -->
+    <string name="assistant_title">East Syria Guide</string>
+    <string name="assistant_subtitle">AI · travel and heritage only</string>
+    <string name="assistant_home_body">Plan a trip or ask about any landmark</string>
+    <string name="assistant_hint">Ask about a place or a trip…</string>
+    <string name="assistant_welcome_title">Where to next?</string>
+    <string name="assistant_welcome_body">Ask about the landmarks of eastern Syria, their history and how to visit, or let me plan a route for you. I only answer travel and heritage questions.</string>
+    <string name="assistant_suggest_1">Plan two days along the Euphrates</string>
+    <string name="assistant_suggest_2">What is the best time to visit Palmyra?</string>
+    <string name="assistant_suggest_3">Which castles can I see near Deir ez-Zor?</string>
+    <string name="assistant_suggest_4">Tell me the story of Dura-Europos</string>
+    <string name="assistant_err_signed_out">Sign in to talk to the guide.</string>
+    <string name="assistant_err_limit">You have reached today\'s limit of questions. The guide is back tomorrow.</string>
+    <string name="assistant_err_not_configured">The guide is not switched on yet. Try again later.</string>
+    <string name="assistant_err_failed">The guide could not answer just now. Try again in a moment.</string>
+
+    <!-- Confirm it's you -->
+    <string name="reauth_title">Confirm it\'s you</string>
+    <string name="reauth_password_body">To open your account details, enter the password for %1$s.</string>
+    <string name="reauth_google_body">To open your account details, choose your Google account again.</string>
+    <string name="reauth_google_action">Choose Google account</string>
+    <string name="reauth_confirm">Confirm</string>
+    <string name="reauth_cancel">Cancel</string>
+    <string name="reauth_wrong">That password is not right. Try again.</string>
+    <string name="reauth_other_account">That is a different Google account. Choose the one you signed in with.</string>
+    <string name="reauth_failed">We couldn\'t confirm it\'s you. Try again.</string>
+    <string name="reauth_unsupported">This account type can\'t be confirmed here.</string>
+    <string name="nav_map_tab">Map</string>
+
+    <!-- Security -->
+    <string name="security_title">Security</string>
+    <string name="security_signin">HOW YOU SIGN IN</string>
+    <string name="security_method">Sign-in method</string>
+    <string name="security_method_google">Google account</string>
+    <string name="security_method_email">Email and password</string>
+    <string name="security_last_signin">Last sign-in</string>
+    <string name="security_twofa">TWO-STEP SIGN-IN</string>
+    <string name="security_app">Authenticator app</string>
+    <string name="security_app_hint">Google Authenticator, Microsoft Authenticator, Authy…</string>
+    <string name="security_on">On</string>
+    <string name="security_off">Off</string>
+    <string name="security_off_body">After you sign in, the app also asks for a 6-digit code from your authenticator app. Someone with your password alone can\'t get in.</string>
+    <string name="security_setup">Set up authenticator app</string>
+    <string name="security_step_scan">Scan this code with your authenticator app</string>
+    <string name="security_key_hint">Can\'t scan it? Enter this key instead:</string>
+    <string name="security_copy">Copy</string>
+    <string name="security_copied">Copied</string>
+    <string name="security_open_app">Open in authenticator app</string>
+    <string name="security_no_app">No authenticator app is installed. Install one, or enter the key by hand.</string>
+    <string name="security_step_code">Enter the 6-digit code it shows</string>
+    <string name="security_turn_on">Turn on</string>
+    <string name="security_codes_title">Save your recovery codes</string>
+    <string name="security_codes_body">If you lose your phone, each of these codes lets you in once. Keep them somewhere safe; they won\'t be shown again.</string>
+    <string name="security_copy_all">Copy all codes</string>
+    <string name="security_saved_codes">I\'ve saved them</string>
+    <string name="security_on_body">You\'ll be asked for a code from your authenticator app when you sign in on a new phone, and once a month on this one.</string>
+    <string name="security_turn_off">Turn off</string>
+    <string name="security_turn_off_body">Enter a code from your authenticator app to turn two-step sign-in off.</string>
+    <string name="security_turned_off">Two-step sign-in is off</string>
+    <string name="security_password">PASSWORD</string>
+    <string name="security_password_body">We\'ll email you a link to choose a new password.</string>
+    <string name="security_password_action">Send password reset email</string>
+    <string name="twofa_title">Enter your code</string>
+    <string name="twofa_body">Open your authenticator app and enter the 6-digit code for East Syria.</string>
+    <string name="twofa_body_recovery">Enter one of the recovery codes you saved when you turned on two-step sign-in.</string>
+    <string name="twofa_verify">Continue</string>
+    <string name="twofa_use_recovery">Use a recovery code</string>
+    <string name="twofa_use_app">Use the authenticator app</string>
+    <string name="twofa_wrong">That code isn\'t right. Codes change every 30 seconds; try the current one.</string>
+    <string name="twofa_locked">Too many wrong codes. Wait 10 minutes and try again.</string>
+    <string name="twofa_failed">Something went wrong. Try again in a moment.</string>
 </resources>

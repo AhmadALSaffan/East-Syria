@@ -1,5 +1,7 @@
 package com.example.eastsyria.Profile
 
+import com.example.eastsyria.Ui.showSnack
+import com.example.eastsyria.Ui.isArabic
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -33,6 +35,7 @@ import java.util.Locale
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProfileBinding
+    private lateinit var reauth: com.example.eastsyria.Login.ReauthFlow
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var pulse: SkeletonPulse
@@ -46,6 +49,10 @@ class ProfileActivity : AppCompatActivity() {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
         pulse = SkeletonPulse(binding.identitySkeleton, binding.stampsSkeleton)
+        // Personal details opens only after the owner signs in again.
+        reauth = com.example.eastsyria.Login.ReauthFlow(this) { message ->
+            showSnack(binding.root, message, long = true)
+        }
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
@@ -95,8 +102,11 @@ class ProfileActivity : AppCompatActivity() {
             )
         }
 
+        binding.layoutSecurity.setOnClickListener {
+            reauth.confirm { startActivity(Intent(this, com.example.eastsyria.Security.SecurityActivity::class.java)) }
+        }
         binding.layoutPersonalDetails.setOnClickListener {
-            startActivity(Intent(this, PersonalDetailsActivity::class.java))
+            reauth.confirm { startActivity(Intent(this, PersonalDetailsActivity::class.java)) }
         }
         binding.tvSavedAll.setOnClickListener {
             startActivity(Intent(this, SavedLandmarksActivity::class.java))
@@ -104,10 +114,18 @@ class ProfileActivity : AppCompatActivity() {
         binding.btnSignOut.setOnClickListener { signOut() }
         binding.btnIdentityRetry.setOnClickListener { loadUserData() }
 
-        // layoutSettings, layoutAboutUs and layoutPrivacyAgreement have no
-        // destination yet. They are dimmed and labelled "Soon" in the layout
-        // rather than carrying an empty listener that makes a dead control
-        // look live.
+        val settings = Intent(this, com.example.eastsyria.Settings.SettingsActivity::class.java)
+        binding.layoutSettings.setOnClickListener { startActivity(settings) }
+        binding.layoutLanguage.setOnClickListener { startActivity(settings) }
+        binding.layoutAbout.setOnClickListener {
+            startActivity(Intent(this, com.example.eastsyria.Settings.AboutActivity::class.java))
+        }
+        binding.layoutPrivacy.setOnClickListener {
+            startActivity(Intent(this, com.example.eastsyria.Settings.PrivacyActivity::class.java))
+        }
+        binding.tvLanguageValue.text = getString(
+            if (isArabic()) R.string.language_arabic else R.string.language_english
+        )
 
         // The real installed version, not a hardcoded "1.0.0 (Stable)".
         // Read from PackageManager because BuildConfig generation is off.
@@ -291,6 +309,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun signOut() {
         val uid = auth.currentUser?.uid
+        uid?.let { com.example.eastsyria.Security.TwoFactorTrust.forget(this, it) }
         auth.signOut()
         if (uid != null) {
             getSharedPreferences("user_prefs", MODE_PRIVATE)

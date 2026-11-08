@@ -8,6 +8,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.eastsyria.MainPage.Data.Landmark
 import com.example.eastsyria.R
+import com.example.eastsyria.Ui.localCategory
+import com.example.eastsyria.Ui.localCity
+import com.example.eastsyria.Ui.localGovernorate
+import com.example.eastsyria.Ui.localName
+import com.example.eastsyria.Ui.otherName
 import com.example.eastsyria.databinding.ItemFeaturedLandmarkBinding
 
 /**
@@ -27,13 +32,14 @@ class FeaturedLandmarkAdapter(
         fun bind(landmark: Landmark) {
             val context = binding.root.context
             binding.apply {
-                tvLandmarkName.text = landmark.name
+                tvLandmarkName.text = landmark.localName(context)
 
-                val arabic = landmark.nameArabic.trim()
-                tvNameArabic.text = arabic
-                tvNameArabic.visibility = if (arabic.isEmpty()) View.GONE else View.VISIBLE
+                // The name in the other script, small, above the main one.
+                val other = landmark.otherName(context)
+                tvNameArabic.text = other
+                tvNameArabic.visibility = if (other.isEmpty()) View.GONE else View.VISIBLE
 
-                tvMeta.text = joinMeta(landmark.category.trim(), landmark.location.city.trim())
+                tvMeta.text = joinMeta(landmark.localCategory(context), landmark.localCity(context))
                 tvMeta.visibility = if (tvMeta.text.isEmpty()) View.GONE else View.VISIBLE
 
                 if (landmark.rating > 0.0) {

@@ -172,7 +172,7 @@ class VerificationActivity : AppCompatActivity() {
                 binding.etOtp6.text.toString()
 
         if (code.length != 6) {
-            showToast("Please enter the 6-digit code")
+            showToast(getString(R.string.otp_need_code))
             return
         }
 
@@ -180,7 +180,7 @@ class VerificationActivity : AppCompatActivity() {
         val expirationTime = codeTimestamp + 600000
         if (System.currentTimeMillis() > expirationTime) {
             showLoading(false)
-            showToast("Verification code has expired. Please request a new one.")
+            showToast(getString(R.string.otp_expired))
             return
         }
 
@@ -188,7 +188,7 @@ class VerificationActivity : AppCompatActivity() {
             createAccountAndSaveData()
         } else {
             showLoading(false)
-            showToast("Invalid verification code. Please try again.")
+            showToast(getString(R.string.otp_invalid))
             clearCodeFields()
         }
     }
@@ -214,25 +214,25 @@ class VerificationActivity : AppCompatActivity() {
 
                     userRef.setValue(userData).addOnSuccessListener {
                         showLoading(false)
-                        showToast("Account created successfully!")
+                        showToast(getString(R.string.otp_account_created))
                         navigateToExplore()
 
                     }.addOnFailureListener { dbError ->
                         showLoading(false)
-                        showToast("Account created but failed to save profile: ${dbError.message}")
+                        showToast(getString(R.string.otp_profile_failed, dbError.message.orEmpty()))
                         navigateToExplore()
                     }
 
                 } else {
                     showLoading(false)
-                    showToast("Failed to create account: ${task.exception?.message}")
+                    showToast(getString(R.string.otp_create_failed, task.exception?.message.orEmpty()))
                 }
             }
     }
 
     private fun resendVerificationCode() {
         binding.tvResendCode.isEnabled = false
-        showToast("Sending new code...")
+        showToast(getString(R.string.otp_sending))
         val newCode = emailService.generateVerificationCode()
 
         verificationCode = newCode
@@ -245,17 +245,17 @@ class VerificationActivity : AppCompatActivity() {
 
                 withContext(Dispatchers.Main) {
                     if (emailSent) {
-                        showToast("New verification code sent to $email")
+                        showToast(getString(R.string.otp_resent, email))
                         clearCodeFields()
                         startResendTimer()
                     } else {
-                        showToast("Failed to send email. Please try again.")
+                        showToast(getString(R.string.otp_send_failed_short))
                         binding.tvResendCode.isEnabled = true
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    showToast("Error: ${e.message}")
+                    showToast(getString(R.string.err_generic, e.message.orEmpty()))
                     binding.tvResendCode.isEnabled = true
                 }
             }
@@ -270,11 +270,11 @@ class VerificationActivity : AppCompatActivity() {
         countDownTimer = object : CountDownTimer(60000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val seconds = millisUntilFinished / 1000
-                binding.tvResendCode.text = "Resend in ${seconds}s"
+                binding.tvResendCode.text = getString(R.string.otp_resend_in, seconds.toString())
             }
 
             override fun onFinish() {
-                binding.tvResendCode.text = "Resend Code"
+                binding.tvResendCode.text = getString(R.string.otp_resend)
                 binding.tvResendCode.isEnabled = true
             }
         }.start()
@@ -307,7 +307,7 @@ class VerificationActivity : AppCompatActivity() {
                 btnVerify.isEnabled = false
             } else {
                 progressBar.visibility = View.GONE
-                btnVerify.text = "Verify and Continue"
+                btnVerify.text = getString(R.string.otp_action)
                 btnVerify.isEnabled = true
             }
         }

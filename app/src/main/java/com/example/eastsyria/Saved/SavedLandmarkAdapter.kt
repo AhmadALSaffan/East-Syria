@@ -1,5 +1,9 @@
 package com.example.eastsyria.Saved
 
+import com.example.eastsyria.Ui.localName
+import com.example.eastsyria.Ui.localCategory
+import com.example.eastsyria.Ui.localCity
+import com.example.eastsyria.Ui.localGovernorate
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,10 +34,10 @@ class SavedLandmarkAdapter(
         fun bind(landmark: Landmark) {
             val context = binding.root.context
             binding.apply {
-                tvLandmarkName.text = landmark.name
+                tvLandmarkName.text = landmark.localName(context)
 
-                val category = landmark.category.trim()
-                val city = landmark.location.city.trim().ifEmpty { landmark.location.governorate.trim() }
+                val category = landmark.localCategory(context)
+                val city = landmark.localCity(context).ifEmpty { landmark.localGovernorate(context) }
                 val meta = when {
                     category.isNotEmpty() && city.isNotEmpty() ->
                         context.getString(R.string.home_meta_separator, category, city)
@@ -60,7 +64,7 @@ class SavedLandmarkAdapter(
                     ContextCompat.getColor(context, R.color.terracotta_soft)
                 )
                 btnBookmark.contentDescription =
-                    context.getString(R.string.saved_remove_desc, landmark.name)
+                    context.getString(R.string.saved_remove_desc, landmark.localName(context))
 
                 Glide.with(context)
                     .load(landmark.imageUrl)
@@ -99,6 +103,7 @@ class SavedLandmarkAdapter(
         } else {
             landmarks.filter { landmark ->
                 landmark.name.contains(q, ignoreCase = true) ||
+                        landmark.nameArabic.contains(q) ||
                         landmark.nameArabic.contains(q, ignoreCase = true) ||
                         landmark.location.city.contains(q, ignoreCase = true) ||
                         landmark.location.governorate.contains(q, ignoreCase = true)

@@ -2,6 +2,6 @@
 <!-- The chosen segment takes the same terracotta wash as the rest of the app's selectors. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="#33E2703A" />
+    <solid android:color="#33D7141F" />
     <corners android:radius="22dp" />
 </shape>

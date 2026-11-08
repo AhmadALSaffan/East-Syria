@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- The photograph melts into the canvas instead of ending at an edge. -->
+<!-- Photo melting into the page: white by day, ink at night. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <gradient
         android:angle="270"
-        android:startColor="#0016120F"
-        android:centerColor="#D916120F"
-        android:endColor="#FF16120F"
-        android:centerY="0.4"
+        android:centerColor="@color/scrim_canvas_80"
+        android:endColor="@color/canvas"
+        android:startColor="@color/scrim_canvas_0"
         android:type="linear" />
 </shape>

@@ -181,9 +181,9 @@ class SavedLandmarksActivity : AppCompatActivity() {
         ref.removeValue()
             .addOnSuccessListener {
                 Snackbar.make(binding.root, R.string.saved_removed, Snackbar.LENGTH_LONG)
-                    .setBackgroundTint(ContextCompat.getColor(this, R.color.surface_high))
-                    .setTextColor(ContextCompat.getColor(this, R.color.ivory))
-                    .setActionTextColor(ContextCompat.getColor(this, R.color.terracotta_soft))
+                    .setBackgroundTint(ContextCompat.getColor(this, R.color.ivory))
+                    .setTextColor(ContextCompat.getColor(this, R.color.canvas))
+                    .setActionTextColor(ContextCompat.getColor(this, R.color.canvas))
                     .setAction(R.string.saved_undo) {
                         ref.setValue(
                             mapOf(
@@ -197,8 +197,8 @@ class SavedLandmarksActivity : AppCompatActivity() {
             .addOnFailureListener { e ->
                 Log.e(TAG, "Failed to remove saved landmark: ${e.message}")
                 Snackbar.make(binding.root, R.string.saved_remove_failed, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(this, R.color.surface_high))
-                    .setTextColor(ContextCompat.getColor(this, R.color.ivory))
+                    .setBackgroundTint(ContextCompat.getColor(this, R.color.ivory))
+                    .setTextColor(ContextCompat.getColor(this, R.color.canvas))
                     .show()
             }
     }

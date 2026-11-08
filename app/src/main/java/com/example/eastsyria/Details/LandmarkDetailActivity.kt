@@ -1,5 +1,6 @@
 package com.example.eastsyria.Details
 
+import com.example.eastsyria.Ui.isArabic
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -45,6 +46,7 @@ class LandmarkDetailActivity : AppCompatActivity() {
     private val database = FirebaseDatabase.getInstance()
     private val auth = FirebaseAuth.getInstance()
     private var currentLandmark: Landmark? = null
+    // Opens in the app's language; the segment still switches the record between the two.
     private var isEnglish = true
     private var isSaved = false
     private var landmarkId: String = ""
@@ -67,6 +69,7 @@ class LandmarkDetailActivity : AppCompatActivity() {
 
         binding = ActivityLandmarkDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        isEnglish = !isArabic()
 
         landmarkId = intent.getStringExtra("LANDMARK_ID").orEmpty()
 
@@ -221,7 +224,7 @@ class LandmarkDetailActivity : AppCompatActivity() {
     private fun updateBookmarkUI(saved: Boolean) {
         val tint = ContextCompat.getColor(
             this,
-            if (saved) R.color.terracotta_soft else R.color.ivory
+            R.color.photo_icon // ink on the white photo button; the filled icon shows the saved state
         )
         binding.btnBookmark.setImageResource(
             if (saved) R.drawable.ic_bookmark_filled else R.drawable.ic_bookmark
@@ -235,8 +238,8 @@ class LandmarkDetailActivity : AppCompatActivity() {
     /** A transient confirmation, anchored above the directions pill when it is showing. */
     private fun showMessage(resId: Int) {
         Snackbar.make(binding.root, resId, Snackbar.LENGTH_SHORT).apply {
-            setBackgroundTint(ContextCompat.getColor(context, R.color.surface_high))
-            setTextColor(ContextCompat.getColor(context, R.color.ivory))
+            setBackgroundTint(ContextCompat.getColor(context, R.color.ivory))
+            setTextColor(ContextCompat.getColor(context, R.color.canvas))
             if (binding.btnGetDirections.visibility == View.VISIBLE) {
                 setAnchorView(binding.btnGetDirections)
             }
@@ -246,11 +249,11 @@ class LandmarkDetailActivity : AppCompatActivity() {
 
     // ------------------------------------------------------------ language
 
-    /** The active segment takes the same terracotta wash as the home navigation. */
+    /** The active segment is a raised ice-on-obsidian pill. */
     private fun updateLanguageUI() {
-        val active = ColorStateList.valueOf(0x33E2703A)
+        val active = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.surface_high))
         val inactive = ColorStateList.valueOf(0x00000000)
-        val activeText = ContextCompat.getColor(this, R.color.terracotta_soft)
+        val activeText = ContextCompat.getColor(this, R.color.ivory)
         val inactiveText = ContextCompat.getColor(this, R.color.ivory_dim)
 
         binding.btnEnglish.backgroundTintList = if (isEnglish) active else inactive
@@ -616,7 +619,7 @@ class LandmarkDetailActivity : AppCompatActivity() {
             val mapsUrl = "https://www.google.com/maps/search/?api=1&query=${landmark.location.latitude},${landmark.location.longitude}"
             append("🗺️ View on Map: $mapsUrl\n\n")
 
-            append("Discover more Syrian landmarks with East Syria app")
+            append(getString(R.string.detail_share_footer))
         }
 
         val shareIntent = Intent().apply {

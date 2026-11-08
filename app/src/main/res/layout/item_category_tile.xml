@@ -20,7 +20,7 @@
         app:cardBackgroundColor="@color/surface"
         app:cardCornerRadius="24dp"
         app:cardElevation="0dp"
-        app:rippleColor="#33F5EDE3"
+        app:rippleColor="@color/ripple"
         app:strokeColor="@color/line"
         app:strokeWidth="1dp">
 
@@ -42,7 +42,7 @@
                 android:layout_margin="18dp"
                 android:alpha="0.85"
                 android:importantForAccessibility="no"
-                app:tint="@color/terracotta_soft"
+                app:tint="@color/on_photo"
                 tools:src="@drawable/ic_historical" />
 
             <ImageView
@@ -78,7 +78,7 @@
                     android:includeFontPadding="false"
                     android:lineHeight="27sp"
                     android:maxLines="2"
-                    android:textColor="@color/ivory"
+                    android:textColor="@color/on_photo"
                     android:textSize="23sp"
                     android:textStyle="bold"
                     tools:text="Historical Sites" />
@@ -88,7 +88,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:textColor="@color/ivory_dim"
+                    android:textColor="@color/on_photo_dim"
                     android:textSize="13sp"
                     android:visibility="gone"
                     tools:text="8 places"

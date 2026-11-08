@@ -1,18 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  THESIS: The profile is your passport. A cover with who you are here and three
-    counted facts, the stamps you have collected, then the few account actions
-    that exist. It refuses the avatar-over-a-stack-of-menu-rows arrangement.
-  OWN-WORLD: Warm canvas, ivory type, a gold hairline for the passport's frame,
-    Amiri for the name and section titles, terracotta for the one action. The
-    stamps are the places you saved, as photographs.
-  STORY: You see who you are and how long you have been here, what you have
-    kept, then the account actions.
-  FIRST VIEWPORT: The passport cover (portrait, name, three facts) and the
-    first stamps, above the dock.
-  FORM: Same world as home; user-pinned direction (no roll).
-  FINISH: unreviewed and undocumented is unfinished; this build ends with the
-    finish review, the verdict, and DESIGN.md
+  Profile, v3. Who you are (photo, name, where from), three facts in quiet
+  tiles, the places you saved as a photo rail, then grouped account rows:
+  personal details, settings, language, about, privacy. Sign out sits apart.
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -54,235 +44,122 @@
                     android:orientation="vertical"
                     android:paddingBottom="136dp">
 
-                    <!-- ============================ the passport ============================ -->
+                    <!-- ============================== identity ============================== -->
 
-                    <com.google.android.material.card.MaterialCardView
+                    <LinearLayout
                         android:id="@+id/layoutIdentity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="20dp"
-                        app:cardBackgroundColor="@color/surface"
-                        app:cardCornerRadius="28dp"
-                        app:cardElevation="0dp"
-                        app:strokeColor="#66F0B44C"
-                        app:strokeWidth="1dp">
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingStart="24dp"
+                        android:paddingTop="12dp"
+                        android:paddingEnd="24dp">
 
                         <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_passport">
+                            android:layout_width="104dp"
+                            android:layout_height="104dp"
+                            android:background="@drawable/bg_avatar_ring">
 
-                            <!-- The arch, drawn large and faint, bleeding off the corner. -->
                             <ImageView
-                                android:layout_width="260dp"
-                                android:layout_height="338dp"
-                                android:layout_gravity="end|bottom"
-                                android:layout_marginEnd="-96dp"
-                                android:layout_marginBottom="-120dp"
-                                android:alpha="0.20"
-                                android:importantForAccessibility="no"
-                                android:scaleType="fitCenter"
-                                android:src="@drawable/art_onb_arch" />
-
-                            <View
+                                android:id="@+id/imgProfile"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/bg_passport_frame"
-                                android:importantForAccessibility="no" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:padding="26dp">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal">
-
-                                    <ImageView
-                                        android:layout_width="14dp"
-                                        android:layout_height="14dp"
-                                        android:importantForAccessibility="no"
-                                        android:src="@drawable/art_onb_star" />
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="8dp"
-                                        android:layout_weight="1"
-                                        android:fontFamily="@font/amiri"
-                                        android:includeFontPadding="false"
-                                        android:text="@string/app_name"
-                                        android:textColor="@color/gold"
-                                        android:textSize="18sp"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/profile_passport"
-                                        android:textColor="@color/ivory_mute"
-                                        android:textSize="12sp" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="22dp"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal">
-
-                                    <com.google.android.material.card.MaterialCardView
-                                        android:layout_width="92dp"
-                                        android:layout_height="92dp"
-                                        app:cardBackgroundColor="@color/surface_high"
-                                        app:cardCornerRadius="46dp"
-                                        app:cardElevation="0dp"
-                                        app:strokeColor="@color/gold"
-                                        app:strokeWidth="2dp">
-
-                                        <ImageView
-                                            android:id="@+id/imgProfile"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
-                                            android:contentDescription="@null"
-                                            android:scaleType="centerCrop"
-                                            android:src="@drawable/ic_profile_placeholder" />
-
-                                    </com.google.android.material.card.MaterialCardView>
-
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="18dp"
-                                        android:layout_weight="1"
-                                        android:orientation="vertical">
-
-                                        <TextView
-                                            android:id="@+id/tvUserName"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:ellipsize="end"
-                                            android:fontFamily="@font/amiri"
-                                            android:includeFontPadding="false"
-                                            android:lineHeight="38sp"
-                                            android:maxLines="2"
-                                            android:textColor="@color/ivory"
-                                            android:textSize="32sp"
-                                            android:textStyle="bold"
-                                            tools:text="Elias Mansour" />
-
-                                        <TextView
-                                            android:id="@+id/tvLocation"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="4dp"
-                                            android:ellipsize="end"
-                                            android:maxLines="1"
-                                            android:textColor="@color/ivory_dim"
-                                            android:textSize="15sp"
-                                            tools:text="Explorer from Deir ez-Zor" />
-
-                                    </LinearLayout>
-
-                                </LinearLayout>
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:layout_marginTop="22dp"
-                                    android:background="#66F0B44C" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="16dp"
-                                    android:baselineAligned="false"
-                                    android:orientation="horizontal">
-
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1.2"
-                                        android:orientation="vertical">
-
-                                        <TextView
-                                            android:id="@+id/tvFactSince"
-                                            style="@style/TextAppearance.EastSyria.PassportFact"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            tools:text="Apr 2023" />
-
-                                        <TextView
-                                            style="@style/TextAppearance.EastSyria.PassportLabel"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/profile_fact_since" />
-
-                                    </LinearLayout>
-
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:orientation="vertical">
-
-                                        <TextView
-                                            android:id="@+id/tvFactSaved"
-                                            style="@style/TextAppearance.EastSyria.PassportFact"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            tools:text="6" />
-
-                                        <TextView
-                                            style="@style/TextAppearance.EastSyria.PassportLabel"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/profile_fact_saved" />
-
-                                    </LinearLayout>
-
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:orientation="vertical">
-
-                                        <TextView
-                                            android:id="@+id/tvFactKinds"
-                                            style="@style/TextAppearance.EastSyria.PassportFact"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            tools:text="3" />
-
-                                        <TextView
-                                            style="@style/TextAppearance.EastSyria.PassportLabel"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/profile_fact_kinds" />
-
-                                    </LinearLayout>
-
-                                </LinearLayout>
-
-                            </LinearLayout>
+                                android:layout_margin="4dp"
+                                android:contentDescription="@string/profile_edit"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_profile_placeholder" />
 
                         </FrameLayout>
 
-                    </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            android:id="@+id/tvUserName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/amiri"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:maxLines="2"
+                            android:textColor="@color/ivory"
+                            android:textSize="30sp"
+                            android:textStyle="bold"
+                            tools:text="Ahmad Al Saffan" />
 
-                    <!-- Loading: the passport's own silhouette. -->
+                        <TextView
+                            android:id="@+id/tvLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:drawablePadding="6dp"
+                            android:gravity="center"
+                            android:textColor="@color/ivory_dim"
+                            android:textSize="14sp"
+                            app:drawableStartCompat="@drawable/ic_location"
+                            app:drawableTint="@color/terracotta_soft"
+                            tools:text="Explorer from Deir ez-Zor" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout style="@style/Widget.EastSyria.V3.StatTile">
+
+                                <TextView
+                                    android:id="@+id/tvFactSaved"
+                                    style="@style/Widget.EastSyria.V3.StatValue"
+                                    tools:text="3" />
+
+                                <TextView
+                                    style="@style/Widget.EastSyria.V3.StatLabel"
+                                    android:text="@string/profile_fact_saved" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                style="@style/Widget.EastSyria.V3.StatTile"
+                                android:layout_marginStart="10dp">
+
+                                <TextView
+                                    android:id="@+id/tvFactKinds"
+                                    style="@style/Widget.EastSyria.V3.StatValue"
+                                    tools:text="2" />
+
+                                <TextView
+                                    style="@style/Widget.EastSyria.V3.StatLabel"
+                                    android:text="@string/profile_fact_kinds" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                style="@style/Widget.EastSyria.V3.StatTile"
+                                android:layout_marginStart="10dp">
+
+                                <TextView
+                                    android:id="@+id/tvFactSince"
+                                    style="@style/Widget.EastSyria.V3.StatValue"
+                                    android:gravity="center"
+                                    android:maxLines="2"
+                                    android:textSize="16sp"
+                                    tools:text="Aug 2026" />
+
+                                <TextView
+                                    style="@style/Widget.EastSyria.V3.StatLabel"
+                                    android:text="@string/profile_fact_since" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
                     <View
                         android:id="@+id/identitySkeleton"
                         android:layout_width="match_parent"
-                        android:layout_height="288dp"
+                        android:layout_height="260dp"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="20dp"
@@ -290,7 +167,6 @@
                         android:importantForAccessibility="no"
                         android:visibility="gone" />
 
-                    <!-- Failed to read the profile: say so, offer the one recovery. -->
                     <LinearLayout
                         android:id="@+id/identityError"
                         android:layout_width="match_parent"
@@ -298,7 +174,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="20dp"
-                        android:background="@drawable/bg_segment_container"
+                        android:background="@drawable/bg_group"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="16dp"
@@ -310,77 +186,71 @@
                             android:layout_weight="1"
                             android:text="@string/profile_error"
                             android:textColor="@color/ivory_dim"
-                            android:textSize="14sp" />
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/btnIdentityRetry"
                             android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_chip_outline"
                             android:clickable="true"
                             android:focusable="true"
                             android:fontFamily="sans-serif-medium"
                             android:gravity="center"
-                            android:paddingStart="12dp"
-                            android:paddingEnd="4dp"
+                            android:paddingStart="18dp"
+                            android:paddingEnd="18dp"
                             android:text="@string/action_retry"
-                            android:textColor="@color/terracotta_soft"
+                            android:textColor="@color/ivory"
                             android:textSize="14sp" />
 
                     </LinearLayout>
 
-                    <!-- ============================== stamps ============================== -->
+                    <!-- =============================== saved =============================== -->
 
-                    <LinearLayout
-                        style="@style/Widget.EastSyria.HomeSectionHeader"
-                        android:layout_marginTop="32dp">
+                    <LinearLayout style="@style/Widget.EastSyria.V3.SectionHeader">
 
                         <TextView
-                            style="@style/Widget.EastSyria.HomeSectionTitle"
+                            style="@style/Widget.EastSyria.V3.SectionTitle"
                             android:text="@string/profile_stamps" />
 
-                        <View style="@style/Widget.EastSyria.HomeSectionRule" />
+                        <TextView
+                            android:id="@+id/tvSavedCount"
+                            style="@style/Widget.EastSyria.V3.SectionMeta"
+                            android:visibility="gone"
+                            tools:text="3 kept"
+                            tools:visibility="visible" />
 
                         <TextView
                             android:id="@+id/tvSavedAll"
-                            style="@style/Widget.EastSyria.HomeSectionAction"
+                            style="@style/Widget.EastSyria.V3.SectionAction"
                             android:text="@string/profile_saved_all"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            tools:visibility="visible" />
 
                     </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tvSavedCount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginEnd="24dp"
-                        android:textColor="@color/ivory_mute"
-                        android:textSize="13sp"
-                        android:visibility="gone"
-                        tools:text="6 kept"
-                        tools:visibility="visible" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvSavedStamps"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="14dp"
                         android:clipToPadding="false"
                         android:overScrollMode="never"
-                        android:paddingStart="24dp"
-                        android:paddingEnd="12dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="8dp"
                         android:visibility="gone"
-                        tools:listitem="@layout/item_saved_stamp" />
+                        tools:listitem="@layout/item_saved_stamp"
+                        tools:orientation="horizontal"
+                        tools:visibility="visible" />
 
                     <LinearLayout
                         android:id="@+id/stampsSkeleton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="14dp"
                         android:importantForAccessibility="no"
                         android:orientation="horizontal"
-                        android:paddingStart="24dp"
+                        android:paddingStart="20dp"
                         android:visibility="gone">
 
                         <View
@@ -402,173 +272,175 @@
 
                     </LinearLayout>
 
-                    <!-- An empty page of the passport: an outlined slot waiting for its first stamp. -->
                     <TextView
                         android:id="@+id/tvSavedEmpty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginEnd="24dp"
-                        android:background="@drawable/bg_empty_slot"
-                        android:drawablePadding="16dp"
-                        android:drawableStart="@drawable/ic_bookmark_border"
-                        android:drawableTint="@color/terracotta_soft"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/bg_group"
+                        android:drawablePadding="14dp"
                         android:gravity="center_vertical"
                         android:lineSpacingMultiplier="1.15"
-                        android:padding="20dp"
+                        android:padding="18dp"
                         android:text="@string/profile_saved_empty"
                         android:textColor="@color/ivory_dim"
                         android:textSize="15sp"
                         android:visibility="gone"
-                        tools:visibility="visible" />
+                        app:drawableStartCompat="@drawable/ic_bookmark_border"
+                        app:drawableTint="@color/terracotta_soft" />
 
-                    <!-- ============================= account ============================= -->
+                    <!-- =============================== account =============================== -->
 
-                    <LinearLayout
-                        style="@style/Widget.EastSyria.HomeSectionHeader"
-                        android:layout_marginTop="36dp">
+                    <TextView
+                        style="@style/Widget.EastSyria.V3.GroupLabel"
+                        android:layout_marginTop="32dp"
+                        android:text="@string/profile_account" />
 
-                        <TextView
-                            style="@style/Widget.EastSyria.HomeSectionTitle"
-                            android:text="@string/profile_account" />
-
-                        <View
-                            style="@style/Widget.EastSyria.HomeSectionRule"
-                            android:layout_marginEnd="0dp" />
-
-                    </LinearLayout>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginEnd="24dp"
-                        app:cardBackgroundColor="@color/surface"
-                        app:cardCornerRadius="24dp"
-                        app:cardElevation="0dp"
-                        app:strokeColor="@color/line"
-                        app:strokeWidth="1dp">
+                    <LinearLayout style="@style/Widget.EastSyria.V3.Group">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingStart="20dp"
-                            android:paddingEnd="20dp">
+                            android:id="@+id/layoutPersonalDetails"
+                            style="@style/Widget.EastSyria.V3.Row">
 
-                            <LinearLayout
-                                android:id="@+id/layoutPersonalDetails"
-                                style="@style/Widget.EastSyria.ProfileRow">
+                            <ImageView
+                                style="@style/Widget.EastSyria.V3.RowIcon"
+                                android:src="@drawable/ic_person" />
 
-                                <ImageView
-                                    style="@style/Widget.EastSyria.RowIcon"
-                                    android:src="@drawable/ic_person"
-                                    app:tint="@color/terracotta_soft" />
+                            <TextView
+                                style="@style/Widget.EastSyria.V3.RowLabel"
+                                android:text="@string/profile_personal" />
 
-                                <TextView
-                                    style="@style/Widget.EastSyria.RowLabel"
-                                    android:text="@string/profile_personal" />
-
-                                <ImageView
-                                    style="@style/Widget.EastSyria.RowChevron"
-                                    android:src="@drawable/ic_arrow_right" />
-
-                            </LinearLayout>
-
-                            <View style="@style/Widget.EastSyria.RowDivider" />
-
-                            <!-- The three below have no destination yet: dimmed, inert, and labelled. -->
-                            <LinearLayout
-                                android:id="@+id/layoutSettings"
-                                style="@style/Widget.EastSyria.ProfileRow"
-                                android:alpha="0.45"
-                                android:background="@null"
-                                android:clickable="false"
-                                android:focusable="false">
-
-                                <ImageView
-                                    style="@style/Widget.EastSyria.RowIcon"
-                                    android:src="@drawable/ic_settings_menu" />
-
-                                <TextView
-                                    style="@style/Widget.EastSyria.RowLabel"
-                                    android:text="@string/profile_settings" />
-
-                                <TextView
-                                    style="@style/Widget.EastSyria.RowSoon"
-                                    android:text="@string/profile_soon" />
-
-                            </LinearLayout>
-
-                            <View style="@style/Widget.EastSyria.RowDivider" />
-
-                            <LinearLayout
-                                android:id="@+id/layoutAboutUs"
-                                style="@style/Widget.EastSyria.ProfileRow"
-                                android:alpha="0.45"
-                                android:background="@null"
-                                android:clickable="false"
-                                android:focusable="false">
-
-                                <ImageView
-                                    style="@style/Widget.EastSyria.RowIcon"
-                                    android:src="@drawable/ic_info" />
-
-                                <TextView
-                                    style="@style/Widget.EastSyria.RowLabel"
-                                    android:text="@string/profile_about" />
-
-                                <TextView
-                                    style="@style/Widget.EastSyria.RowSoon"
-                                    android:text="@string/profile_soon" />
-
-                            </LinearLayout>
-
-                            <View style="@style/Widget.EastSyria.RowDivider" />
-
-                            <LinearLayout
-                                android:id="@+id/layoutPrivacyAgreement"
-                                style="@style/Widget.EastSyria.ProfileRow"
-                                android:alpha="0.45"
-                                android:background="@null"
-                                android:clickable="false"
-                                android:focusable="false">
-
-                                <ImageView
-                                    style="@style/Widget.EastSyria.RowIcon"
-                                    android:src="@drawable/ic_privacy" />
-
-                                <TextView
-                                    style="@style/Widget.EastSyria.RowLabel"
-                                    android:text="@string/profile_privacy" />
-
-                                <TextView
-                                    style="@style/Widget.EastSyria.RowSoon"
-                                    android:text="@string/profile_soon" />
-
-                            </LinearLayout>
+                            <ImageView style="@style/Widget.EastSyria.V3.RowChevron" />
 
                         </LinearLayout>
 
-                    </com.google.android.material.card.MaterialCardView>
+                        <View style="@style/Widget.EastSyria.V3.RowDivider" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSignOut"
-                        style="@style/Widget.EastSyria.Button.Outline"
-                        android:layout_width="match_parent"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginEnd="24dp"
-                        android:text="@string/profile_sign_out"
-                        android:textColor="@color/terracotta_soft"
-                        app:cornerRadius="28dp"
-                        app:icon="@drawable/ic_sign_out"
-                        app:iconGravity="textStart"
-                        app:iconSize="18dp"
-                        app:iconTint="@color/terracotta_soft"
-                        app:strokeColor="@color/line" />
+                        <LinearLayout
+                            android:id="@+id/layoutSecurity"
+                            style="@style/Widget.EastSyria.V3.Row">
+
+                            <ImageView
+                                style="@style/Widget.EastSyria.V3.RowIcon"
+                                android:src="@drawable/ic_lock" />
+
+                            <TextView
+                                style="@style/Widget.EastSyria.V3.RowLabel"
+                                android:text="@string/security_title" />
+
+                            <ImageView style="@style/Widget.EastSyria.V3.RowChevron" />
+
+                        </LinearLayout>
+
+                        <View style="@style/Widget.EastSyria.V3.RowDivider" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutLanguage"
+                            style="@style/Widget.EastSyria.V3.Row">
+
+                            <ImageView
+                                style="@style/Widget.EastSyria.V3.RowIcon"
+                                android:src="@drawable/ic_globe" />
+
+                            <TextView
+                                style="@style/Widget.EastSyria.V3.RowLabel"
+                                android:text="@string/settings_language" />
+
+                            <TextView
+                                android:id="@+id/tvLanguageValue"
+                                style="@style/Widget.EastSyria.V3.RowValue"
+                                tools:text="English" />
+
+                            <ImageView style="@style/Widget.EastSyria.V3.RowChevron" />
+
+                        </LinearLayout>
+
+                        <View style="@style/Widget.EastSyria.V3.RowDivider" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutSettings"
+                            style="@style/Widget.EastSyria.V3.Row">
+
+                            <ImageView
+                                style="@style/Widget.EastSyria.V3.RowIcon"
+                                android:src="@drawable/ic_settings_menu" />
+
+                            <TextView
+                                style="@style/Widget.EastSyria.V3.RowLabel"
+                                android:text="@string/profile_settings" />
+
+                            <ImageView style="@style/Widget.EastSyria.V3.RowChevron" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <TextView
+                        style="@style/Widget.EastSyria.V3.GroupLabel"
+                        android:text="@string/profile_more" />
+
+                    <LinearLayout style="@style/Widget.EastSyria.V3.Group">
+
+                        <LinearLayout
+                            android:id="@+id/layoutAbout"
+                            style="@style/Widget.EastSyria.V3.Row">
+
+                            <ImageView
+                                style="@style/Widget.EastSyria.V3.RowIcon"
+                                android:src="@drawable/ic_info" />
+
+                            <TextView
+                                style="@style/Widget.EastSyria.V3.RowLabel"
+                                android:text="@string/profile_about" />
+
+                            <ImageView style="@style/Widget.EastSyria.V3.RowChevron" />
+
+                        </LinearLayout>
+
+                        <View style="@style/Widget.EastSyria.V3.RowDivider" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutPrivacy"
+                            style="@style/Widget.EastSyria.V3.Row">
+
+                            <ImageView
+                                style="@style/Widget.EastSyria.V3.RowIcon"
+                                android:src="@drawable/ic_privacy" />
+
+                            <TextView
+                                style="@style/Widget.EastSyria.V3.RowLabel"
+                                android:text="@string/profile_privacy" />
+
+                            <ImageView style="@style/Widget.EastSyria.V3.RowChevron" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/Widget.EastSyria.V3.Group"
+                        android:layout_marginTop="16dp">
+
+                        <LinearLayout
+                            android:id="@+id/btnSignOut"
+                            style="@style/Widget.EastSyria.V3.Row">
+
+                            <ImageView
+                                style="@style/Widget.EastSyria.V3.RowIcon"
+                                android:src="@drawable/ic_logout"
+                                app:tint="@color/terracotta_soft" />
+
+                            <TextView
+                                style="@style/Widget.EastSyria.V3.RowLabel"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="@string/profile_sign_out"
+                                android:textColor="@color/terracotta_soft" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tvAppVersion"
@@ -594,7 +466,6 @@
 
     </LinearLayout>
 
-    <!-- The dock: four tabs around the map button. -->
     <com.example.eastsyria.Nav.NavDock
         android:id="@+id/navDock"
         android:layout_width="match_parent"

@@ -1,21 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  THESIS: The home screen opens on a place, not a form. A full-bleed
-    photograph of a featured landmark fills the first viewport; search floats
-    over it. It refuses the header-plus-search-plus-icon-grid opening every
-    catalog app ships.
-  OWN-WORLD: Warm basalt canvas (#16120F), ivory type, terracotta acts, gold
-    marks a rating, teal is the map and nothing else. Amiri carries names in
-    Latin and Arabic; Roboto carries the interface. Photographs melt into the
-    canvas through scrims; nothing is boxed around them.
-  STORY: You arrive, a landmark is already looking back at you, you tap it or
-    reach for search, a category, or the map.
-  FIRST VIEWPORT: 480dp hero (name, Arabic name, place, one action, page
-    dots) under a floating search pill; the category row peeks beneath it;
-    a pill navigation floats above the foot with the map as its own button.
-  FORM: Photo-led hero carousel; user-pinned direction (no roll).
-  FINISH: unreviewed and undocumented is unfinished; this build ends with the
-    finish review, the verdict, and DESIGN.md
+  Home, v3 (obsidian / ice / racing red).
+  A calm header (greeting, title, avatar), an inline search field, then the
+  featured landmarks as inset photo cards, the kinds of place as quiet chips,
+  and the trending places as a rail. Red is kept for the one action on each
+  card and the active state; everything else is ice on obsidian.
 -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -23,8 +12,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/canvas">
-
-    <!-- ============================== content ============================== -->
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollMain"
@@ -37,21 +24,209 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="176dp">
+            android:paddingBottom="148dp">
 
-            <!-- ============================ hero ============================ -->
+            <!-- ============================ header ============================ -->
+
+            <LinearLayout
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="24dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="20dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvGreeting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/ivory_mute"
+                        android:textSize="14sp"
+                        tools:text="Good evening" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:fontFamily="@font/amiri"
+                        android:includeFontPadding="false"
+                        android:text="@string/home_title_explore"
+                        android:textColor="@color/ivory"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/btnAvatar"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_avatar"
+                    android:clickable="true"
+                    android:contentDescription="@string/nav_profile"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/tvAvatarInitial"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:importantForAccessibility="no"
+                        android:textColor="@color/ivory"
+                        android:textSize="18sp"
+                        tools:text="A" />
+
+                    <ImageView
+                        android:id="@+id/ivAvatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:visibility="gone" />
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/searchPill"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_field"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="18dp"
+                android:paddingEnd="8dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_search"
+                    app:tint="@color/ivory_dim" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/home_search_hint"
+                    android:textColor="@color/ivory_mute"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:id="@+id/btnSearchMap"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_avatar"
+                    android:contentDescription="@string/nav_map"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_map_outlined"
+                    app:tint="@color/ivory" />
+
+            </LinearLayout>
+
+            <!-- The AI guide. -->
+            <LinearLayout
+                android:id="@+id/cardAssistant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_row_card"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="14dp">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_circle_accent"
+                    android:importantForAccessibility="no"
+                    android:padding="11dp"
+                    android:src="@drawable/ic_sparkle"
+                    app:tint="@color/on_accent" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/assistant_title"
+                        android:textColor="@color/ivory"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/assistant_home_body"
+                        android:textColor="@color/ivory_mute"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_arrow_right"
+                    app:tint="@color/ivory_mute" />
+
+            </LinearLayout>
+
+            <!-- ============================ featured ============================ -->
+
+            <LinearLayout style="@style/Widget.EastSyria.V3.SectionHeader">
+
+                <TextView
+                    style="@style/Widget.EastSyria.V3.SectionTitle"
+                    android:text="@string/section_featured" />
+
+                <TextView
+                    android:id="@+id/tvCatalogCount"
+                    style="@style/Widget.EastSyria.V3.SectionMeta"
+                    tools:text="9 places" />
+
+            </LinearLayout>
 
             <FrameLayout
                 android:id="@+id/heroContainer"
                 android:layout_width="match_parent"
-                android:layout_height="480dp">
+                android:layout_height="440dp"
+                android:layout_marginTop="14dp">
 
-                <!-- Loading: the hero's own silhouette, pulsing. -->
                 <FrameLayout
                     android:id="@+id/heroSkeleton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bg_skeleton_hero"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/bg_skeleton_block"
                     android:importantForAccessibility="no">
 
                     <LinearLayout
@@ -59,25 +234,17 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:orientation="vertical"
-                        android:paddingStart="24dp"
-                        android:paddingEnd="24dp"
-                        android:paddingBottom="72dp">
+                        android:padding="24dp">
 
                         <View
-                            android:layout_width="260dp"
-                            android:layout_height="36dp"
+                            android:layout_width="220dp"
+                            android:layout_height="34dp"
                             android:background="@drawable/bg_skeleton_bar" />
 
                         <View
-                            android:layout_width="180dp"
-                            android:layout_height="16dp"
-                            android:layout_marginTop="16dp"
-                            android:background="@drawable/bg_skeleton_bar" />
-
-                        <View
-                            android:layout_width="156dp"
-                            android:layout_height="48dp"
-                            android:layout_marginTop="22dp"
+                            android:layout_width="150dp"
+                            android:layout_height="14dp"
+                            android:layout_marginTop="14dp"
                             android:background="@drawable/bg_skeleton_bar" />
 
                     </LinearLayout>
@@ -93,26 +260,15 @@
                     tools:listitem="@layout/item_featured_landmark" />
 
                 <LinearLayout
-                    android:id="@+id/heroDots"
-                    android:layout_width="wrap_content"
-                    android:layout_height="6dp"
-                    android:layout_gravity="bottom|start"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginBottom="36dp"
-                    android:importantForAccessibility="no"
-                    android:orientation="horizontal" />
-
-                <!-- Empty and error share one panel; the copy changes, the shape does not. -->
-                <LinearLayout
                     android:id="@+id/heroState"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bg_hero_empty"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/bg_skeleton_block"
                     android:gravity="bottom"
                     android:orientation="vertical"
-                    android:paddingStart="24dp"
-                    android:paddingEnd="24dp"
-                    android:paddingBottom="64dp"
+                    android:padding="24dp"
                     android:visibility="gone">
 
                     <TextView
@@ -121,9 +277,8 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/amiri"
                         android:includeFontPadding="false"
-                        android:lineHeight="38sp"
                         android:textColor="@color/ivory"
-                        android:textSize="32sp"
+                        android:textSize="28sp"
                         android:textStyle="bold"
                         tools:text="Nothing published yet" />
 
@@ -131,7 +286,7 @@
                         android:id="@+id/tvStateBody"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="8dp"
                         android:lineSpacingMultiplier="1.15"
                         android:textColor="@color/ivory_dim"
                         android:textSize="15sp"
@@ -142,7 +297,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:layout_marginTop="20dp"
-                        android:background="@drawable/bg_hero_button_outline"
+                        android:background="@drawable/bg_chip_outline"
                         android:clickable="true"
                         android:focusable="true"
                         android:fontFamily="sans-serif-medium"
@@ -150,23 +305,45 @@
                         android:paddingStart="24dp"
                         android:paddingEnd="24dp"
                         android:text="@string/action_retry"
-                        android:textColor="@color/terracotta_soft"
+                        android:textColor="@color/ivory"
                         android:textSize="15sp" />
 
                 </LinearLayout>
 
             </FrameLayout>
 
+            <LinearLayout
+                android:id="@+id/heroDots"
+                android:layout_width="wrap_content"
+                android:layout_height="6dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:importantForAccessibility="no"
+                android:orientation="horizontal" />
+
             <!-- ========================== categories ========================== -->
+
+            <LinearLayout style="@style/Widget.EastSyria.V3.SectionHeader">
+
+                <TextView
+                    style="@style/Widget.EastSyria.V3.SectionTitle"
+                    android:text="@string/home_browse" />
+
+                <TextView
+                    android:id="@+id/btnMore"
+                    style="@style/Widget.EastSyria.V3.SectionAction"
+                    android:text="@string/action_see_all" />
+
+            </LinearLayout>
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="14dp"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
-                android:paddingStart="24dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="12dp"
                 android:scrollbars="none">
 
                 <LinearLayout
@@ -176,131 +353,85 @@
 
                     <LinearLayout
                         android:id="@+id/btnHistorical"
-                        style="@style/Widget.EastSyria.HomeCategory">
+                        style="@style/Widget.EastSyria.V3.Chip">
 
-                        <FrameLayout style="@style/Widget.EastSyria.HomeCategoryBox">
-
-                            <ImageView
-                                style="@style/Widget.EastSyria.HomeCategoryIcon"
-                                android:src="@drawable/ic_historical" />
-
-                        </FrameLayout>
+                        <ImageView
+                            style="@style/Widget.EastSyria.V3.ChipIcon"
+                            android:src="@drawable/ic_historical" />
 
                         <TextView
-                            style="@style/Widget.EastSyria.HomeCategoryLabel"
+                            style="@style/Widget.EastSyria.V3.ChipLabel"
                             android:text="@string/cat_historical" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/btnNature"
-                        style="@style/Widget.EastSyria.HomeCategory">
+                        style="@style/Widget.EastSyria.V3.Chip">
 
-                        <FrameLayout style="@style/Widget.EastSyria.HomeCategoryBox">
-
-                            <ImageView
-                                style="@style/Widget.EastSyria.HomeCategoryIcon"
-                                android:src="@drawable/ic_waves" />
-
-                        </FrameLayout>
+                        <ImageView
+                            style="@style/Widget.EastSyria.V3.ChipIcon"
+                            android:src="@drawable/ic_waves" />
 
                         <TextView
-                            style="@style/Widget.EastSyria.HomeCategoryLabel"
+                            style="@style/Widget.EastSyria.V3.ChipLabel"
                             android:text="@string/cat_nature" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/btnCulture"
-                        style="@style/Widget.EastSyria.HomeCategory">
+                        style="@style/Widget.EastSyria.V3.Chip">
 
-                        <FrameLayout style="@style/Widget.EastSyria.HomeCategoryBox">
-
-                            <ImageView
-                                style="@style/Widget.EastSyria.HomeCategoryIcon"
-                                android:src="@drawable/ic_people" />
-
-                        </FrameLayout>
+                        <ImageView
+                            style="@style/Widget.EastSyria.V3.ChipIcon"
+                            android:src="@drawable/ic_people" />
 
                         <TextView
-                            style="@style/Widget.EastSyria.HomeCategoryLabel"
+                            style="@style/Widget.EastSyria.V3.ChipLabel"
                             android:text="@string/cat_culture" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/btnMuseums"
-                        style="@style/Widget.EastSyria.HomeCategory">
+                        style="@style/Widget.EastSyria.V3.Chip">
 
-                        <FrameLayout style="@style/Widget.EastSyria.HomeCategoryBox">
-
-                            <ImageView
-                                style="@style/Widget.EastSyria.HomeCategoryIcon"
-                                android:src="@drawable/ic_museum" />
-
-                        </FrameLayout>
+                        <ImageView
+                            style="@style/Widget.EastSyria.V3.ChipIcon"
+                            android:src="@drawable/ic_museum" />
 
                         <TextView
-                            style="@style/Widget.EastSyria.HomeCategoryLabel"
+                            style="@style/Widget.EastSyria.V3.ChipLabel"
                             android:text="@string/cat_museums" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/btnCuisine"
-                        style="@style/Widget.EastSyria.HomeCategory">
+                        style="@style/Widget.EastSyria.V3.Chip">
 
-                        <FrameLayout style="@style/Widget.EastSyria.HomeCategoryBox">
-
-                            <ImageView
-                                style="@style/Widget.EastSyria.HomeCategoryIcon"
-                                android:src="@drawable/ic_restaurant" />
-
-                        </FrameLayout>
+                        <ImageView
+                            style="@style/Widget.EastSyria.V3.ChipIcon"
+                            android:src="@drawable/ic_restaurant" />
 
                         <TextView
-                            style="@style/Widget.EastSyria.HomeCategoryLabel"
+                            style="@style/Widget.EastSyria.V3.ChipLabel"
                             android:text="@string/cat_cuisine" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/btnCrafts"
-                        style="@style/Widget.EastSyria.HomeCategory">
+                        style="@style/Widget.EastSyria.V3.Chip">
 
-                        <FrameLayout style="@style/Widget.EastSyria.HomeCategoryBox">
-
-                            <ImageView
-                                style="@style/Widget.EastSyria.HomeCategoryIcon"
-                                android:src="@drawable/ic_tools" />
-
-                        </FrameLayout>
+                        <ImageView
+                            style="@style/Widget.EastSyria.V3.ChipIcon"
+                            android:src="@drawable/ic_tools" />
 
                         <TextView
-                            style="@style/Widget.EastSyria.HomeCategoryLabel"
+                            style="@style/Widget.EastSyria.V3.ChipLabel"
                             android:text="@string/cat_crafts" />
-
-                    </LinearLayout>
-
-                    <!-- The index, not a category: outlined, so it reads as a different kind of thing. -->
-                    <LinearLayout
-                        android:id="@+id/btnMore"
-                        style="@style/Widget.EastSyria.HomeCategory">
-
-                        <FrameLayout
-                            style="@style/Widget.EastSyria.HomeCategoryBox"
-                            android:background="@drawable/bg_category_tile_all">
-
-                            <ImageView
-                                style="@style/Widget.EastSyria.HomeCategoryIcon"
-                                android:src="@drawable/ic_grid"
-                                android:tint="@color/ivory_dim" />
-
-                        </FrameLayout>
-
-                        <TextView
-                            style="@style/Widget.EastSyria.HomeCategoryLabel"
-                            android:text="@string/cat_all" />
 
                     </LinearLayout>
 
@@ -314,22 +445,19 @@
                 android:id="@+id/sectionTrending"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
                 android:orientation="vertical"
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <LinearLayout style="@style/Widget.EastSyria.HomeSectionHeader">
+                <LinearLayout style="@style/Widget.EastSyria.V3.SectionHeader">
 
                     <TextView
-                        style="@style/Widget.EastSyria.HomeSectionTitle"
+                        style="@style/Widget.EastSyria.V3.SectionTitle"
                         android:text="@string/section_trending" />
-
-                    <View style="@style/Widget.EastSyria.HomeSectionRule" />
 
                     <TextView
                         android:id="@+id/tvViewMap"
-                        style="@style/Widget.EastSyria.HomeSectionAction"
+                        style="@style/Widget.EastSyria.V3.SectionAction"
                         android:text="@string/action_view_map" />
 
                 </LinearLayout>
@@ -338,121 +466,53 @@
                     android:id="@+id/rvTrendingDestinations"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="14dp"
+                    android:clipToPadding="false"
                     android:nestedScrollingEnabled="false"
                     android:overScrollMode="never"
-                    tools:itemCount="2"
-                    tools:listitem="@layout/item_trending_destination" />
+                    android:paddingStart="20dp"
+                    android:paddingEnd="6dp"
+                    tools:listitem="@layout/item_trending_destination"
+                    tools:orientation="horizontal" />
 
             </LinearLayout>
 
-            <!-- Loading: two card silhouettes under the section's own title. -->
             <LinearLayout
                 android:id="@+id/trendingSkeleton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="32dp"
                 android:importantForAccessibility="no"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
 
                 <View
-                    android:layout_width="132dp"
-                    android:layout_height="32dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="@drawable/bg_skeleton_bar" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="220dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginEnd="24dp"
+                    android:layout_width="236dp"
+                    android:layout_height="300dp"
                     android:background="@drawable/bg_skeleton_block" />
 
                 <View
-                    android:layout_width="match_parent"
-                    android:layout_height="220dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="24dp"
+                    android:layout_width="236dp"
+                    android:layout_height="300dp"
+                    android:layout_marginStart="14dp"
                     android:background="@drawable/bg_skeleton_block" />
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvCatalogCount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:gravity="center"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp"
-                android:textColor="@color/ivory_mute"
-                android:textSize="13sp"
-                tools:text="12 places catalogued" />
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- ============================ floating search ============================ -->
-
-    <FrameLayout
-        android:id="@+id/topBar"
+    <!-- A solid strip behind the status bar once the header has scrolled away. -->
+    <View
+        android:id="@+id/topBarBg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top">
+        android:layout_height="24dp"
+        android:layout_gravity="top"
+        android:alpha="0"
+        android:background="@color/canvas"
+        android:importantForAccessibility="no" />
 
-        <!-- Height is set in code (status bar inset + 76dp); a match_parent
-             backing inside this wrap_content bar swallowed the whole screen. -->
-        <View
-            android:id="@+id/topBarBg"
-            android:layout_width="match_parent"
-            android:layout_height="76dp"
-            android:alpha="0"
-            android:background="@drawable/bg_top_bar_solid"
-            android:importantForAccessibility="no" />
-
-        <LinearLayout
-            android:id="@+id/searchPill"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/bg_search_pill"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp">
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_search"
-                app:tint="@color/terracotta_soft" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/home_search_hint"
-                android:textColor="@color/ivory_dim"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-
-    </FrameLayout>
-
-    <!-- The dock: four tabs around the map button. -->
     <com.example.eastsyria.Nav.NavDock
         android:id="@+id/navDock"
         android:layout_width="match_parent"

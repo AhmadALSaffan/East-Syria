@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- About: a photograph, what East Syria is, what is inside, credits. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/canvas"
+    android:orientation="vertical">
+
+    <com.example.eastsyria.Ui.ScreenHeader
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:headerTitle="@string/profile_about" />
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="32dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/line"
+                app:strokeWidth="1dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/onb_dura_europos" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/scrim_card_bottom" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/amiri"
+                        android:includeFontPadding="false"
+                        android:text="@string/app_name"
+                        android:textColor="@color/on_photo"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:fontFamily="@font/amiri"
+                        android:text="سوريا الشرقية"
+                        android:textColor="@color/on_photo_dim"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.Prose"
+                android:layout_marginTop="24dp"
+                android:text="@string/about_intro"
+                android:textColor="@color/ivory"
+                android:textSize="16sp" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.ProseHeading"
+                android:text="@string/about_inside_title" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.Prose"
+                android:text="@string/about_inside_body" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.ProseHeading"
+                android:text="@string/about_care_title" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.Prose"
+                android:text="@string/about_care_body" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.ProseHeading"
+                android:text="@string/about_credits_title" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.Prose"
+                android:text="@string/about_credits_body" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.GroupLabel"
+                android:text="@string/about_contact" />
+
+            <LinearLayout style="@style/Widget.EastSyria.V3.Group">
+
+                <LinearLayout
+                    android:id="@+id/rowGithub"
+                    style="@style/Widget.EastSyria.V3.Row">
+
+                    <ImageView
+                        style="@style/Widget.EastSyria.V3.RowIcon"
+                        android:src="@drawable/ic_globe" />
+
+                    <TextView
+                        style="@style/Widget.EastSyria.V3.RowLabel"
+                        android:text="@string/about_made_by" />
+
+                    <ImageView style="@style/Widget.EastSyria.V3.RowChevron" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvVersion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:textColor="@color/ivory_mute"
+                android:textSize="12sp"
+                tools:text="Version 1.0" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

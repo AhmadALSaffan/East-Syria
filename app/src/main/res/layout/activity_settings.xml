@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings: language (the main one), the app's own housekeeping, and the account. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/canvas"
+    android:orientation="vertical">
+
+    <com.example.eastsyria.Ui.ScreenHeader
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:headerTitle="@string/profile_settings" />
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="32dp">
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.GroupLabel"
+                android:layout_marginTop="12dp"
+                android:text="@string/settings_language" />
+
+            <LinearLayout style="@style/Widget.EastSyria.V3.Group">
+
+                <LinearLayout
+                    android:id="@+id/rowEnglish"
+                    style="@style/Widget.EastSyria.V3.Row">
+
+                    <TextView
+                        style="@style/Widget.EastSyria.V3.RowLabel"
+                        android:layout_marginStart="4dp"
+                        android:text="English" />
+
+                    <ImageView
+                        android:id="@+id/checkEnglish"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:background="@drawable/bg_circle_accent"
+                        android:importantForAccessibility="no"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_check"
+                        app:tint="@color/on_accent" />
+
+                </LinearLayout>
+
+                <View
+                    style="@style/Widget.EastSyria.V3.RowDivider"
+                    android:layout_marginStart="20dp" />
+
+                <LinearLayout
+                    android:id="@+id/rowArabic"
+                    style="@style/Widget.EastSyria.V3.Row">
+
+                    <TextView
+                        style="@style/Widget.EastSyria.V3.RowLabel"
+                        android:layout_marginStart="4dp"
+                        android:fontFamily="@font/amiri"
+                        android:text="العربية"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/checkArabic"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:background="@drawable/bg_circle_accent"
+                        android:importantForAccessibility="no"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="invisible"
+                        app:tint="@color/on_accent" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.Prose"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/settings_language_hint"
+                android:textColor="@color/ivory_mute"
+                android:textSize="13sp" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.GroupLabel"
+                android:text="@string/settings_app" />
+
+            <LinearLayout style="@style/Widget.EastSyria.V3.Group">
+
+                <LinearLayout
+                    android:id="@+id/rowClearCache"
+                    style="@style/Widget.EastSyria.V3.Row">
+
+                    <ImageView
+                        style="@style/Widget.EastSyria.V3.RowIcon"
+                        android:src="@drawable/ic_photo_library" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_clear_cache"
+                            android:textColor="@color/ivory"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/settings_clear_cache_hint"
+                            android:textColor="@color/ivory_mute"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View style="@style/Widget.EastSyria.V3.RowDivider" />
+
+                <LinearLayout
+                    android:id="@+id/rowReplayIntro"
+                    style="@style/Widget.EastSyria.V3.Row">
+
+                    <ImageView
+                        style="@style/Widget.EastSyria.V3.RowIcon"
+                        android:src="@drawable/ic_explore" />
+
+                    <TextView
+                        style="@style/Widget.EastSyria.V3.RowLabel"
+                        android:text="@string/settings_replay_intro" />
+
+                    <ImageView style="@style/Widget.EastSyria.V3.RowChevron" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.GroupLabel"
+                android:text="@string/profile_account" />
+
+            <LinearLayout style="@style/Widget.EastSyria.V3.Group">
+
+                <LinearLayout
+                    android:id="@+id/rowPersonal"
+                    style="@style/Widget.EastSyria.V3.Row">
+
+                    <ImageView
+                        style="@style/Widget.EastSyria.V3.RowIcon"
+                        android:src="@drawable/ic_person" />
+
+                    <TextView
+                        style="@style/Widget.EastSyria.V3.RowLabel"
+                        android:text="@string/profile_personal" />
+
+                    <ImageView style="@style/Widget.EastSyria.V3.RowChevron" />
+
+                </LinearLayout>
+
+                    <View style="@style/Widget.EastSyria.V3.RowDivider" />
+
+                    <LinearLayout
+                        android:id="@+id/rowSecurity"
+                        style="@style/Widget.EastSyria.V3.Row">
+
+                        <ImageView
+                            style="@style/Widget.EastSyria.V3.RowIcon"
+                            android:src="@drawable/ic_lock" />
+
+                        <TextView
+                            style="@style/Widget.EastSyria.V3.RowLabel"
+                            android:text="@string/security_title" />
+
+                        <ImageView style="@style/Widget.EastSyria.V3.RowChevron" />
+
+                    </LinearLayout>
+
+                <View style="@style/Widget.EastSyria.V3.RowDivider" />
+
+                <LinearLayout
+                    android:id="@+id/rowPrivacy"
+                    style="@style/Widget.EastSyria.V3.Row">
+
+                    <ImageView
+                        style="@style/Widget.EastSyria.V3.RowIcon"
+                        android:src="@drawable/ic_privacy" />
+
+                    <TextView
+                        style="@style/Widget.EastSyria.V3.RowLabel"
+                        android:text="@string/profile_privacy" />
+
+                    <ImageView style="@style/Widget.EastSyria.V3.RowChevron" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvVersion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:textColor="@color/ivory_mute"
+                android:textSize="12sp"
+                tools:text="Version 1.0" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

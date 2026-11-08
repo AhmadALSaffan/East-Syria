@@ -15,14 +15,12 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.example.eastsyria.Admin.MainPageAdminActivity
 import com.example.eastsyria.databinding.ActivityAddLandmarkBinding
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
-import java.util.UUID
+import com.example.eastsyria.Storage.ImageUploader
 
 class AddLandmarkActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddLandmarkBinding
     private var selectedImageUri: Uri? = null
-    private val storageRef = FirebaseStorage.getInstance().reference
     private val databaseRef = FirebaseDatabase.getInstance().getReference("landmarks")
 
     companion object {
@@ -257,23 +255,15 @@ class AddLandmarkActivity : AppCompatActivity() {
     private fun saveLandmark() {
         setLoading(true)
 
-        val imageFileName = "landmarks/${UUID.randomUUID()}.jpg"
-        val imageRef = storageRef.child(imageFileName)
-
-        imageRef.putFile(selectedImageUri!!)
-            .addOnProgressListener { taskSnapshot ->
-                val progress = (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount).toInt()
-                binding.progressBar.progress = progress
-            }
-            .addOnSuccessListener {
-                imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
-                    uploadToDatabase(downloadUri.toString())
-                }
-            }
-            .addOnFailureListener {
+        ImageUploader.uploadLandmarkPhoto(
+            context = this,
+            uri = selectedImageUri!!,
+            onSuccess = { url -> uploadToDatabase(url) },
+            onError = {
                 setLoading(false)
                 showSnack(binding.root, "Image upload failed: ${it.message}", long = true)
             }
+        )
     }
 
     private fun uploadToDatabase(imageUrl: String) {

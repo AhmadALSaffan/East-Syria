@@ -15,14 +15,13 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
-import java.util.UUID
+import com.example.eastsyria.R
+import com.example.eastsyria.Storage.ImageUploader
 
 class EditLandmarkActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditLandmarkBinding
     private val database = FirebaseDatabase.getInstance().reference
-    private val storage = FirebaseStorage.getInstance().reference
     private var landmarkId = ""
     private var currentImageUrl = ""
     private var selectedImageUri: Uri? = null
@@ -146,6 +145,7 @@ class EditLandmarkActivity : AppCompatActivity() {
             Glide.with(this)
                 .load(currentImageUrl)
                 .centerCrop()
+                .error(R.drawable.placeholder_dark)
                 .into(binding.ivPreview)
         }
 
@@ -190,18 +190,15 @@ class EditLandmarkActivity : AppCompatActivity() {
 
     private fun uploadImageThenSave() {
         showProgress(true)
-        val filename = "landmarks/${UUID.randomUUID()}.jpg"
-        val ref = storage.child(filename)
-        ref.putFile(selectedImageUri!!)
-            .addOnSuccessListener {
-                ref.downloadUrl.addOnSuccessListener { uri ->
-                    saveToFirebase(uri.toString())
-                }
-            }
-            .addOnFailureListener {
+        ImageUploader.uploadLandmarkPhoto(
+            context = this,
+            uri = selectedImageUri!!,
+            onSuccess = { url -> saveToFirebase(url) },
+            onError = {
                 showProgress(false)
                 showSnack(binding.root, "Image upload failed: ${it.message}", long = true)
             }
+        )
     }
 
     private fun saveToFirebase(imageUrl: String) {

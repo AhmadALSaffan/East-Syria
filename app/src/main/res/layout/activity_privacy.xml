@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Privacy: what is collected, where it lives, who sees it, and what you can do. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/canvas"
+    android:orientation="vertical">
+
+    <com.example.eastsyria.Ui.ScreenHeader
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:headerTitle="@string/profile_privacy" />
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="32dp">
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.Prose"
+                android:layout_marginTop="8dp"
+                android:text="@string/privacy_intro"
+                android:textColor="@color/ivory"
+                android:textSize="16sp" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.ProseHeading"
+                android:text="@string/privacy_collect_title" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.Prose"
+                android:text="@string/privacy_collect_body" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.ProseHeading"
+                android:text="@string/privacy_store_title" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.Prose"
+                android:text="@string/privacy_store_body" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.ProseHeading"
+                android:text="@string/privacy_share_title" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.Prose"
+                android:text="@string/privacy_share_body" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.ProseHeading"
+                android:text="@string/privacy_choices_title" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.Prose"
+                android:text="@string/privacy_choices_body" />
+
+            <TextView
+                style="@style/Widget.EastSyria.V3.Prose"
+                android:layout_marginTop="28dp"
+                android:text="@string/privacy_updated"
+                android:textColor="@color/ivory_mute"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

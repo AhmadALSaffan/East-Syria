@@ -1,129 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  A hero page. The photograph runs full-bleed under the status bar and melts
-  into the canvas at its foot; the name, place and one action sit on that melt.
-  The category rides in the meta line, after the name, not above it.
--->
+<!-- A featured landmark: an inset photo card, the name over a soft scrim, one red action. -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp">
 
-    <ImageView
-        android:id="@+id/ivLandmark"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@null"
-        android:scaleType="centerCrop" />
+        android:duplicateParentState="true"
+        app:cardBackgroundColor="@color/surface"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="0dp"
+        app:strokeColor="@color/line"
+        app:strokeWidth="1dp">
 
-    <!-- A flat 15% dim so a bright sky never fights the type. -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#14000000"
-        android:importantForAccessibility="no" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_gravity="top"
-        android:background="@drawable/scrim_canvas_top"
-        android:importantForAccessibility="no" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="380dp"
-        android:layout_gravity="bottom"
-        android:background="@drawable/scrim_canvas_bottom"
-        android:importantForAccessibility="no" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="vertical"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:paddingBottom="72dp">
-
-        <TextView
-            android:id="@+id/tvLandmarkName"
+        <ImageView
+            android:id="@+id/ivLandmark"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:fontFamily="@font/amiri"
-            android:includeFontPadding="false"
-            android:lineHeight="42sp"
-            android:maxLines="2"
-            android:textColor="@color/ivory"
-            android:textSize="36sp"
-            android:textStyle="bold"
-            tools:text="Qal'at Ja'bar" />
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop" />
 
-        <TextView
-            android:id="@+id/tvNameArabic"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/amiri"
-            android:includeFontPadding="false"
-            android:lineHeight="34sp"
-            android:maxLines="1"
-            android:textAlignment="viewStart"
-            android:textColor="@color/ivory_dim"
-            android:textDirection="anyRtl"
-            android:textSize="24sp"
-            android:visibility="gone"
-            tools:text="قلعة جعبر"
-            tools:visibility="visible" />
+            android:layout_height="260dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/scrim_card_bottom" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_gravity="top"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-            <TextView
-                android:id="@+id/tvMeta"
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="@color/ivory_dim"
-                android:textSize="15sp"
-                tools:text="Historical Sites · Ar-Raqqah" />
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tvMeta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_glass_pill"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingStart="12dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="6dp"
+                    android:textColor="@color/on_photo"
+                    android:textSize="13sp"
+                    tools:text="Historical · Deir ez-Zor" />
+
+            </FrameLayout>
 
             <LinearLayout
                 android:id="@+id/layoutRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:background="@drawable/bg_glass_pill"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:paddingStart="10dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="6dp">
 
                 <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:importantForAccessibility="no"
-                    android:src="@drawable/ic_star"
-                    app:tint="@color/gold" />
+                    android:src="@drawable/ic_star_filled"
+                    app:tint="@color/on_photo" />
 
                 <TextView
                     android:id="@+id/tvRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginStart="5dp"
                     android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/gold"
-                    android:textSize="15sp"
+                    android:textColor="@color/on_photo"
+                    android:textSize="13sp"
                     tools:text="4.8" />
 
             </LinearLayout>
@@ -131,37 +98,70 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btnView"
-            android:importantForAccessibility="no"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginTop="18dp"
-            android:background="@drawable/bg_hero_button"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
             android:orientation="horizontal"
-            android:paddingStart="24dp"
-            android:paddingEnd="16dp">
+            android:padding="22dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/hero_view_landmark"
-                android:textColor="@color/canvas"
-                android:textSize="15sp" />
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="6dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_arrow_right"
-                app:tint="@color/canvas" />
+                <TextView
+                    android:id="@+id/tvNameArabic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/amiri"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:textColor="@color/on_photo_dim"
+                    android:textSize="17sp"
+                    tools:text="جسر دير الزور المعلق" />
+
+                <TextView
+                    android:id="@+id/tvLandmarkName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/amiri"
+                    android:includeFontPadding="false"
+                    android:lineHeight="36sp"
+                    android:maxLines="2"
+                    android:textColor="@color/on_photo"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    tools:text="Deir ez-Zor Suspension Bridge" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/btnView"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/bg_photo_button"
+                android:clickable="true"
+                android:contentDescription="@string/hero_view_landmark"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_arrow_right"
+                    app:tint="@color/photo_icon" />
+
+            </FrameLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </FrameLayout>

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "482676029898",
+    "firebase_url": "https://east-syria-default-rtdb.firebaseio.com",
     "project_id": "east-syria",
     "storage_bucket": "east-syria.firebasestorage.app"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "482676029898-8pl5esv21cqlkgv2p5i0o9anao5ee13u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eastsyria",
+            "certificate_hash": "7f468277b48f5a9a9d0757caed55a51dc534b97d"
+          }
+        },
         {
           "client_id": "482676029898-9hrbu4uqfonqtlqrfkcusl0eafr0c4jd.apps.googleusercontent.com",
           "client_type": 3

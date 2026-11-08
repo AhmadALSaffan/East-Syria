@@ -12,12 +12,20 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.eastsyria.MainPage.Data.Landmark
 import com.example.eastsyria.R
+import com.example.eastsyria.Ui.localCategory
+import com.example.eastsyria.Ui.localCity
+import com.example.eastsyria.Ui.localGovernorate
+import com.example.eastsyria.Ui.localName
 import com.example.eastsyria.databinding.ItemSearchResultBinding
 
 /**
  * Search rows over the published catalog. The part of a name that matches the
  * query is coloured, so a result explains why it is there.
  */
+/** One key per kind of place, so "Archaeological Site" and "Archaeological" match. */
+fun categoryKey(raw: String): String =
+    raw.trim().lowercase().removeSuffix(" sites").removeSuffix(" site").trim()
+
 class SearchResultAdapter(
     landmarks: List<Landmark>,
     private val onItemClick: (Landmark) -> Unit
@@ -33,7 +41,7 @@ class SearchResultAdapter(
         fun bind(landmark: Landmark) {
             val context = binding.root.context
             binding.apply {
-                tvLandmarkName.text = highlighted(landmark.name, context)
+                tvLandmarkName.text = highlighted(landmark.localName(context), context)
 
                 val meta = joinMeta(landmark)
                 tvMeta.text = meta
@@ -62,8 +70,8 @@ class SearchResultAdapter(
 
         private fun joinMeta(landmark: Landmark): String {
             val context = binding.root.context
-            val category = landmark.category.trim()
-            val city = landmark.location.city.trim().ifEmpty { landmark.location.governorate.trim() }
+            val category = landmark.localCategory(context)
+            val city = landmark.localCity(context).ifEmpty { landmark.localGovernorate(context) }
             return when {
                 category.isNotEmpty() && city.isNotEmpty() ->
                     context.getString(R.string.home_meta_separator, category, city)
@@ -114,10 +122,11 @@ class SearchResultAdapter(
                     landmark.nameArabic.contains(q, ignoreCase = true) ||
                     landmark.location.city.contains(q, ignoreCase = true) ||
                     landmark.location.governorate.contains(q, ignoreCase = true) ||
+                    landmark.location.cityArabic.contains(q) ||
+                    landmark.categoryArabic.contains(q) ||
                     landmark.description.contains(q, ignoreCase = true)
 
-            val matchesCategory = category == null ||
-                    landmark.category.trim().equals(category, ignoreCase = true)
+            val matchesCategory = category == null || categoryKey(landmark.category) == category
 
             matchesQuery && matchesCategory
         }
@@ -131,14 +140,17 @@ class SearchResultAdapter(
         notifyDataSetChanged()
     }
 
-    /** The categories that actually exist in the catalog, most common first. */
-    fun categories(): List<String> = landmarks
-        .map { it.category.trim() }
-        .filter { it.isNotEmpty() }
-        .groupBy { it.lowercase() }
-        .values
-        .sortedByDescending { it.size }
-        .map { it.first() }
+    /**
+     * The categories that exist in the catalog, most common first, as (key, label) pairs.
+     * "Archaeological" and "Archaeological Site" are one category; the label is in the app's
+     * language.
+     */
+    fun categories(context: android.content.Context): List<Pair<String, String>> = landmarks
+        .filter { categoryKey(it.category).isNotEmpty() }
+        .groupBy { categoryKey(it.category) }
+        .entries
+        .sortedByDescending { it.value.size }
+        .map { (key, items) -> key to items.first().localCategory(context).substringBefore(" Site").trim() }
 
     fun getFilteredCount() = filteredLandmarks.size
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Quiet pill: obsidian surface, hairline edge, red ripple. Chips, secondary actions. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/ripple">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/surface" />
+            <stroke android:width="1dp" android:color="@color/line" />
+            <corners android:radius="100dp" />
+        </shape>
+    </item>
+</ripple>

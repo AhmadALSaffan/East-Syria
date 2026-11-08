@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Arabic. Keys not listed here fall back to English (values/strings.xml). -->
+<resources>
+    <string name="app_name">سوريا الشرقية</string>
+    <string name="next">التالي</string>
+    <string name="previous">السابق</string>
+
+    <!-- Onboarding (older keys, still referenced) -->
+    <string name="stop_horizon">الأفق</string>
+    <string name="stop_walls">الأسوار</string>
+    <string name="stop_gate">البوابة</string>
+    <string name="stop_threshold">العتبة</string>
+    <string name="onboarding_1_title">سوريا، من بعيد</string>
+    <string name="onboarding_1_body">قلاع وأنهار ومتاحف ومطابخ وورش، أماكن تحمل تاريخ البلاد في دليل واحد.</string>
+    <string name="onboarding_2_title">كل مدخل موثّق</string>
+    <string name="onboarding_2_body">تُكتب المعالم وتُراجع قبل نشرها بالعربية والإنجليزية، مع المعلومات العملية التي تحتاجها للزيارة.</string>
+    <string name="onboarding_3_title">اعثر عليه على الخريطة</string>
+    <string name="onboarding_3_body">ست فئات وبحث كامل وخريطة تُريك ما حولك. احفظ الأماكن التي تنوي العودة إليها.</string>
+    <string name="onboarding_4_title">تفضّل بالدخول</string>
+    <string name="onboarding_4_body">أنشئ حساباً لتحفظ المعالم وتحمل قائمتك معك.</string>
+    <string name="onboarding_plate_en">Tell Halaf</string>
+    <string name="onboarding_plate_place">قرب رأس العين، الحسكة</string>
+
+    <!-- Onboarding v3: the scenes, in Arabic -->
+    <string name="onb_wordmark">سوريا الشرقية</string>
+    <string name="onb_1_title">اعثر على أي معلم</string>
+    <string name="onb_1_body">قلاع وآثار ومتاحف ومطابخ شرق سوريا، مجموعة في دليل واحد تبحث فيه بلحظة.</string>
+    <string name="onb_2_title">كل المواقع على خريطة واحدة</string>
+    <string name="onb_2_body">شاهد ما يقوم على ضفاف الفرات وما حولك، ثم افتح أي دبوس لتعرف المواعيد والرسوم والطريق إليه.</string>
+    <string name="onb_3_title">بالعربية والإنجليزية</string>
+    <string name="onb_3_body">كل مدخل مكتوب ومراجَع باللغتين، مع المعلومات العملية التي تحتاجها للذهاب فعلاً.</string>
+    <string name="onb_4_title">احتفظ بما تحب</string>
+    <string name="onb_4_body">احفظ المعالم في مجموعتك وكن أول من يعلم حين يُضاف موقع جديد.</string>
+
+    <string name="onb_search_hint">ابحث عن المعالم</string>
+    <string name="onb_search_query">الفرات</string>
+    <string name="onb_search_count">٣ معالم على النهر</string>
+    <string name="onb_search_r1">قلعة جعبر</string>
+    <string name="onb_search_r1_meta">قلعة · الرقة</string>
+    <string name="onb_search_r2">قلعة الرحبة</string>
+    <string name="onb_search_r2_meta">قلعة · الميادين</string>
+    <string name="onb_search_r3">دورا أوروبوس</string>
+    <string name="onb_search_r3_meta">مدينة أثرية · دير الزور</string>
+
+    <string name="onb_map_pin1">قلعة جعبر</string>
+    <string name="onb_map_pin2">دير الزور</string>
+    <string name="onb_map_pin3">دورا أوروبوس</string>
+    <string name="onb_map_pin4">ماري</string>
+    <string name="onb_map_card_meta">مدينة أثرية · القرن الثالث ق.م</string>
+    <string name="onb_map_open">افتح</string>
+
+    <string name="onb_entry_reviewed">مُراجَع</string>
+    <string name="onb_entry_era">الحقبة</string>
+    <string name="onb_entry_era_value">الألف السادس ق.م</string>
+    <string name="onb_entry_region">المنطقة</string>
+    <string name="onb_entry_region_value">الحسكة</string>
+    <string name="onb_entry_entry">الدخول</string>
+    <string name="onb_entry_entry_value">مجاني</string>
+
+    <string name="onb_save_name">تدمر</string>
+    <string name="onb_save_meta">تدمر · بادية حمص</string>
+    <string name="onb_save_collection">مجموعتك</string>
+    <string name="onb_save_note_title">أُضيف معلم جديد</string>
+    <string name="onb_save_note_body">مدينة ماري الأثرية</string>
+
+    <string name="onb_continue_google">المتابعة باستخدام Google</string>
+    <string name="onb_continue_email">المتابعة بالبريد الإلكتروني</string>
+    <string name="onb_have_account">لدي حساب بالفعل</string>
+    <string name="onb_page_of">الصفحة %1$d من %2$d</string>
+
+    <string name="onboarding_skip">تخطَّ</string>
+    <string name="onboarding_next">متابعة</string>
+    <string name="onboarding_start">ابدأ</string>
+    <string name="onboarding_open_map">افتح الخريطة</string>
+    <string name="onboarding_page_of">المحطة %1$d من %2$d</string>
+    <string name="cd_onboarding_art">رسم لطريق يقود إلى موقع تراثي</string>
+
+    <!-- Auth -->
+    <string name="auth_back">رجوع</string>
+    <string name="login_title">أهلاً بعودتك</string>
+    <string name="login_subtitle">سجّل الدخول للوصول إلى معالمك المحفوظة.</string>
+    <string name="login_email_label">البريد الإلكتروني</string>
+    <string name="login_password_label">كلمة المرور</string>
+    <string name="login_password_hint">كلمة المرور</string>
+    <string name="login_forgot">نسيتها؟</string>
+    <string name="login_action">تسجيل الدخول</string>
+    <string name="login_divider">أو استخدم بريدك الإلكتروني</string>
+    <string name="login_google">المتابعة باستخدام Google</string>
+    <string name="login_no_account">جديد هنا؟</string>
+    <string name="login_sign_up">أنشئ حساباً</string>
+
+    <string name="signup_title">أنشئ حسابك</string>
+    <string name="signup_subtitle">خطوتان. الثانية تؤكد بريدك الإلكتروني.</string>
+    <string name="signup_step_1">الخطوة ١ من ٢</string>
+    <string name="signup_step_2">الخطوة ٢ من ٢</string>
+    <string name="signup_name_label">الاسم الكامل</string>
+    <string name="signup_name_hint">اسمك</string>
+    <string name="signup_email_label">البريد الإلكتروني</string>
+    <string name="signup_city_label">المدينة</string>
+    <string name="signup_city_hint">أين تقيم</string>
+    <string name="signup_phone_label">الهاتف</string>
+    <string name="signup_password_label">كلمة المرور</string>
+    <string name="signup_password_hint">٦ أحرف على الأقل</string>
+    <string name="signup_terms">بإنشاء حساب فإنك توافق على شروط الخدمة وسياسة الخصوصية.</string>
+    <string name="signup_action">إنشاء الحساب</string>
+    <string name="signup_have_account">لديك حساب بالفعل؟</string>
+    <string name="signup_login">تسجيل الدخول</string>
+
+    <string name="otp_title">تحقّق من بريدك</string>
+    <string name="otp_subtitle">أدخل الرمز المكوّن من ستة أرقام الذي أرسلناه إليك. إنه الباب الأخير.</string>
+
+    <!-- Home -->
+    <string name="home_title">سوريا الشرقية</string>
+    <string name="home_search_hint">ابحث عن معالم أو مدن…</string>
+    <string name="home_saved">المعالم المحفوظة</string>
+    <string name="home_catalog_count">%1$d مكاناً في الدليل</string>
+    <string name="home_catalog_counting">جارٍ تحميل الدليل…</string>
+    <string name="home_catalog_empty">لم يُنشر شيء بعد</string>
+
+    <string name="section_featured">مختارات</string>
+    <string name="section_trending">الأكثر رواجاً</string>
+    <string name="action_see_all">عرض الكل</string>
+    <string name="action_view_map">على الخريطة</string>
+
+    <string name="cat_historical">تاريخية</string>
+    <string name="cat_nature">أنهار</string>
+    <string name="cat_culture">ثقافة</string>
+    <string name="cat_museums">متاحف</string>
+    <string name="cat_cuisine">مطبخ</string>
+    <string name="cat_crafts">حِرَف</string>
+    <string name="cat_all">الكل</string>
+
+    <string name="cat_name_historical">مواقع تاريخية</string>
+    <string name="cat_name_nature">الطبيعة والأنهار</string>
+    <string name="cat_name_culture">الثقافة المحلية</string>
+    <string name="cat_name_museums">المتاحف</string>
+    <string name="cat_name_cuisine">المطبخ</string>
+    <string name="cat_name_crafts">الحِرَف اليدوية</string>
+
+    <string name="hero_view_landmark">عرض المعلم</string>
+    <string name="hero_empty_title">لم يُنشر شيء بعد</string>
+    <string name="hero_empty_body">تظهر المعالم الجديدة هنا فور نشرها.</string>
+    <string name="hero_error_title">تعذّر تحميل الدليل</string>
+    <string name="hero_error_body">تحقّق من اتصالك ثم حاول مجدداً.</string>
+    <string name="action_retry">حاول مجدداً</string>
+    <string name="home_rating_desc">التقييم %1$s</string>
+    <string name="home_meta_separator">%1$s · %2$s</string>
+
+    <string name="nav_explore">استكشف</string>
+    <string name="nav_saved">المحفوظات</string>
+    <string name="nav_updates">التحديثات</string>
+    <string name="nav_profile">الملف الشخصي</string>
+    <string name="nav_map">افتح الخريطة</string>
+
+    <!-- Search -->
+    <string name="search_back">رجوع</string>
+    <string name="search_clear">امسح البحث</string>
+    <string name="search_filter_all">الكل</string>
+    <plurals name="search_count_all">
+        <item quantity="zero">لا معالم</item>
+        <item quantity="one">معلم واحد</item>
+        <item quantity="two">معلمان</item>
+        <item quantity="few">%d معالم</item>
+        <item quantity="many">%d معلماً</item>
+        <item quantity="other">%d معلم</item>
+    </plurals>
+    <plurals name="search_count_query">
+        <item quantity="zero">لا نتائج لـ «%2$s»</item>
+        <item quantity="one">نتيجة واحدة لـ «%2$s»</item>
+        <item quantity="two">نتيجتان لـ «%2$s»</item>
+        <item quantity="few">%1$d نتائج لـ «%2$s»</item>
+        <item quantity="many">%1$d نتيجة لـ «%2$s»</item>
+        <item quantity="other">%1$d نتيجة لـ «%2$s»</item>
+    </plurals>
+    <string name="search_empty_title">لم نجد معالم</string>
+    <string name="search_empty_body_query">لا شيء يطابق «%1$s». تحقّق من الكتابة أو جرّب كلمة أعم.</string>
+    <string name="search_empty_body_filter">لا توجد معالم في هذه الفئة بعد.</string>
+    <string name="search_error_title">تعذّر تحميل المعالم</string>
+    <string name="search_error_body">تحقّق من اتصالك ثم حاول مجدداً.</string>
+    <string name="category_search_hint">ابحث في هذه الفئة</string>
+
+    <!-- Personal details -->
+    <string name="personal_title">البيانات الشخصية</string>
+    <string name="personal_change_photo">تغيير الصورة</string>
+    <string name="personal_full_name">الاسم الكامل</string>
+    <string name="personal_email">البريد الإلكتروني</string>
+    <string name="personal_email_helper">هذا هو العنوان الذي تسجّل به الدخول، ولا يمكن تغييره هنا.</string>
+    <string name="personal_phone">الهاتف</string>
+    <string name="personal_city">المدينة</string>
+    <string name="personal_save">حفظ التغييرات</string>
+    <string name="personal_discard">تجاهل التغييرات</string>
+    <string name="personal_load_error">تعذّر تحميل بياناتك.</string>
+    <string name="personal_required">مطلوب</string>
+    <string name="personal_saved">حُفظت بياناتك</string>
+    <string name="personal_save_failed">تعذّر حفظ التغييرات. تحقّق من اتصالك وحاول مجدداً.</string>
+    <string name="personal_image_too_large">الصورة أكبر من ١ ميغابايت حتى بعد الضغط. اختر صورة أصغر.</string>
+    <string name="personal_photo_permission">اسمح بالوصول إلى صورك لاختيار صورة.</string>
+    <string name="personal_photo_upload_failed">تعذّر رفع صورتك. حاول مجدداً.</string>
+
+    <!-- Profile -->
+    <string name="profile_passport">جواز المستكشف</string>
+    <string name="profile_stamps">أماكنك المحفوظة</string>
+    <string name="profile_fact_since">عضو منذ</string>
+    <string name="profile_fact_saved">أماكن محفوظة</string>
+    <string name="profile_fact_kinds">أنواع الأماكن</string>
+    <string name="profile_error">تعذّر تحميل ملفك الشخصي.</string>
+    <string name="profile_signed_out_title">لم تسجّل الدخول</string>
+    <string name="profile_signed_out_body">سجّل الدخول لترى ملفك والأماكن التي حفظتها.</string>
+    <string name="profile_title">الملف الشخصي</string>
+    <string name="profile_back">رجوع</string>
+    <string name="profile_edit">تعديل الصورة</string>
+    <string name="profile_explorer_from">مستكشف من %1$s</string>
+    <string name="profile_explorer">مستكشف</string>
+    <string name="profile_member_since">عضو منذ %1$s</string>
+    <string name="profile_saved">المحفوظات</string>
+    <string name="profile_saved_count">%1$d محفوظ</string>
+    <string name="profile_saved_empty">لم تحفظ شيئاً بعد. احفظ معلماً وسيظهر هنا.</string>
+    <string name="profile_saved_all">عرض الكل</string>
+    <string name="profile_account">الحساب</string>
+    <string name="profile_personal">البيانات الشخصية</string>
+    <string name="profile_settings">الإعدادات</string>
+    <string name="profile_about">عن سوريا الشرقية</string>
+    <string name="profile_privacy">اتفاقية الخصوصية</string>
+    <string name="profile_soon">قريباً</string>
+    <string name="profile_sign_out">تسجيل الخروج</string>
+    <string name="profile_version">الإصدار %1$s</string>
+    <string name="profile_more">المزيد</string>
+
+    <!-- Updates -->
+    <string name="updates_title">التحديثات</string>
+    <string name="updates_recent">الأحدث</string>
+    <string name="updates_earlier">سابقاً</string>
+    <string name="updates_mark_all">تعليم الكل كمقروء</string>
+    <string name="updates_all_read">عُلّمت كل التحديثات كمقروءة</string>
+    <string name="updates_mark_failed">تعذّر تعليمها كمقروءة. حاول مجدداً.</string>
+    <string name="updates_dialog_close">إغلاق</string>
+    <string name="updates_empty_title">لا جديد لديك</string>
+    <string name="updates_empty_body">ستظهر هنا المعالم الجديدة والتغييرات على الأماكن.</string>
+    <string name="updates_signed_out_title">سجّل الدخول لترى تحديثاتك</string>
+    <string name="updates_signed_out_body">تُحفظ التحديثات مع حسابك.</string>
+    <string name="updates_error_title">تعذّر تحميل تحديثاتك</string>
+
+    <!-- Filter sheet -->
+    <string name="filter_close">إغلاق عوامل التصفية</string>
+    <string name="filter_rating">أدنى تقييم</string>
+    <string name="filter_rating_four">٤٫٠ فأكثر</string>
+    <string name="filter_rating_four_half">٤٫٥ فأكثر</string>
+    <string name="filter_condition">الحالة</string>
+    <string name="filter_intact">سليم</string>
+    <string name="filter_ruins">أطلال</string>
+    <string name="filter_destroyed">مدمَّر</string>
+    <string name="filter_curated">منتقى</string>
+    <string name="filter_reset">إعادة ضبط</string>
+    <string name="filter_apply">اعرض الأماكن</string>
+
+    <!-- Category list -->
+    <string name="category_filter">تصفية الأماكن</string>
+    <string name="category_unesco">تراث عالمي لليونسكو</string>
+    <string name="category_reset_filters">إعادة ضبط التصفية</string>
+    <string name="category_empty_title">لا شيء هنا بعد</string>
+    <string name="category_filtered_empty_body">لا مكان يطابق هذه التصفية. خفّفها لترى المزيد.</string>
+
+    <!-- Categories -->
+    <string name="categories_title">الفئات</string>
+    <string name="categories_explore_map">استكشف على الخريطة</string>
+    <string name="categories_stats_failed">تعذّر تحميل الأعداد والصور.</string>
+    <plurals name="categories_place_count">
+        <item quantity="zero">لا أماكن</item>
+        <item quantity="one">مكان واحد</item>
+        <item quantity="two">مكانان</item>
+        <item quantity="few">%d أماكن</item>
+        <item quantity="many">%d مكاناً</item>
+        <item quantity="other">%d مكان</item>
+    </plurals>
+
+    <!-- Saved -->
+    <string name="saved_title">المحفوظات</string>
+    <string name="saved_search_hint">ابحث في معالمك المحفوظة</string>
+    <plurals name="saved_count">
+        <item quantity="zero">لا معالم محفوظة</item>
+        <item quantity="one">معلم محفوظ واحد</item>
+        <item quantity="two">معلمان محفوظان</item>
+        <item quantity="few">%d معالم محفوظة</item>
+        <item quantity="many">%d معلماً محفوظاً</item>
+        <item quantity="other">%d معلم محفوظ</item>
+    </plurals>
+    <string name="saved_empty_title">لم تحفظ شيئاً بعد</string>
+    <string name="saved_empty_body">اضغط علامة الحفظ على أي معلم ليبقى هنا.</string>
+    <string name="saved_empty_action">استكشف المعالم</string>
+    <string name="saved_signed_out_title">سجّل الدخول لترى قائمتك</string>
+    <string name="saved_signed_out_body">تُحفظ معالمك مع حسابك.</string>
+    <string name="saved_signed_out_action">تسجيل الدخول</string>
+    <string name="saved_error_title">تعذّر تحميل قائمتك</string>
+    <string name="saved_no_match">لا معلم محفوظ يطابق «%1$s».</string>
+    <string name="saved_removed">أُزيل من قائمتك</string>
+    <string name="saved_undo">تراجع</string>
+    <string name="saved_remove_failed">تعذّرت الإزالة. حاول مجدداً.</string>
+    <string name="saved_remove_desc">إزالة %1$s من المحفوظات</string>
+
+    <!-- Landmark detail -->
+    <string name="detail_back">رجوع</string>
+    <string name="detail_unbookmark">إزالة من المحفوظات</string>
+    <string name="detail_error_title">تعذّر تحميل هذا المعلم</string>
+    <string name="detail_error_body">تحقّق من اتصالك ثم حاول مجدداً.</string>
+    <string name="detail_missing_title">هذا المعلم غير متاح</string>
+    <string name="detail_missing_body">ربما أُزيل، أو لم يُنشر بعد.</string>
+    <string name="detail_saved">حُفظ في قائمتك</string>
+    <string name="detail_unsaved">أُزيل من قائمتك</string>
+    <string name="detail_login_to_save">سجّل الدخول لحفظ المعالم</string>
+    <string name="detail_save_failed">تعذّر تحديث قائمتك. حاول مجدداً.</string>
+    <string name="detail_share_failed">تعذّر فتح المشاركة</string>
+    <string name="detail_maps_failed">لا يوجد تطبيق يفتح الخريطة</string>
+    <string name="detail_share_chooser">مشاركة عبر</string>
+    <string name="detail_share">شارك هذا المعلم</string>
+    <string name="detail_bookmark">احفظ هذا المعلم</string>
+    <string name="detail_directions">الاتجاهات</string>
+    <string name="detail_lang_english">English</string>
+    <string name="detail_section_record">السجل</string>
+    <string name="detail_section_visiting">الزيارة</string>
+    <string name="detail_rating">التقييم %1$s</string>
+    <string name="detail_share_footer">اكتشف المزيد من المعالم السورية مع تطبيق سوريا الشرقية</string>
+
+    <!-- Map -->
+    <string name="map_filter_categories">الفئات</string>
+    <string name="map_filter_distance">المسافة منك</string>
+    <string name="map_filter_any_distance">أي مسافة</string>
+    <string name="map_filter_distance_km">%1$d كم</string>
+    <string name="map_filter_distance_needs_location">فعّل الموقع لتصفّي حسب المسافة.</string>
+    <string name="map_filter_rating_three">٣٫٠ فأكثر</string>
+    <string name="map_filter_featured_only">المختارات فقط</string>
+    <string name="map_filter_trending_only">الأكثر رواجاً فقط</string>
+    <string name="map_load_failed">تعذّر تحميل المعالم.</string>
+    <string name="map_readout_failed">تعذّرت قراءة الدليل</string>
+    <string name="map_location_unavailable">موقعك غير متاح بعد.</string>
+    <string name="map_location_permission">اسمح بالوصول إلى الموقع لترى المسافات وتنتقل إلى مكانك.</string>
+    <string name="map_search_hint">ابحث في الخريطة…</string>
+    <string name="map_filters">التصفية</string>
+    <string name="map_all">الكل</string>
+    <string name="map_readout">يظهر %1$d من %2$d</string>
+    <string name="map_readout_loading">جارٍ قراءة الدليل…</string>
+    <string name="map_layers">طبقات الخريطة</string>
+    <string name="map_zoom_in">تكبير</string>
+    <string name="map_zoom_out">تصغير</string>
+    <string name="map_my_location">موقعي</string>
+    <string name="map_distance">على بعد %1$s كم</string>
+    <string name="map_distance_unknown">المسافة غير متاحة</string>
+    <string name="map_chip_count">%1$s · %2$d</string>
+
+    <string name="value_yes">نعم</string>
+    <string name="value_no">لا</string>
+
+    <string name="record_year_built">سنة البناء</string>
+    <string name="record_elevation">الارتفاع</string>
+    <string name="record_material">المادة</string>
+    <string name="record_visiting_hours">المواعيد</string>
+    <string name="record_entry_fee">الدخول</string>
+    <string name="record_best_time">أفضل وقت</string>
+
+    <string name="otp_digit_1">الرقم ١ من ٦</string>
+    <string name="otp_digit_2">الرقم ٢ من ٦</string>
+    <string name="otp_digit_3">الرقم ٣ من ٦</string>
+    <string name="otp_digit_4">الرقم ٤ من ٦</string>
+    <string name="otp_digit_5">الرقم ٥ من ٦</string>
+    <string name="otp_digit_6">الرقم ٦ من ٦</string>
+    <string name="otp_no_code">لم يصلك؟</string>
+    <string name="otp_resend">أرسله مجدداً</string>
+    <string name="otp_action">تحقّق وتابع</string>
+
+    <!-- v3 -->
+    <string name="home_title_explore">استكشف سوريا الشرقية</string>
+    <string name="home_greeting_morning">صباح الخير</string>
+    <string name="home_greeting_afternoon">طاب يومك</string>
+    <string name="home_greeting_evening">مساء الخير</string>
+    <string name="home_browse">تصفّح حسب النوع</string>
+    <plurals name="home_places">
+        <item quantity="zero">لا أماكن</item>
+        <item quantity="one">مكان واحد</item>
+        <item quantity="two">مكانان</item>
+        <item quantity="few">%d أماكن</item>
+        <item quantity="many">%d مكاناً</item>
+        <item quantity="other">%d مكان</item>
+    </plurals>
+    <string name="place_city_governorate">%1$s، %2$s</string>
+    <string name="search_title">البحث</string>
+    <string name="language_english">English</string>
+
+    <string name="settings_language">اللغة</string>
+    <string name="settings_language_hint">يتحوّل التطبيق كله، بما في ذلك مشاهد البداية وسجلات المعالم.</string>
+    <string name="settings_app">التطبيق</string>
+    <string name="settings_clear_cache">مسح الصور المحفوظة</string>
+    <string name="settings_clear_cache_hint">يوفّر مساحة، وتُحمّل الصور من جديد عند فتحها.</string>
+    <string name="settings_cache_cleared">مُسحت الصور المحفوظة</string>
+    <string name="settings_replay_intro">شاهد المقدمة مجدداً</string>
+
+    <string name="about_intro">سوريا الشرقية دليل ثنائي اللغة لتراث شرق سوريا: القلاع والمدن الأثرية والأنهار والمتاحف والمطابخ والورش التي تحمل تاريخ المنطقة.</string>
+    <string name="about_inside_title">ماذا في الداخل</string>
+    <string name="about_inside_body">لكل معلم سجل مكتوب بالعربية والإنجليزية، وصور، ومعلومات عملية للزيارة (المواعيد والدخول وأفضل وقت للذهاب)، ومكانه على الخريطة. احفظ ما تنوي زيارته وستعلم حين تُضاف مواقع جديدة.</string>
+    <string name="about_care_title">كيف تُكتب المداخل</string>
+    <string name="about_care_body">يكتب القيّمون المعالم ويراجعونها قبل نشرها. إن وجدت خطأً أو نقصاً فأخبرنا وسنصححه.</string>
+    <string name="about_credits_title">حقوق الصور</string>
+    <string name="about_credits_body">ماري، قصر زمري ليم: Heretiq، رخصة CC BY-SA 2.5، عبر ويكيميديا كومنز. بقية الصور تعود لمشروع سوريا الشرقية.</string>
+    <string name="about_contact">من صنع</string>
+    <string name="about_made_by">أحمد الصفّان على GitHub</string>
+
+    <string name="privacy_intro">توضح هذه الصفحة ما يحتفظ به تطبيق سوريا الشرقية عنك ولماذا. باختصار: فقط ما يحتاجه التطبيق ليمنحك حساباً وأماكنك المحفوظة.</string>
+    <string name="privacy_collect_title">ما الذي نجمعه</string>
+    <string name="privacy_collect_body">اسمك وبريدك الإلكتروني، وإن أضفتها: رقم هاتفك ومدينتك وصورة الملف الشخصي. ونحتفظ أيضاً بالمعالم التي تحفظها والتحديثات المرسلة إليك. إن سجّلت الدخول عبر Google فإننا نتلقى اسمك وبريدك منها.</string>
+    <string name="privacy_store_title">أين تُحفظ</string>
+    <string name="privacy_store_body">يُخزَّن حسابك وأماكنك المحفوظة لدى Google Firebase، وتُخزَّن صور الملف الشخصي وصور المعالم لدى Supabase. كلاهما يحفظ البيانات على خوادم آمنة، ويتصل التطبيق بهما عبر اتصالات مشفّرة.</string>
+    <string name="privacy_share_title">من يمكنه رؤيتها</string>
+    <string name="privacy_share_body">أنت وحدك تقرأ بيانات حسابك وأماكنك المحفوظة. يمكن للقيّمين على التطبيق رؤية قائمة الحسابات لإرسال التحديثات. لا نبيع بياناتك ولا نشاركها مع المعلنين، ولا يعرض التطبيق إعلانات.</string>
+    <string name="privacy_choices_title">خياراتك</string>
+    <string name="privacy_choices_body">يمكنك تغيير بياناتك وصورتك من البيانات الشخصية في أي وقت. لحذف حسابك وكل ما يُخزَّن معه، تواصل معنا عبر صفحة المشروع في «عن سوريا الشرقية» وسيُحذف.</string>
+    <string name="privacy_updated">آخر تحديث: تشرين الثاني ٢٠٢٦.</string>
+
+    <!-- Messages -->
+    <string name="err_google_unavailable">تسجيل الدخول عبر Google غير متاح حالياً. جرّب بريدك الإلكتروني.</string>
+    <string name="err_offline">لا يوجد اتصال. تحقّق من شبكتك وحاول مجدداً.</string>
+    <string name="err_google_failed">لم ينجح تسجيل الدخول عبر Google. حاول مجدداً أو استخدم بريدك.</string>
+    <string name="err_sign_in">تعذّر تسجيل دخولك. حاول بعد قليل.</string>
+    <string name="err_account_setup">تعذّر إكمال إعداد حسابك. حاول مجدداً.</string>
+    <string name="err_server">تعذّر الوصول إلى الخادم. تحقّق من اتصالك وحاول مجدداً.</string>
+    <string name="login_forgot_need_email">أدخل بريدك أولاً، ثم اضغط «نسيتها؟».</string>
+    <string name="err_email_required">البريد الإلكتروني مطلوب</string>
+    <string name="err_email_invalid">أدخل بريداً إلكترونياً صحيحاً</string>
+    <string name="err_password_required">كلمة المرور مطلوبة</string>
+    <string name="err_password_short">يجب ألا تقل كلمة المرور عن ٦ أحرف</string>
+    <string name="err_account_missing">لم نجد هذا الحساب. حاول مجدداً.</string>
+    <string name="err_wrong_password">البريد وكلمة المرور غير متطابقين. تحقّق منهما وحاول مجدداً.</string>
+    <string name="err_too_many">محاولات كثيرة. انتظر قليلاً ثم حاول مجدداً.</string>
+    <string name="err_not_set_up">حسابك غير مُعدّ بعد. أنشئ حساباً أولاً.</string>
+    <string name="err_load_account_offline">تعذّر تحميل حسابك. تحقّق من اتصالك وحاول مجدداً.</string>
+    <string name="err_load_account">تعذّر تحميل حسابك. حاول بعد قليل.</string>
+    <string name="login_reset_sent">أُرسل بريد إعادة تعيين كلمة المرور إلى %1$s</string>
+    <string name="login_reset_failed">تعذّر إرسال بريد إعادة التعيين: %1$s</string>
+    <string name="err_name_required">الاسم الكامل مطلوب</string>
+    <string name="err_name_short">يجب ألا يقل الاسم عن ٣ أحرف</string>
+    <string name="err_phone_required">رقم الهاتف مطلوب</string>
+    <string name="err_phone_invalid">أدخل رقم هاتف صحيحاً</string>
+    <string name="err_city_required">اختر مدينة</string>
+    <string name="otp_sent">أُرسل رمز التحقق إلى %1$s</string>
+    <string name="otp_send_failed">تعذّر إرسال بريد التحقق. حاول مجدداً.</string>
+    <string name="err_generic">خطأ: %1$s</string>
+    <string name="otp_need_code">أدخل الرمز المكوّن من ٦ أرقام</string>
+    <string name="otp_expired">انتهت صلاحية الرمز. اطلب رمزاً جديداً.</string>
+    <string name="otp_invalid">الرمز غير صحيح. حاول مجدداً.</string>
+    <string name="otp_account_created">أُنشئ الحساب بنجاح!</string>
+    <string name="otp_profile_failed">أُنشئ الحساب لكن تعذّر حفظ الملف: %1$s</string>
+    <string name="otp_create_failed">تعذّر إنشاء الحساب: %1$s</string>
+    <string name="otp_sending">جارٍ إرسال رمز جديد…</string>
+    <string name="otp_resent">أُرسل رمز جديد إلى %1$s</string>
+    <string name="otp_send_failed_short">تعذّر إرسال البريد. حاول مجدداً.</string>
+    <string name="otp_resend_in">إعادة الإرسال بعد %1$s ث</string>
+
+    <!-- AI guide -->
+    <string name="assistant_title">دليل سوريا الشرقية</string>
+    <string name="assistant_subtitle">ذكاء اصطناعي · للسفر والتراث فقط</string>
+    <string name="assistant_home_body">خطّط لرحلة أو اسأل عن أي معلم</string>
+    <string name="assistant_hint">اسأل عن مكان أو رحلة…</string>
+    <string name="assistant_welcome_title">إلى أين بعد ذلك؟</string>
+    <string name="assistant_welcome_body">اسأل عن معالم شرق سوريا وتاريخها وكيفية زيارتها، أو دعني أخطط لك مساراً. أجيب عن أسئلة السفر والتراث فقط.</string>
+    <string name="assistant_suggest_1">خطّط لي يومين على ضفاف الفرات</string>
+    <string name="assistant_suggest_2">ما أفضل وقت لزيارة تدمر؟</string>
+    <string name="assistant_suggest_3">ما القلاع التي يمكنني زيارتها قرب دير الزور؟</string>
+    <string name="assistant_suggest_4">احكِ لي قصة دورا أوروبوس</string>
+    <string name="assistant_err_signed_out">سجّل الدخول لتتحدث مع الدليل.</string>
+    <string name="assistant_err_limit">بلغت الحد اليومي من الأسئلة. يعود الدليل غداً.</string>
+    <string name="assistant_err_not_configured">لم يُفعَّل الدليل بعد. حاول لاحقاً.</string>
+    <string name="assistant_err_failed">تعذّر على الدليل الإجابة الآن. حاول بعد قليل.</string>
+
+    <!-- Confirm it's you -->
+    <string name="reauth_title">تأكيد هويتك</string>
+    <string name="reauth_password_body">لفتح بيانات حسابك، أدخل كلمة المرور الخاصة بـ %1$s.</string>
+    <string name="reauth_google_body">لفتح بيانات حسابك، اختر حساب Google الخاص بك مجدداً.</string>
+    <string name="reauth_google_action">اختر حساب Google</string>
+    <string name="reauth_confirm">تأكيد</string>
+    <string name="reauth_cancel">إلغاء</string>
+    <string name="reauth_wrong">كلمة المرور غير صحيحة. حاول مجدداً.</string>
+    <string name="reauth_other_account">هذا حساب Google مختلف. اختر الحساب الذي سجّلت الدخول به.</string>
+    <string name="reauth_failed">تعذّر تأكيد هويتك. حاول مجدداً.</string>
+    <string name="reauth_unsupported">لا يمكن تأكيد هذا النوع من الحسابات هنا.</string>
+    <string name="nav_map_tab">الخريطة</string>
+
+    <!-- Security -->
+    <string name="security_title">الأمان</string>
+    <string name="security_signin">طريقة تسجيل الدخول</string>
+    <string name="security_method">الطريقة</string>
+    <string name="security_method_google">حساب Google</string>
+    <string name="security_method_email">البريد الإلكتروني وكلمة المرور</string>
+    <string name="security_last_signin">آخر تسجيل دخول</string>
+    <string name="security_twofa">التحقق بخطوتين</string>
+    <string name="security_app">تطبيق المصادقة</string>
+    <string name="security_app_hint">Google Authenticator أو Microsoft Authenticator أو Authy…</string>
+    <string name="security_on">مفعّل</string>
+    <string name="security_off">متوقف</string>
+    <string name="security_off_body">بعد تسجيل الدخول يطلب التطبيق أيضاً رمزاً من ٦ أرقام من تطبيق المصادقة. لن يتمكن أحد من الدخول بكلمة المرور وحدها.</string>
+    <string name="security_setup">إعداد تطبيق المصادقة</string>
+    <string name="security_step_scan">امسح هذا الرمز بتطبيق المصادقة</string>
+    <string name="security_key_hint">لا يمكنك المسح؟ أدخل هذا المفتاح بدلاً من ذلك:</string>
+    <string name="security_copy">نسخ</string>
+    <string name="security_copied">تم النسخ</string>
+    <string name="security_open_app">افتح في تطبيق المصادقة</string>
+    <string name="security_no_app">لا يوجد تطبيق مصادقة مثبّت. ثبّت واحداً أو أدخل المفتاح يدوياً.</string>
+    <string name="security_step_code">أدخل الرمز المكوّن من ٦ أرقام الذي يظهر فيه</string>
+    <string name="security_turn_on">تفعيل</string>
+    <string name="security_codes_title">احفظ رموز الاسترداد</string>
+    <string name="security_codes_body">إن فقدت هاتفك، يتيح لك كل رمز من هذه الرموز الدخول مرة واحدة. احفظها في مكان آمن؛ لن تظهر مجدداً.</string>
+    <string name="security_copy_all">نسخ كل الرموز</string>
+    <string name="security_saved_codes">لقد حفظتها</string>
+    <string name="security_on_body">سيُطلب منك رمز من تطبيق المصادقة عند تسجيل الدخول على هاتف جديد، ومرة كل شهر على هذا الهاتف.</string>
+    <string name="security_turn_off">إيقاف</string>
+    <string name="security_turn_off_body">أدخل رمزاً من تطبيق المصادقة لإيقاف التحقق بخطوتين.</string>
+    <string name="security_turned_off">أُوقف التحقق بخطوتين</string>
+    <string name="security_password">كلمة المرور</string>
+    <string name="security_password_body">سنرسل إلى بريدك رابطاً لاختيار كلمة مرور جديدة.</string>
+    <string name="security_password_action">أرسل رابط إعادة تعيين كلمة المرور</string>
+    <string name="twofa_title">أدخل الرمز</string>
+    <string name="twofa_body">افتح تطبيق المصادقة وأدخل الرمز المكوّن من ٦ أرقام الخاص بسوريا الشرقية.</string>
+    <string name="twofa_body_recovery">أدخل أحد رموز الاسترداد التي حفظتها عند تفعيل التحقق بخطوتين.</string>
+    <string name="twofa_verify">متابعة</string>
+    <string name="twofa_use_recovery">استخدم رمز استرداد</string>
+    <string name="twofa_use_app">استخدم تطبيق المصادقة</string>
+    <string name="twofa_wrong">الرمز غير صحيح. تتغير الرموز كل ٣٠ ثانية؛ جرّب الرمز الحالي.</string>
+    <string name="twofa_locked">رموز خاطئة كثيرة. انتظر ١٠ دقائق ثم حاول مجدداً.</string>
+    <string name="twofa_failed">حدث خطأ ما. حاول بعد قليل.</string>
+</resources>

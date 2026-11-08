@@ -1,5 +1,7 @@
 package com.example.eastsyria.Profile
 
+import com.example.eastsyria.Ui.localName
+import com.example.eastsyria.Ui.localCity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,9 +28,9 @@ class SavedStampAdapter(
 
         fun bind(landmark: Landmark) {
             binding.apply {
-                tvStampName.text = landmark.name
+                tvStampName.text = landmark.localName(root.context)
 
-                val place = landmark.location.city.trim()
+                val place = landmark.localCity(root.context)
                     .ifEmpty { landmark.location.governorate.trim() }
                 tvStampPlace.text = place
                 tvStampPlace.visibility = if (place.isEmpty()) View.GONE else View.VISIBLE
@@ -41,7 +43,7 @@ class SavedStampAdapter(
                     .transition(DrawableTransitionOptions.withCrossFade(200))
                     .into(ivStamp)
 
-                root.contentDescription = landmark.name
+                root.contentDescription = landmark.localName(root.context)
                 root.setOnClickListener { onItemClick(landmark) }
             }
         }

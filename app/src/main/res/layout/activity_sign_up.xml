@@ -337,7 +337,7 @@
                 android:focusable="true"
                 android:gravity="center"
                 android:paddingStart="8dp"
-                android:textColor="@color/clay"
+                android:textColor="@color/clay_bright"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:text="@string/signup_login" />

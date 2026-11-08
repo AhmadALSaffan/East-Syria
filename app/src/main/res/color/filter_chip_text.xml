@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Ink on terracotta clears 5.9:1; ivory on it would not. -->
+<!-- White on racing red clears 5.2:1. -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/canvas" android:state_checked="true" />
+    <item android:color="@color/on_accent" android:state_checked="true" />
     <item android:color="@color/ivory_dim" />
 </selector>

@@ -8,6 +8,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.eastsyria.MainPage.Data.Landmark
 import com.example.eastsyria.R
+import com.example.eastsyria.Ui.localCategory
+import com.example.eastsyria.Ui.localCity
+import com.example.eastsyria.Ui.localGovernorate
+import com.example.eastsyria.Ui.localName
+import com.example.eastsyria.Ui.otherName
 import com.example.eastsyria.databinding.ItemTrendingDestinationBinding
 
 /**
@@ -31,7 +36,7 @@ class TrendingDestinationAdapter(
         fun bind(landmark: Landmark) {
             val context = binding.root.context
             binding.apply {
-                tvLandmarkName.text = landmark.name
+                tvLandmarkName.text = landmark.localName(context)
 
                 val place = formatPlace(landmark)
                 tvLocation.text = place
@@ -59,11 +64,11 @@ class TrendingDestinationAdapter(
         }
 
         private fun formatPlace(landmark: Landmark): String {
-            val city = landmark.location.city.trim()
-            val governorate = landmark.location.governorate.trim()
+            val context = binding.root.context
+            val city = landmark.localCity(context)
+            val governorate = landmark.localGovernorate(context)
+            // The city alone reads cleaner on a small card; the governorate only when there is no city.
             return when {
-                city.isNotEmpty() && governorate.isNotEmpty() && city != governorate ->
-                    "$city, $governorate"
 
                 city.isNotEmpty() -> city
                 else -> governorate

@@ -14,16 +14,17 @@ import com.google.android.material.snackbar.Snackbar
  */
 fun Activity.showSnack(root: View, message: CharSequence, long: Boolean = false) {
     Snackbar.make(root, message, if (long) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT)
-        .setBackgroundTint(ContextCompat.getColor(this, R.color.surface_high))
-        .setTextColor(ContextCompat.getColor(this, R.color.ivory))
-        .setActionTextColor(ContextCompat.getColor(this, R.color.terracotta_soft))
+        .setBackgroundTint(ContextCompat.getColor(this, R.color.ivory))
+        .setTextColor(ContextCompat.getColor(this, R.color.canvas))
+        .setActionTextColor(ContextCompat.getColor(this, R.color.canvas))
         .show()
 }
 
 /** Light status and navigation bar icons, for screens that are always dark. */
 fun Activity.lightBarIcons() {
     WindowCompat.getInsetsController(window, window.decorView).apply {
-        isAppearanceLightStatusBars = false
-        isAppearanceLightNavigationBars = false
+        val day = !isNightMode()
+        isAppearanceLightStatusBars = day
+        isAppearanceLightNavigationBars = day
     }
 }

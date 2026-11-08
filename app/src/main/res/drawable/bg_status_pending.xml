@@ -2,9 +2,9 @@
 <!-- Pending is gold: waiting on a curator, not a warning. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="#1AF0B44C" />
+    <solid android:color="#1ADCE3EA" />
     <corners android:radius="12dp" />
     <stroke
         android:width="1dp"
-        android:color="#F0B44C" />
+        android:color="#DCE3EA" />
 </shape>

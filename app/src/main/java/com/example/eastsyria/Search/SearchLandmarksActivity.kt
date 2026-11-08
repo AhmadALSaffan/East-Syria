@@ -1,5 +1,6 @@
 package com.example.eastsyria.Search
 
+import com.example.eastsyria.Ui.isNightMode
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
@@ -51,8 +52,8 @@ class SearchLandmarksActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         WindowCompat.getInsetsController(window, window.decorView).apply {
-            isAppearanceLightStatusBars = false
-            isAppearanceLightNavigationBars = false
+            isAppearanceLightStatusBars = !isNightMode()
+            isAppearanceLightNavigationBars = !isNightMode()
         }
         binding = ActivitySearchLandmarksBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -152,13 +153,13 @@ class SearchLandmarksActivity : AppCompatActivity() {
         group.removeAllViews()
         currentCategory = null
 
-        val categories = adapter.categories()
+        val categories = adapter.categories(this)
         // A single category makes the row a decision with one answer.
         binding.filterScrollView.visibility = if (categories.size < 2) View.GONE else View.VISIBLE
         if (categories.size < 2) return
 
         addChip(getString(R.string.search_filter_all), null, checked = true)
-        categories.forEach { addChip(it, it, checked = false) }
+        categories.forEach { (key, label) -> addChip(label, key, checked = false) }
 
         group.setOnCheckedStateChangeListener { _, checkedIds ->
             val chip = checkedIds.firstOrNull()?.let { group.findViewById<Chip>(it) }

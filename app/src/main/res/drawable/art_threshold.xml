@@ -73,11 +73,11 @@
     </path>
 
     <path
-        android:strokeColor="#FF120C06"
+        android:strokeColor="#FF08090A"
         android:strokeWidth="2.5"
         android:pathData="M200,0 L200,44" />
     <path
-        android:fillColor="#FF120C06"
+        android:fillColor="#FF08090A"
         android:pathData="M182,46 Q200,31 218,46 L211,70 L189,70 Z" />
     <path
         android:fillColor="#FFFFE3AE"

@@ -172,13 +172,13 @@ class SignUpActivity : AppCompatActivity() {
         ): Boolean {
             binding.apply {
                 if (fullName.isEmpty()) {
-                    tilFullName.error = "Full name is required"
+                    tilFullName.error = getString(R.string.err_name_required)
                     etFullName.requestFocus()
                     scrollToView(tilFullName)
                     return false
                 }
                 if (fullName.length < 3) {
-                    tilFullName.error = "Name must be at least 3 characters"
+                    tilFullName.error = getString(R.string.err_name_short)
                     etFullName.requestFocus()
                     scrollToView(tilFullName)
                     return false
@@ -186,13 +186,13 @@ class SignUpActivity : AppCompatActivity() {
                 tilFullName.error = null
 
                 if (email.isEmpty()) {
-                    tilEmail.error = "Email is required"
+                    tilEmail.error = getString(R.string.err_email_required)
                     etEmail.requestFocus()
                     scrollToView(tilEmail)
                     return false
                 }
                 if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    tilEmail.error = "Please enter a valid email"
+                    tilEmail.error = getString(R.string.err_email_invalid)
                     etEmail.requestFocus()
                     scrollToView(tilEmail)
                     return false
@@ -200,13 +200,13 @@ class SignUpActivity : AppCompatActivity() {
                 tilEmail.error = null
 
                 if (phone.isEmpty()) {
-                    tilPhone.error = "Phone number is required"
+                    tilPhone.error = getString(R.string.err_phone_required)
                     etPhone.requestFocus()
                     scrollToView(tilPhone)
                     return false
                 }
                 if (phone.length < 10) {
-                    tilPhone.error = "Please enter a valid phone number"
+                    tilPhone.error = getString(R.string.err_phone_invalid)
                     etPhone.requestFocus()
                     scrollToView(tilPhone)
                     return false
@@ -214,20 +214,20 @@ class SignUpActivity : AppCompatActivity() {
                 tilPhone.error = null
 
                 if (password.isEmpty()) {
-                    tilPassword.error = "Password is required"
+                    tilPassword.error = getString(R.string.err_password_required)
                     etPassword.requestFocus()
                     scrollToView(tilPassword)
                     return false
                 }
                 if (password.length < 6) {
-                    tilPassword.error = "Password must be at least 6 characters"
+                    tilPassword.error = getString(R.string.err_password_short)
                     etPassword.requestFocus()
                     scrollToView(tilPassword)
                     return false
                 }
                 tilPassword.error = null
                 if (city.isEmpty()){
-                    tilCity.error = "Please select a city"
+                    tilCity.error = getString(R.string.err_city_required)
                     return false
                 }
             }
@@ -256,7 +256,7 @@ class SignUpActivity : AppCompatActivity() {
                         showLoading(false)
 
                         if (emailSent) {
-                            showToast("Verification code sent to $email")
+                            showToast(getString(R.string.otp_sent, email))
                             navigateToVerification(
                                 fullName,
                                 email,
@@ -266,13 +266,13 @@ class SignUpActivity : AppCompatActivity() {
                                 verificationCode
                             )
                         } else {
-                            showToast("Failed to send verification email. Please try again.")
+                            showToast(getString(R.string.otp_send_failed))
                         }
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         showLoading(false)
-                        showToast("Error: ${e.message}")
+                        showToast(getString(R.string.err_generic, e.message.orEmpty()))
                     }
                 }
             }
@@ -307,7 +307,7 @@ class SignUpActivity : AppCompatActivity() {
                 btnCreateAccount.isEnabled = false
             } else {
                 progressBar.visibility = View.GONE
-                btnCreateAccount.text = "Create Account"
+                btnCreateAccount.text = getString(R.string.signup_action)
                 btnCreateAccount.isEnabled = true
             }
         }

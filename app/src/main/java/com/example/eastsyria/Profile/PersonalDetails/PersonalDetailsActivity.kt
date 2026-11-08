@@ -1,5 +1,6 @@
 package com.example.eastsyria.Profile.PersonalDetails
 
+import com.example.eastsyria.Ui.showSnack
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -24,7 +25,7 @@ import com.example.eastsyria.databinding.ActivityPersonalDetailsBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
+import com.example.eastsyria.Storage.ImageUploader
 import java.io.ByteArrayOutputStream
 
 class PersonalDetailsActivity : AppCompatActivity() {
@@ -33,7 +34,6 @@ class PersonalDetailsActivity : AppCompatActivity() {
 
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val dbRef by lazy { FirebaseDatabase.getInstance().reference }
-    private val storageRef by lazy { FirebaseStorage.getInstance().reference }
 
     private var selectedImageUri: Uri? = null
     private val MAX_IMAGE_SIZE_BYTES = 1 * 1024 * 1024
@@ -58,6 +58,7 @@ class PersonalDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         warmEdgeToEdge()
         binding = ActivityPersonalDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -235,7 +236,6 @@ class PersonalDetailsActivity : AppCompatActivity() {
         if (phone.isEmpty())    { binding.tilPhone.error    = getString(R.string.personal_required); return }
 
         setLoading(true)
-
         if (selectedImageUri != null) {
             uploadImageThenSave(uid, fullName, email, phone, city)
         } else {
@@ -246,30 +246,16 @@ class PersonalDetailsActivity : AppCompatActivity() {
     private fun uploadImageThenSave(
         uid: String, fullName: String, email: String, phone: String, city: String
     ) {
-        val compressed = compressToUnder1MB(selectedImageUri!!)
-        if (compressed == null) {
-            setLoading(false)
-            showMessage(R.string.personal_image_too_large)
-            return
-        }
-
-        val imageRef = storageRef.child("profile_images/$uid.jpg")
-
-        imageRef.putBytes(compressed)
-            .addOnSuccessListener {
-                imageRef.downloadUrl
-                    .addOnSuccessListener { downloadUri ->
-                        saveToDatabase(uid, fullName, email, phone, city, downloadUri.toString())
-                    }
-                    .addOnFailureListener {
-                        setLoading(false)
-                        showMessage(R.string.personal_photo_upload_failed)
-                    }
-            }
-            .addOnFailureListener {
+        ImageUploader.uploadAvatar(
+            context = this,
+            uid = uid,
+            uri = selectedImageUri!!,
+            onSuccess = { url -> saveToDatabase(uid, fullName, email, phone, city, url) },
+            onError = {
                 setLoading(false)
                 showMessage(R.string.personal_photo_upload_failed)
             }
+        )
     }
 
     private fun saveToDatabase(
@@ -314,8 +300,8 @@ class PersonalDetailsActivity : AppCompatActivity() {
 
     private fun showMessage(resId: Int) {
         Snackbar.make(binding.root, resId, Snackbar.LENGTH_LONG)
-            .setBackgroundTint(ContextCompat.getColor(this, R.color.surface_high))
-            .setTextColor(ContextCompat.getColor(this, R.color.ivory))
+            .setBackgroundTint(ContextCompat.getColor(this, R.color.ivory))
+            .setTextColor(ContextCompat.getColor(this, R.color.canvas))
             .show()
     }
 }
