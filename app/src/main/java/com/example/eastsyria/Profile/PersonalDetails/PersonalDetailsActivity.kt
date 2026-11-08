@@ -147,18 +147,11 @@ class PersonalDetailsActivity : AppCompatActivity() {
         binding.btnSaveChanges.setOnClickListener { onSaveClicked() }
     }
 
-    private fun requestImagePermission() {
-        val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            Manifest.permission.READ_MEDIA_IMAGES
-        else
-            Manifest.permission.READ_EXTERNAL_STORAGE
-
-        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
-            openImagePicker()
-        } else {
-            permissionLauncher.launch(permission)
-        }
-    }
+    /**
+     * The system photo picker (Android 13+) or document picker hands over just the chosen photo,
+     * so no storage permission is needed. Asking for one blocked uploads for anyone who said no.
+     */
+    private fun requestImagePermission() = openImagePicker()
 
     private fun openImagePicker() {
         imagePickerLauncher.launch("image/*")

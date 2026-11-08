@@ -18,8 +18,8 @@ android {
         applicationId = "com.example.eastsyria"
         minSdk = 31
         targetSdk = 36
-        versionCode = 3
-        versionName = "3.0"
+        versionCode = 4
+        versionName = "3.1"
         val properties = Properties()
         properties.load(FileInputStream(rootProject.file("local.properties")))
         val mapsApiKey = properties.getProperty("MAPS_API_KEY", "")
@@ -114,6 +114,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.1.0")
     implementation("com.google.maps.android:android-maps-utils:3.8.2")
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    // App-wide foreground/background, for "people nearby" presence
+    implementation("androidx.lifecycle:lifecycle-process:2.9.4")
     // QR code for setting up an authenticator app
     implementation("com.google.zxing:core:3.5.3")
 }

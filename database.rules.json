@@ -2,12 +2,10 @@
   "rules": {
     ".read": false,
     ".write": false,
-
     "landmarks": {
       ".read": true,
       ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'"
     },
-
     "users": {
       ".read": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'",
       "$uid": {
@@ -18,17 +16,47 @@
         }
       }
     },
-
     "notifications": {
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
         ".write": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('role').val() === 'admin')"
       }
     },
-
     "reports": {
       ".read": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'",
       ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'"
+    },
+    "nearby": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "!newData.exists() || (newData.child('lat').isNumber() && newData.child('lng').isNumber() && newData.child('at').isNumber())"
+      }
+    },
+    "chats": {
+      "$chatId": {
+        ".read": "auth != null && ($chatId.beginsWith(auth.uid + '_') || $chatId.endsWith('_' + auth.uid))",
+        "messages": {
+          "$msg": {
+            ".write": "auth != null && !data.exists() && ($chatId.beginsWith(auth.uid + '_') || $chatId.endsWith('_' + auth.uid)) && !root.child('blocks').child($chatId.replace(auth.uid, '').replace('_', '')).child(auth.uid).exists()",
+            ".validate": "newData.child('from').val() === auth.uid && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 1000"
+          }
+        }
+      }
+    },
+    "userChats": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        "$chatId": {
+          ".write": "auth != null && ($uid === auth.uid || (($chatId.beginsWith(auth.uid + '_') || $chatId.endsWith('_' + auth.uid)) && ($chatId.beginsWith($uid + '_') || $chatId.endsWith('_' + $uid))))"
+        }
+      }
+    },
+    "blocks": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
     }
   }
 }

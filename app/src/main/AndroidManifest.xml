@@ -43,6 +43,16 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".Social.NearbyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Social.ChatListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Social.ChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".Security.SecurityActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />

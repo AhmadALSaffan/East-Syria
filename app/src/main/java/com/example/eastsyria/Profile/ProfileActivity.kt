@@ -310,6 +310,8 @@ class ProfileActivity : AppCompatActivity() {
     private fun signOut() {
         val uid = auth.currentUser?.uid
         uid?.let { com.example.eastsyria.Security.TwoFactorTrust.forget(this, it) }
+        com.example.eastsyria.Social.Presence.withdraw()
+        com.example.eastsyria.Social.Profile.forget()
         auth.signOut()
         if (uid != null) {
             getSharedPreferences("user_prefs", MODE_PRIVATE)

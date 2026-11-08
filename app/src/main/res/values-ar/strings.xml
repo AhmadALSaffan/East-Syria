@@ -655,4 +655,44 @@
     <string name="reports_top_rated">الأعلى تقييماً</string>
     <string name="reports_top_rated_empty">لا يوجد معلم مقيّم بعد.</string>
     <string name="reports_error_title">تعذّر إعداد التقرير</string>
+
+    <!-- People nearby and chat -->
+    <string name="nearby_title">أشخاص بالقرب منك</string>
+    <string name="nearby_home_body">شاهد من يفتح التطبيق حولك وقل مرحباً</string>
+    <string name="nearby_visible">أظهرني للأشخاص القريبين</string>
+    <string name="nearby_visible_on">أنت ظاهر ما دام التطبيق مفتوحاً</string>
+    <string name="nearby_visible_off">متوقف. لا أحد يراك</string>
+    <string name="nearby_privacy">يرى الآخرون اسمك وصورتك ومسافة تقريبية مثل «على بعد ~٣ كم»، ولا يرون موقعك الدقيق أبداً. تختفي فور إغلاق التطبيق أو إيقاف هذا الخيار.</string>
+    <string name="nearby_off_title">فعّله لترى من حولك</string>
+    <string name="nearby_off_body">ترى الأشخاص القريبين ما دمت ظاهراً لهم، كما يرونك هم.</string>
+    <string name="nearby_perm_title">الموقع متوقف لسوريا الشرقية</string>
+    <string name="nearby_perm_body">اسمح بالموقع التقريبي لترى بُعد الأشخاص عنك. لا يغادر موقعك الدقيق هاتفك أبداً.</string>
+    <string name="nearby_nofix_title">تعذّر تحديد موقعك</string>
+    <string name="nearby_nofix_body">فعّل الموقع في هاتفك ثم حاول مجدداً.</string>
+    <string name="nearby_empty_title">لا أحد بالقرب الآن</string>
+    <string name="nearby_empty_body">لا أحد ضمن ٥٠ كم يفتح التطبيق وهو ظاهر. عد لاحقاً.</string>
+    <plurals name="nearby_count">
+        <item quantity="zero">لا أحد ضمن ٥٠ كم</item>
+        <item quantity="one">شخص واحد ضمن ٥٠ كم</item>
+        <item quantity="two">شخصان ضمن ٥٠ كم</item>
+        <item quantity="few">%d أشخاص ضمن ٥٠ كم</item>
+        <item quantity="many">%d شخصاً ضمن ٥٠ كم</item>
+        <item quantity="other">%d شخص ضمن ٥٠ كم</item>
+    </plurals>
+    <string name="nearby_km">على بعد ~%1$d كم</string>
+    <string name="nearby_under_km">على بعد أقل من ١ كم</string>
+    <string name="nearby_active_now">نشط الآن</string>
+    <string name="chats_title">الرسائل</string>
+    <string name="chats_empty_title">لا رسائل بعد</string>
+    <string name="chats_empty_body">افتح «أشخاص بالقرب منك» وقل مرحباً لأحدهم.</string>
+    <string name="chats_you">أنت:</string>
+    <string name="chat_hint">رسالة…</string>
+    <string name="chat_empty">قل مرحباً لـ %1$s. كن لطيفاً؛ يمكنك حظر أي شخص من القائمة.</string>
+    <string name="chat_more">خيارات أخرى</string>
+    <string name="chat_block">حظر</string>
+    <string name="chat_unblock">إلغاء الحظر</string>
+    <string name="chat_block_title">حظر %1$s؟</string>
+    <string name="chat_block_body">لن يتمكن من مراسلتك، ولن تراه في «أشخاص بالقرب منك». يمكنك إلغاء الحظر لاحقاً من هذه المحادثة.</string>
+    <string name="chat_blocked_note">لقد حظرت هذا الشخص. ألغِ الحظر من القائمة لتراسله مجدداً.</string>
+    <string name="chat_send_failed">تعذّر الإرسال. تحقّق من اتصالك وحاول مجدداً.</string>
 </resources>

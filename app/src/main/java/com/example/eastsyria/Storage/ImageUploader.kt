@@ -12,15 +12,14 @@ import com.google.android.gms.tasks.Tasks
 import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.UUID
 import java.util.concurrent.Executors
 
 /**
  * Uploads photos to the `images` bucket in Supabase Storage (Firebase Storage needs the Blaze plan).
  *
- * The request carries the signed-in user's Firebase ID token. The Supabase project trusts the
- * `east-syria` Firebase project (Third-Party Auth), and the bucket's policies only accept writes
- * from those tokens: `landmarks/...` for any signed-in user, `avatars/<uid>/...` for that user only.
+ * The request carries the signed-in user's Firebase ID token to the `upload` edge function, which
+ * verifies it and stores the photo: `landmarks/...` for any signed-in user, `avatars/<uid>/...`
+ * only in the caller's own folder.
  */
 object ImageUploader {
 
@@ -37,7 +36,7 @@ object ImageUploader {
         uri: Uri,
         onSuccess: (String) -> Unit,
         onError: (Exception) -> Unit,
-    ) = upload(context, uri, "landmarks/${UUID.randomUUID()}.jpg", upsert = false, onSuccess, onError)
+    ) = upload(context, uri, "landmark", onSuccess, onError)
 
     /**
      * The user's profile picture. Each upload gets a new file name so Glide and other phones
@@ -49,7 +48,7 @@ object ImageUploader {
         uri: Uri,
         onSuccess: (String) -> Unit,
         onError: (Exception) -> Unit,
-    ) = upload(context, uri, "avatars/$uid/${System.currentTimeMillis()}.jpg", upsert = true, onSuccess, onError)
+    ) = upload(context, uri, "avatar", onSuccess, onError)
 
     fun publicUrl(path: String): String =
         "${BuildConfig.SUPABASE_URL}/storage/v1/object/public/$BUCKET/$path"
@@ -57,8 +56,7 @@ object ImageUploader {
     private fun upload(
         context: Context,
         uri: Uri,
-        path: String,
-        upsert: Boolean,
+        kind: String,
         onSuccess: (String) -> Unit,
         onError: (Exception) -> Unit,
     ) {
@@ -70,8 +68,7 @@ object ImageUploader {
                 val token = Tasks.await(user.getIdToken(false)).token
                     ?: throw IllegalStateException("No Firebase ID token")
                 val bytes = compress(appContext, uri)
-                put(path, bytes, token, upsert)
-                val url = publicUrl(path)
+                val url = send(kind, bytes, token)
                 main.post { onSuccess(url) }
             } catch (e: Exception) {
                 main.post { onError(e) }
@@ -99,8 +96,13 @@ object ImageUploader {
         }
     }
 
-    private fun put(path: String, bytes: ByteArray, token: String, upsert: Boolean) {
-        val url = URL("${BuildConfig.SUPABASE_URL}/storage/v1/object/$BUCKET/$path")
+    /**
+     * Sends the photo to the `upload` edge function, which checks the Firebase sign-in, stores the
+     * file with the service role and answers with its public URL. (Storage itself would need
+     * Firebase registered under Supabase Third-Party Auth to accept the token directly.)
+     */
+    private fun send(kind: String, bytes: ByteArray, token: String): String {
+        val url = URL("${BuildConfig.SUPABASE_URL}/functions/v1/upload?kind=$kind")
         val conn = url.openConnection() as HttpURLConnection
         try {
             conn.requestMethod = "POST"
@@ -109,10 +111,8 @@ object ImageUploader {
             conn.readTimeout = 30_000
             conn.setFixedLengthStreamingMode(bytes.size)
             conn.setRequestProperty("apikey", BuildConfig.SUPABASE_KEY)
-            conn.setRequestProperty("Authorization", "Bearer $token")
+            conn.setRequestProperty("x-firebase-token", token)
             conn.setRequestProperty("Content-Type", "image/jpeg")
-            conn.setRequestProperty("Cache-Control", "max-age=31536000")
-            conn.setRequestProperty("x-upsert", upsert.toString())
             conn.outputStream.use { it.write(bytes) }
 
             val code = conn.responseCode
@@ -120,6 +120,8 @@ object ImageUploader {
                 val body = conn.errorStream?.bufferedReader()?.use { it.readText() }.orEmpty()
                 throw UploadException(code, body)
             }
+            val body = conn.inputStream.bufferedReader().use { it.readText() }
+            return org.json.JSONObject(body).getString("url")
         } finally {
             conn.disconnect()
         }

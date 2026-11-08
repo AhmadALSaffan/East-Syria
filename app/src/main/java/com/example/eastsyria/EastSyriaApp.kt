@@ -20,6 +20,8 @@ class EastSyriaApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // Shows you to people nearby while the app is open (only if you turned it on).
+        com.example.eastsyria.Social.Presence.install(this)
         try {
             val database = FirebaseDatabase.getInstance()
             database.setPersistenceEnabled(true)

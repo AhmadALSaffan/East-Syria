@@ -99,6 +99,22 @@ class MainPageActivity : AppCompatActivity() {
         handleExploreExtra(intent)
     }
 
+    private var stopUnread: () -> Unit = {}
+
+    override fun onStart() {
+        super.onStart()
+        // Unread messages show as a count on the "People nearby" card.
+        stopUnread = com.example.eastsyria.Social.Social.listenUnreadTotal { n ->
+            binding.tvUnreadBadge.visibility = if (n > 0) View.VISIBLE else View.GONE
+            binding.tvUnreadBadge.text = if (n > 9) "9+" else n.toString()
+        }
+    }
+
+    override fun onStop() {
+        stopUnread()
+        super.onStop()
+    }
+
     override fun onResume() {
         super.onResume()
         // Coming back from a tab: the selector glides home to Explore.
@@ -369,6 +385,9 @@ class MainPageActivity : AppCompatActivity() {
 
             tvViewMap.setOnClickListener { openMap() }
             btnSearchMap.setOnClickListener { openMap() }
+            cardNearby.setOnClickListener {
+                startActivity(Intent(this@MainPageActivity, com.example.eastsyria.Social.NearbyActivity::class.java))
+            }
             cardAssistant.setOnClickListener {
                 startActivity(Intent(this@MainPageActivity, com.example.eastsyria.Assistant.AssistantActivity::class.java))
             }

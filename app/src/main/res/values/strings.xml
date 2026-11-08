@@ -714,4 +714,40 @@
     <string name="admin_not_found">Landmark not found</string>
     <string name="admin_updated">Landmark updated</string>
     <string name="admin_update_failed">Couldn\'t save the changes. %1$s</string>
+
+    <!-- People nearby and chat -->
+    <string name="nearby_title">People nearby</string>
+    <string name="nearby_home_body">See who has the app open around you and say hello</string>
+    <string name="nearby_visible">Show me to people nearby</string>
+    <string name="nearby_visible_on">You\'re visible while the app is open</string>
+    <string name="nearby_visible_off">Off. Nobody can see you</string>
+    <string name="nearby_privacy">Others see your name, photo and a rough distance, like \"~3 km away\". Never your exact location. You disappear as soon as you close the app or turn this off.</string>
+    <string name="nearby_off_title">Turn on to see who\'s around</string>
+    <string name="nearby_off_body">You see people nearby while you\'re visible to them, the same way they see you.</string>
+    <string name="nearby_perm_title">Location is off for East Syria</string>
+    <string name="nearby_perm_body">Allow approximate location to see how far people are. Your exact position never leaves the phone.</string>
+    <string name="nearby_nofix_title">Can\'t find your location</string>
+    <string name="nearby_nofix_body">Turn on location on your phone, then try again.</string>
+    <string name="nearby_empty_title">Nobody nearby right now</string>
+    <string name="nearby_empty_body">No one within 50 km has the app open and visible. Check back later.</string>
+    <plurals name="nearby_count">
+        <item quantity="one">%d person within 50 km</item>
+        <item quantity="other">%d people within 50 km</item>
+    </plurals>
+    <string name="nearby_km">~%1$d km away</string>
+    <string name="nearby_under_km">Less than 1 km away</string>
+    <string name="nearby_active_now">Active now</string>
+    <string name="chats_title">Messages</string>
+    <string name="chats_empty_title">No messages yet</string>
+    <string name="chats_empty_body">Open People nearby and say hello to someone.</string>
+    <string name="chats_you">You:</string>
+    <string name="chat_hint">Message…</string>
+    <string name="chat_empty">Say hello to %1$s. Be kind; you can block anyone from the menu.</string>
+    <string name="chat_more">More options</string>
+    <string name="chat_block">Block</string>
+    <string name="chat_unblock">Unblock</string>
+    <string name="chat_block_title">Block %1$s?</string>
+    <string name="chat_block_body">They won\'t be able to message you, and you won\'t see them in People nearby. You can unblock them later from this chat.</string>
+    <string name="chat_blocked_note">You blocked this person. Unblock from the menu to message again.</string>
+    <string name="chat_send_failed">Couldn\'t send. Check your connection and try again.</string>
 </resources>
