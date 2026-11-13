@@ -39,6 +39,11 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.CircleOptions
+import com.google.android.gms.maps.model.Dash
+import com.google.android.gms.maps.model.Gap
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
@@ -72,9 +77,20 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val pinIcon: BitmapDescriptor by lazy { bitmapFromVector(R.drawable.ic_map_pin_v3) }
 
+    /** Set when the AI guide opens the map to show suggested stops. */
+    private class ItineraryView(val ids: List<String>, val anchor: LatLng?, val anchorName: String?, val radiusKm: Double?)
+    private var itinerary: ItineraryView? = null
+
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
         private const val TAG = "MapActivity"
+
+        /** Suggested stops, in visiting order. */
+        const val EXTRA_ITINERARY_IDS = "ITINERARY_IDS"
+        const val EXTRA_ANCHOR_LAT = "ITINERARY_ANCHOR_LAT"
+        const val EXTRA_ANCHOR_LNG = "ITINERARY_ANCHOR_LNG"
+        const val EXTRA_ANCHOR_NAME = "ITINERARY_ANCHOR_NAME"
+        const val EXTRA_RADIUS_KM = "ITINERARY_RADIUS_KM"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +101,17 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(binding.root)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        intent.getStringArrayListExtra(EXTRA_ITINERARY_IDS)?.let { ids ->
+            itinerary = ItineraryView(
+                ids = ids,
+                anchor = if (intent.hasExtra(EXTRA_ANCHOR_LAT)) LatLng(intent.getDoubleExtra(EXTRA_ANCHOR_LAT, 0.0), intent.getDoubleExtra(EXTRA_ANCHOR_LNG, 0.0)) else null,
+                anchorName = intent.getStringExtra(EXTRA_ANCHOR_NAME),
+                radiusKm = if (intent.hasExtra(EXTRA_RADIUS_KM)) intent.getDoubleExtra(EXTRA_RADIUS_KM, 0.0) else null,
+            )
+            // The stops are the whole view: no search or kinds of place to narrow them.
+            binding.searchPill.visibility = View.GONE
+            binding.filterScrollView.visibility = View.GONE
+        }
 
         setupInsets()
         setupMap()
@@ -209,8 +236,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 setLoading(false)
-                buildCategoryChips()
-                applyCategoryFilter()
+                if (itinerary != null) {
+                    showItinerary()
+                } else {
+                    buildCategoryChips()
+                    applyCategoryFilter()
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -320,6 +351,92 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.landmarkBottomCard.visibility = View.GONE
         selectedLandmark = null
         updateBottomMargins()
+    }
+
+    // ------------------------------------------------------------ suggested stops
+
+    /**
+     * The AI guide's suggested stops: numbered pins in visiting order joined by dashed straight
+     * lines from the start, and the "near" radius drawn as a circle. Straight lines on purpose:
+     * the app has no road routing, so it shows no roads or travel times.
+     */
+    private fun showItinerary() {
+        val plan = itinerary ?: return
+        clearMarkers()
+        googleMap.clear()
+        val byId = landmarks.associateBy { it.id }
+        val stops = plan.ids.mapNotNull { byId[it] }
+        val ink = ContextCompat.getColor(this, R.color.terracotta)
+        val density = resources.displayMetrics.density
+        val bounds = LatLngBounds.builder()
+        var included = false
+
+        plan.anchor?.let { start ->
+            plan.radiusKm?.let { r ->
+                googleMap.addCircle(
+                    CircleOptions().center(start).radius(r * 1000)
+                        .strokeColor(ink).strokeWidth(2 * density)
+                        .fillColor(android.graphics.Color.argb(18, android.graphics.Color.red(ink), android.graphics.Color.green(ink), android.graphics.Color.blue(ink)))
+                )
+            }
+            googleMap.addMarker(
+                MarkerOptions().position(start).anchor(0.5f, 0.5f).zIndex(0f)
+                    .title(plan.anchorName?.let { getString(R.string.itinerary_map_start, it) })
+                    .icon(numberedPin(null))
+            )
+            bounds.include(start); included = true
+        }
+
+        val path = PolylineOptions().color(ink).width(3 * density).pattern(listOf(Dash(18 * density), Gap(10 * density)))
+        plan.anchor?.let { path.add(it) }
+        stops.forEachIndexed { i, l ->
+            val at = LatLng(l.location.latitude, l.location.longitude)
+            path.add(at)
+            googleMap.addMarker(
+                MarkerOptions().position(at).anchor(0.5f, 0.5f).zIndex(1f + i).title(l.localName(this)).icon(numberedPin(i + 1))
+            )?.also { it.tag = l; markers.add(it) }
+            bounds.include(at); included = true
+        }
+        if (stops.isNotEmpty()) googleMap.addPolyline(path)
+
+        binding.tvReadout.text = if (plan.anchorName != null && plan.radiusKm != null) {
+            getString(R.string.itinerary_map_readout, String.format(Locale.getDefault(), "%.0f", plan.radiusKm), plan.anchorName)
+        } else getString(R.string.itinerary_map_readout_plain)
+
+        if (included) {
+            binding.root.post {
+                runCatching {
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), (64 * density).toInt()))
+                }
+            }
+        }
+    }
+
+    /** A round pin with the stop's number, or a small ring for the starting point. */
+    private fun numberedPin(number: Int?): BitmapDescriptor {
+        val d = resources.displayMetrics.density
+        val size = ((if (number == null) 18 else 30) * d).toInt()
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val ink = ContextCompat.getColor(this, R.color.terracotta)
+        val onInk = ContextCompat.getColor(this, R.color.on_accent)
+        val paint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
+        val r = size / 2f
+        paint.color = onInk
+        canvas.drawCircle(r, r, r, paint)
+        paint.color = ink
+        canvas.drawCircle(r, r, r - 2 * d, paint)
+        paint.color = onInk
+        if (number == null) {
+            canvas.drawCircle(r, r, r / 2.5f, paint)
+        } else {
+            paint.textAlign = android.graphics.Paint.Align.CENTER
+            paint.textSize = 14 * d
+            paint.typeface = android.graphics.Typeface.DEFAULT_BOLD
+            val label = java.text.NumberFormat.getInstance(Locale.getDefault()).format(number)
+            canvas.drawText(label, r, r - (paint.descent() + paint.ascent()) / 2, paint)
+        }
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 
     // ------------------------------------------------------------ controls
@@ -433,7 +550,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     /** Category, search and the sheet's filters compose; none silently drops another. */
     private fun applyCategoryFilter() {
-        if (!::googleMap.isInitialized) return
+        if (!::googleMap.isInitialized || itinerary != null) return
         val query = binding.etSearch.text?.toString().orEmpty().trim()
 
         var shown = landmarks.filter { landmark ->

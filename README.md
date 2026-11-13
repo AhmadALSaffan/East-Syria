@@ -11,6 +11,7 @@
 [![Firebase](https://img.shields.io/badge/Firebase-Auth%20%C2%B7%20Realtime%20DB-FFCA28?style=flat-square&logo=firebase&logoColor=black)](https://firebase.google.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-Storage%20%C2%B7%20Edge%20Functions-3FCF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com/)
 [![Google Maps](https://img.shields.io/badge/Google-Maps%20SDK-4285F4?style=flat-square&logo=googlemaps&logoColor=white)](https://developers.google.com/maps)
+[![RAG](https://img.shields.io/badge/RAG-Grounded%20itineraries-0F766E?style=flat-square&logo=databricks&logoColor=white)](#rag-grounded-itineraries)
 [![Languages](https://img.shields.io/badge/Languages-English%20%C2%B7%20%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%8A%D8%A9-1B1B1A?style=flat-square)](#arabic-and-english)
 
 <br />
@@ -93,6 +94,7 @@ Curators add, edit and publish landmarks, and see what was added over a day, a w
 - 🌗 **Light and dark**: "Stone & Ink", white with black ink by day and deep ink with ivory at night, following the phone. Photos carry the colour.
 - 🏛️ **Home**: a greeting, search, the AI guide, featured landmarks as photo cards, kinds of place, and a trending rail.
 - ✨ **AI guide**: ask about any landmark or have it plan a trip. It answers only travel and heritage questions, grounds its answers in the app's own catalog, replies in your language, and turns the places it mentions into cards that open them.
+- 🧭 **RAG itineraries** *(new)*: ask the AI guide for nearby places in Arabic or English ("بدي ٣ أماكن قريبة من دير الزور مرتبطة بتاريخ الفرات") and it retrieves up to three matching landmarks from the catalog, keeps those within the radius, orders them, and explains each one only with text from its own record. [More below](#rag-grounded-itineraries).
 - 🗺️ **Map**: a light or dark map to match the app, pins, kinds of place with counts, a readout, my location and filters.
 - 🔎 **Search**: Arabic or English, live results with the match highlighted, and kinds of place built from the catalog.
 - 🔖 **Saved places and updates**: kept per account, with Undo, and grouped updates with unread markers.
@@ -102,6 +104,68 @@ Curators add, edit and publish landmarks, and see what was added over a day, a w
   - Password reset for email accounts.
 - 🛠️ **Curator tools**: add, edit and delete landmarks with photo upload and a publish state, in Arabic or English; reports counted from the records themselves.
 - ♿ **Every state designed**: loading skeletons, empty, error and signed-out states, with mirrored icons and layouts in Arabic.
+
+---
+
+## RAG: grounded itineraries
+
+The AI guide now uses **retrieval-augmented generation (RAG)** to answer requests for nearby stops. Retrieval finds the matching records in the landmark catalog, and the answer is generated only from those records. The open-ended chat still goes to the language model. Requests for stops are answered on the phone from the catalog, with no model in the loop, so nothing in the answer can be invented.
+
+| ع · the user story | Its stops on the map | English, with a place too far | Where to start? |
+|:---:|:---:|:---:|:---:|
+| <img src="docs/rag/screenshots/ar-plan.jpg" width="190"> | <img src="docs/rag/screenshots/ar-map.jpg" width="190"> | <img src="docs/rag/screenshots/en-castles.jpg" width="190"> | <img src="docs/rag/screenshots/en-ask.jpg" width="190"> |
+
+**How it works** (`app/src/main/java/com/example/eastsyria/Itinerary/`)
+
+1. **Read the request**: how many places (up to 3, default 3), near where, within what radius, about what. This works in Arabic and English, including Arabic-Indic digits, prefixes like "بـ" and "الـ", and different spellings of town names.
+2. **Retrieve by meaning**: a bilingual concept lexicon links words like *Euphrates* and *الفرات*, or *castle* and *قلعة*. Matching runs across both languages' names, tags, categories and descriptions, and rarer concepts count for more. A place must cover at least half of the request's meaning. There are no embeddings. Retrieval stays deterministic and explainable over a small catalog.
+3. **Filter by distance**: straight-line (haversine) distances from the starting point, using the records' coordinates. Records with no usable coordinates are reported, never placed.
+   - **"Near" means within 100 km** unless the request gives a radius ("within 50 km", "ضمن ٥٠ كم"). The radius is shown on the answer and drawn on the map.
+   - Starting points are towns with coordinates checked against Wikipedia, or a catalog landmark.
+4. **Order the stops**: every order of the (at most three) stops is tried, and the shortest straight-line path from the start wins. The result is labeled **Suggested stop order**. The app's map has no road routing, so no roads or travel times are shown.
+5. **Explain only from the record**: each stop gets a sentence copied word for word from its own description, its matching tags, and its computed distances. Each stop links to its landmark page and shows the record's source links when it has them. `ItineraryCheck` verifies every quote, tag, link and distance before anything is shown.
+
+**Edge cases.** The app handles each of these and says so in the answer:
+
+- fewer matches than requested ("Only 1 of the 3…", plus a *Search within 200 km* button);
+- relevant places beyond the radius ("Also relevant, but farther than 100 km: Mari Ancient City · 110.0 km");
+- records without coordinates;
+- an unclear start, which gets a question with choices: *near the castle* (which one?), *near me* (the guide can't see your location), or two towns named;
+- asking for more than 3 places.
+
+The card follows the request's language: right to left in Arabic, left to right in English.
+
+**Demo and evaluation**, reproducible from a dated snapshot of the catalog:
+
+```bash
+./gradlew :app:testDebugUnitTest --tests "com.example.eastsyria.Itinerary.*"
+```
+
+- [`docs/rag/demo.md`](docs/rag/demo.md) runs three requests:
+  - the Arabic user story;
+  - the same request in English, which returns the same stops in the same order;
+  - *"Three medieval castles near Raqqa"*, where Qalaat Najm is left out at 100.4 km.
+
+  In the user story, Mari, an Euphrates city, is left out at 110 km.
+- [`docs/rag/eval-report.md`](docs/rag/eval-report.md) runs a labeled set ([`eval-set.json`](app/src/test/resources/itinerary/eval-set.json)) of 16 requests and 12 claims:
+
+| Check | Result |
+|---|---|
+| Retrieval precision / recall (labeled relevance) | 19/19 · 19/19 |
+| Geographic filter (stops inside the radius, far places excluded) | 26/26 |
+| Distances vs an independent calculation (±0.2 km) | 22/22 |
+| Stop order = shortest straight-line path | 7/7 |
+| Intent, language and unclear starts handled as labeled | 16/16 |
+| Generated explanations supported by their record | 16/16 |
+| Support check vs labeled claims (TP / TN / FP / FN) | 6 / 5 / 0 / 1 (the miss is a faithful paraphrase; the check is word for word) |
+
+**Limits.**
+
+- The catalog has 9 records (8 published), so these scores come from a small set I labeled myself; they are not a benchmark.
+- "Meaning" is limited to the concept lexicon. A word outside it only matches literally.
+- Distances are straight lines, not roads.
+- None of the current records has `sources` links yet.
+- Mari's Arabic long description has broken letters in the catalog itself ("بالد", "الميالد").
 
 ---
 
@@ -123,6 +187,7 @@ Curators add, edit and publish landmarks, and see what was added over a day, a w
 | Data | Firebase Realtime Database with disk persistence |
 | Photos | Supabase Storage (uploads), Glide |
 | AI guide | Supabase Edge Function (`assistant`) calling DeepSeek, grounded in the catalog |
+| RAG itineraries | On-device retrieval over the bilingual catalog (concept lexicon, haversine radius, exact stop ordering), explanations quoted from the records and verified |
 | Maps | Google Maps SDK with light and dark styles, Play Services Location |
 | Min / target SDK | 31 / 36 |
 
@@ -186,11 +251,12 @@ users/{uid}/role = "admin"
 ```text
 app/src/main/java/com/example/eastsyria/
 ├── Admin/          curator dashboard, add and edit landmark, reports
-├── Assistant/      the AI guide (Compose chat + edge-function client)
+├── Assistant/      the AI guide (Compose chat + edge-function client, itinerary cards)
 ├── Categories/     kinds of place
 ├── CategoryList/   a category's places, filter sheet
 ├── Details/        the landmark screen
 ├── Login/ SignUp/  sign-in (Google first), email sign-up, re-authentication
+├── Itinerary/      RAG itineraries: request parsing, retrieval, distance, order, checks
 ├── MainPage/       home
 ├── Map/            map, filters
 ├── Nav/            the bottom tab bar

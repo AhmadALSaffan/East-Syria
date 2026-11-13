@@ -1,0 +1,150 @@
+{
+  "about": "Labeled evaluation set for the AI guide's itinerary planner. Catalog: catalog-2026-11-13.json (the app's public Firebase landmarks node, downloaded 2026-11-13). Relevance labels judge the records' own text against the request: 2 = clearly about it, 1 = partly, 0 = not. expectedDistancesKm were computed independently (Python haversine, R = 6371.0088 km, town coordinates from Wikipedia) and are compared with the app's distances to within 0.2 km.",
+  "cases": [
+    {
+      "id": "ar-user-story",
+      "query": "بدي ٣ أماكن قريبة من دير الزور مرتبطة بتاريخ الفرات",
+      "language": "ar",
+      "expect": "plan",
+      "anchor": "town:deir-ez-zor",
+      "radiusKm": 100,
+      "relevance": {"1": 2, "2": 2, "6": 2, "7": 2, "9": 2, "4": 1, "3": 0, "5": 0},
+      "relevanceNotes": {"4": "Qalaat Jabar stands in Lake Assad, the dammed Euphrates, but its record never says Euphrates, so it can't be justified from the record."},
+      "expectedStopsInOrder": ["1", "6", "2"],
+      "expectedOutsideRadius": ["7", "9"],
+      "expectedDistancesKm": {"1": 1.3, "6": 44.2, "2": 83.4, "7": 110.0, "9": 223.7}
+    },
+    {
+      "id": "en-user-story",
+      "query": "Suggest three places near Deir ez-Zor linked to the history of the Euphrates",
+      "language": "en",
+      "expect": "plan",
+      "anchor": "town:deir-ez-zor",
+      "radiusKm": 100,
+      "relevance": {"1": 2, "2": 2, "6": 2, "7": 2, "9": 2, "4": 1, "3": 0, "5": 0},
+      "expectedStopsInOrder": ["1", "6", "2"],
+      "expectedOutsideRadius": ["7", "9"],
+      "expectedDistancesKm": {"1": 1.3, "6": 44.2, "2": 83.4, "7": 110.0}
+    },
+    {
+      "id": "en-castles-raqqa",
+      "query": "Three medieval castles near Raqqa",
+      "language": "en",
+      "expect": "plan",
+      "anchor": "town:raqqa",
+      "radiusKm": 100,
+      "relevance": {"4": 2, "9": 2, "6": 2, "2": 1, "1": 0, "3": 0, "5": 0, "7": 0},
+      "relevanceNotes": {"2": "Dura-Europos is a fortress city but not medieval."},
+      "expectedStopsInOrder": ["4"],
+      "expectedOutsideRadius": ["9", "6"],
+      "expectedDistancesKm": {"4": 48.0, "9": 100.4, "6": 165.6}
+    },
+    {
+      "id": "ar-roman-shortfall",
+      "query": "٣ مواقع رومانية قرب دير الزور",
+      "language": "ar",
+      "expect": "plan",
+      "anchor": "town:deir-ez-zor",
+      "radiusKm": 100,
+      "relevance": {"2": 2, "3": 2, "1": 0, "4": 0, "5": 0, "6": 0, "7": 0, "9": 0},
+      "expectedStopsInOrder": ["2"],
+      "expectedOutsideRadius": ["3"],
+      "expectedDistancesKm": {"2": 83.4, "3": 191.7}
+    },
+    {
+      "id": "en-ancient-abu-kamal",
+      "query": "2 ancient sites near Abu Kamal",
+      "language": "en",
+      "expect": "plan",
+      "anchor": "town:abu-kamal",
+      "radiusKm": 100,
+      "relevance": {"7": 2, "2": 2, "3": 2, "5": 2, "1": 0, "4": 0, "6": 0, "9": 0},
+      "expectedStopsInOrder": ["7", "2"],
+      "expectedOutsideRadius": ["3", "5"],
+      "expectedDistancesKm": {"7": 11.7, "2": 38.2}
+    },
+    {
+      "id": "en-explicit-radius",
+      "query": "Places within 50 km of Al-Mayadin",
+      "language": "en",
+      "expect": "plan",
+      "anchor": "town:mayadin",
+      "radiusKm": 50,
+      "relevance": {},
+      "expectedStopsInOrder": ["2", "6", "1"],
+      "orderNote": "Shortest straight-line path from Al-Mayadin: Dura-Europos first, then back north via Al-Rahba to the bridge (123.6 km vs 127.0 km starting at Al-Rahba).",
+      "expectedOutsideRadius": [],
+      "mustNotInclude": ["7"],
+      "expectedDistancesKm": {"6": 3.1, "2": 38.8, "1": 45.5, "7": 65.4}
+    },
+    {
+      "id": "ar-capped",
+      "query": "اقترح لي ٥ أماكن قريبة من دير الزور",
+      "language": "ar",
+      "expect": "plan",
+      "anchor": "town:deir-ez-zor",
+      "radiusKm": 100,
+      "capped": true,
+      "relevance": {},
+      "expectedStopsInOrder": ["1", "6", "2"],
+      "expectedOutsideRadius": [],
+      "expectedDistancesKm": {"1": 1.3, "6": 44.2, "2": 83.4}
+    },
+    {
+      "id": "en-generic-castle",
+      "query": "3 places near the castle",
+      "language": "en",
+      "expect": "ambiguous",
+      "reason": "GENERIC_PLACE",
+      "options": ["landmark:4", "landmark:9"]
+    },
+    {
+      "id": "ar-generic-castle",
+      "query": "أماكن قريبة من القلعة",
+      "language": "ar",
+      "expect": "ambiguous",
+      "reason": "GENERIC_PLACE",
+      "options": ["landmark:4", "landmark:9"]
+    },
+    {
+      "id": "ar-near-me",
+      "query": "بدي أماكن أثرية قريبة مني",
+      "language": "ar",
+      "expect": "ambiguous",
+      "reason": "NEAR_ME"
+    },
+    {
+      "id": "en-no-place",
+      "query": "Show me 3 historical places nearby",
+      "language": "en",
+      "expect": "ambiguous",
+      "reason": "NO_PLACE"
+    },
+    {
+      "id": "en-two-towns",
+      "query": "3 Euphrates places in Raqqa or Deir ez-Zor",
+      "language": "en",
+      "expect": "ambiguous",
+      "reason": "SEVERAL_PLACES",
+      "options": ["town:raqqa", "town:deir-ez-zor"]
+    },
+    {"id": "en-open-question-1", "query": "What is the best time to visit Palmyra?", "language": "en", "expect": "not-itinerary"},
+    {"id": "en-open-question-2", "query": "Tell me the story of Dura-Europos", "language": "en", "expect": "not-itinerary"},
+    {"id": "en-open-question-3", "query": "Plan two days along the Euphrates", "language": "en", "expect": "not-itinerary"},
+    {"id": "ar-open-question", "query": "متى أفضل وقت لزيارة تدمر؟", "language": "ar", "expect": "not-itinerary"}
+  ],
+  "claims": [
+    {"landmark": "1", "field": "description", "text": "built by French engineers in 1927", "supported": true},
+    {"landmark": "1", "field": "descriptionArabic", "text": "يربط بين ضفتي نهر الفرات", "supported": true},
+    {"landmark": "6", "field": "description", "text": "once the main Mamluk stronghold on the river", "supported": true},
+    {"landmark": "2", "field": "longDescription", "text": "Dura-Europos was founded around 300 BCE during the Hellenistic period.", "supported": true},
+    {"landmark": "7", "field": "description", "text": "Mari was a major Bronze Age city on the Euphrates River", "supported": true},
+    {"landmark": "6", "field": "descriptionArabic", "text": "قلعة عربية من العصور الوسطى على الفرات", "supported": true},
+    {"landmark": "1", "field": "description", "text": "built by the Romans in 200 AD", "supported": false},
+    {"landmark": "6", "field": "description", "text": "rebuilt by Saladin in 1177 AD", "supported": false, "note": "true of Qalaat Najm, not of Al-Rahba"},
+    {"landmark": "2", "field": "descriptionArabic", "text": "أكبر مدينة رومانية في سوريا", "supported": false},
+    {"landmark": "7", "field": "longDescription", "text": "The city was destroyed by the Mongols", "supported": false},
+    {"landmark": "9", "field": "description", "text": "A stunning medieval Islamic fortress perched on a rocky cliff above the Tigris River", "supported": false, "note": "one word changed"},
+    {"landmark": "1", "field": "description", "text": "A French-built footbridge from 1927 over the Euphrates", "supported": true, "note": "a faithful paraphrase; the word-for-word check is expected to reject it (the planner never paraphrases)"}
+  ]
+}

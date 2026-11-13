@@ -78,6 +78,8 @@ data class ChatMessage(
     val text: String,
     val landmarkIds: List<String> = emptyList(),
     val isError: Boolean = false,
+    /** Suggested stops (or a question about where to start), drawn as a card instead of text. */
+    val itinerary: com.example.eastsyria.Itinerary.ItineraryOutcome? = null,
 )
 
 @Composable
@@ -88,6 +90,7 @@ internal fun AssistantScreen(
     landmarks: Map<String, Landmark>,
     onSend: (String) -> Unit,
     onOpenLandmark: (Landmark) -> Unit,
+    itineraryActions: ItineraryActions,
     onBack: () -> Unit,
 ) {
     val c = esColors()
@@ -163,7 +166,7 @@ internal fun AssistantScreen(
                 item { Welcome(onPick = { onSend(it) }) }
             }
             items(messages) { m ->
-                if (m.fromUser) UserBubble(m.text) else AssistantBubble(m, landmarks, onOpenLandmark)
+                if (m.fromUser) UserBubble(m.text) else AssistantBubble(m, landmarks, onOpenLandmark, itineraryActions)
             }
             if (thinking) item { Thinking() }
             item { Spacer(Modifier.height(1.dp)) }
@@ -272,7 +275,7 @@ private fun UserBubble(text: String) {
 }
 
 @Composable
-private fun AssistantBubble(m: ChatMessage, landmarks: Map<String, Landmark>, onOpen: (Landmark) -> Unit) {
+private fun AssistantBubble(m: ChatMessage, landmarks: Map<String, Landmark>, onOpen: (Landmark) -> Unit, itineraryActions: ItineraryActions) {
     val c = esColors()
     var shown by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { shown = true }
@@ -289,12 +292,16 @@ private fun AssistantBubble(m: ChatMessage, landmarks: Map<String, Landmark>, on
                     Icon(painterResource(R.drawable.ic_sparkle), null, tint = c.onRed, modifier = Modifier.size(15.dp))
                 }
                 Spacer(Modifier.width(12.dp))
-                Text(
-                    m.text,
-                    style = EsType.body.copy(lineHeight = 25.sp),
-                    color = if (m.isError) c.iceMute else c.ice,
-                    modifier = Modifier.weight(1f),
-                )
+                if (m.itinerary != null) {
+                    Box(Modifier.weight(1f)) { ItineraryCard(m.itinerary, itineraryActions) }
+                } else {
+                    Text(
+                        m.text,
+                        style = EsType.body.copy(lineHeight = 25.sp),
+                        color = if (m.isError) c.iceMute else c.ice,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
             }
             val cards = m.landmarkIds.mapNotNull { landmarks[it] }
             if (cards.isNotEmpty()) {

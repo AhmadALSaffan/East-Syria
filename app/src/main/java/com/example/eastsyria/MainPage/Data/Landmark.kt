@@ -62,6 +62,10 @@ data class Landmark(
     @get:PropertyName("tagsArabic") @set:PropertyName("tagsArabic")
     var tagsArabic: List<String> = emptyList(),
 
+    /** Optional links to where the record's facts come from; shown with AI guide stops. */
+    @get:PropertyName("sources") @set:PropertyName("sources")
+    var sources: List<String> = emptyList(),
+
     @get:PropertyName("status") @set:PropertyName("status")
     var status: String = "",
 
